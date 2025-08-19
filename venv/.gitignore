@@ -1,0 +1,18 @@
+# Ambiente Virtual
+venv/
+env/
+*.env
+
+# Banco de Dados
+*.sqlite3
+db.sqlite3
+
+# Cache do Python
+__pycache__/
+*.pyc
+
+# Pasta de mídia (geralmente para uploads de usuários)
+/media/
+
+# Pasta para onde o Django agrupa os arquivos estáticos em produção
+/static_root/
