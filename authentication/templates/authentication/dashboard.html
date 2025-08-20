@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="card text-center shadow-sm">
+            <div class="card-header fw-bold">
+                Acesso Concedido
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Bem-vindo(a) ao seu Dashboard!</h5>
+
+                <p class="card-text mt-4">Você está logado como: <strong>{{ user.cpf }}</strong></p>
+                <p class="card-text">Seu nome é: <strong>{{ user.first_name }} {{ user.last_name }}</strong></p>
+
+                <a href="#" class="btn btn-primary mt-3">Ir para a Página Principal</a>
+            </div>
+            <div class="card-footer text-muted">
+                Sessão iniciada com sucesso.
+            </div>
+        </div>
+    </div>
+{% endblock %}

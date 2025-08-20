@@ -1,18 +1,30 @@
-# Ambiente Virtual
-venv/
-env/
+# Arquivos de Segredos e Configurações de Ambiente
+# NUNCA envie senhas ou chaves secretas para o GitHub!
+.env
 *.env
 
-# Banco de Dados
-*.sqlite3
-db.sqlite3
+# Ambiente Virtual
+# A pasta do ambiente virtual é específica para cada máquina.
+venv/
+env/
 
-# Cache do Python
+# Arquivos de Banco de Dados local
+# Outros desenvolvedores criarão seus próprios bancos.
+db.sqlite3
+*.sqlite3
+
+# Cache e arquivos compilados do Python
+# São gerados automaticamente e não precisam ser versionados.
 __pycache__/
 *.pyc
+*.pyo
 
-# Pasta de mídia (geralmente para uploads de usuários)
+# Pastas de arquivos do Django em Produção
+# Geradas pelo comando collectstatic e para uploads de usuários.
+/static_root/
 /media/
 
-# Pasta para onde o Django agrupa os arquivos estáticos em produção
-/static_root/
+# Configurações de IDEs (Editores de Código)
+# Pastas de configuração específicas de cada desenvolvedor.
+.vscode/
+.idea/
