@@ -9,12 +9,14 @@
     <div class="login-container shadow p-4 rounded-3 text-center">
         <h2 class="fw-bold text-primary mb-3">Bem-vindo</h2>
         <p class="text-muted mb-4">Faça login para acessar sua conta</p>
-        {% if messages %}
-    <div class="alert alert-danger">
-        {% for message in messages %}
+{% if messages %}
+    {% for message in messages %}
+        {# O 'message.tags' contém o nível da mensagem: 'success', 'error', 'info', etc. #}
+        {# Nós usamos isso para definir a classe do Bootstrap dinamicamente. #}
+        <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-{{ message.tags }}{% endif %}">
             {{ message }}
-        {% endfor %}
-    </div>
+        </div>
+    {% endfor %}
 {% endif %}
 
     
@@ -36,7 +38,7 @@
         </form>
     
         <div class="register mt-4 text-muted">
-            Não tem uma conta? <a href="#" class="text-primary fw-bold text-decoration-none">Registrar</a>
+            Não tem uma conta? <a href="{% url 'register' %}" class="text-primary fw-bold text-decoration-none">Registrar</a>
         </div>
     </div>
 {% endblock %}

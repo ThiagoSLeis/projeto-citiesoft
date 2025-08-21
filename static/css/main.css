@@ -1,15 +1,10 @@
 /* projeto_brisa/static/css/main.css */
 
 body {
-   
-    background-color: #000000; 
+    /* Um degradê suave de um azul claro para um azul um pouco mais claro */
+    background: linear-gradient(to bottom, #e6f0ff, #d9e8ff);
+    
+    /* Garante que o degradê cubra a tela inteira, mesmo em páginas com pouco conteúdo */
+    min-height: 100vh;
+    font-family: 'Poppins', sans-serif; /* Uma fonte mais moderna, opcional */
 }
-
-/*
-  Futuramente, aqui entrarão seus estilos reutilizáveis.
-  Exemplo:
-  .btn-custom {
-    background-color: #5d3dff;
-    color: white;
-  }
-*/
