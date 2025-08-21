@@ -18,7 +18,7 @@ def login_view(request):
         cpf_limpo = ''.join(re.findall(r'\d', cpf_com_formatacao))
 
         # Usa o CPF limpo para autenticar
-        user = authenticate(request, cpf=cpf_limpo, password=password)
+        user = authenticate(request, username=cpf_limpo, password=password)
 
         if user is not None:
             login(request, user)
