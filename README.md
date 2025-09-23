@@ -16,3 +16,5 @@ git checkout main
 git pull origin main
 python manage.py migrate
 pip install requirements.txt
+
+
