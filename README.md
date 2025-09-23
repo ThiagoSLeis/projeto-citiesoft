@@ -9,3 +9,12 @@ criar arquivo .env (DB_PASSWORD)
 python manage.py makemigrations
 python manage.py createsuperuser
 python manage.py runserver
+
+e pra poder atualizar o codigo todos os dias 
+cd projeto-citiesoft
+git checkout main
+git pull origin main
+python manage.py migrate
+pip install requirements.txt
+
+
