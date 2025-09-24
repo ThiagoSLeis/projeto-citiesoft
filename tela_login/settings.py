@@ -56,9 +56,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
+    
 ]
-
-ROOT_URLCONF = 'tela_login.urls'
+ROOT_URLCONF = "tela_login.urls"
 
 TEMPLATES = [
     {
@@ -84,9 +85,9 @@ WSGI_APPLICATION = 'tela_login.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'brisa_db',
+        'NAME': 'cadastro',
         'USER': 'root',
-        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'PASSWORD':'Ufma2023@',
         'HOST': 'localhost',
         'PORT': '3306',
     }
@@ -115,7 +116,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'pt-br'
 
 TIME_ZONE = 'UTC'
 
@@ -147,3 +148,5 @@ PASSWORD_HASHERS = [
 
 AUTH_USER_MODEL = 'users.CustomUser'
 LOGIN_URL = 'login'
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

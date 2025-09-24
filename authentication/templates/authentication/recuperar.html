@@ -7,8 +7,8 @@
 
 {% block content %}
     <div class="login-container shadow p-4 rounded-3 text-center">
-        <h2 class="fw-bold text-primary mb-3">Bem-vindo</h2>
-        <p class="text-muted mb-4">Faça login para acessar sua conta</p>
+        <h4 class="fw-bold text-primary mb-3">Recuperação de Senha</h4>
+        
 {% if messages %}
     {% for message in messages %}
         {# O 'message.tags' contém o nível da mensagem: 'success', 'error', 'info', etc. #}
@@ -23,18 +23,11 @@
         <form method="post">
             {% csrf_token %}
             <div class="form-group text-start mb-3">
-                <label for="cpf" class="form-label fw-bold">CPF</label>
-                <input type="text" id="cpf" name="cpf" class="form-control" placeholder="CPF/CNPJ" required>
+                <label for="email" class="form-label fw-bold">Email</label>
+                <input type="email" id="email" name="email" class="form-control" placeholder="exemplo@email.com" required>
             </div>
-
-            <div class="form-group text-start mb-2">
-                <label for="senha" class="form-label fw-bold">Senha</label>
-                <input type="password" id="senha" name="password" class="form-control" placeholder="Digite sua senha" required>
-            </div>
-             <a href="{% url 'password_reset' %}" class="d-block text-end text-primary text-decoration-none mb-4">Esqueceu sua senha?</a>
-            <button type="submit" class="btn btn-primary w-100 fw-bold p-2">Entrar</button>
+            <button type="submit" class="btn btn-primary w-100 fw-bold p-2">Enviar</button>
         </form>
-        
         <div class="register mt-4 text-muted">
             Não tem uma conta? <a href="{% url 'register' %}" class="text-primary fw-bold text-decoration-none">Registrar</a>
         </div>

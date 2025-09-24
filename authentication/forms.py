@@ -1,5 +1,6 @@
 import re
 from django import forms
+from django.contrib.auth.models import User
 from users.models import CustomUser
 from .validators import validate_cpf
 
@@ -22,7 +23,6 @@ class RegistrationForm(forms.ModelForm):
     # Validação da força da senha
     def clean_password(self):
         password = self.cleaned_data.get('password')
-
         if len(password) < 8:
             raise forms.ValidationError('A senha deve ter no mínimo 8 caracteres.')
         if not re.search(r'[A-Z]', password):
@@ -57,5 +57,5 @@ class RegistrationForm(forms.ModelForm):
 
         if commit:
             user.save()
-            
+
         return user
