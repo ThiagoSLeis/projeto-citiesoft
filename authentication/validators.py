@@ -24,3 +24,5 @@ def validate_cpf(value):
 
     if not (digito_1 == int(cpf[9]) and digito_2 == int(cpf[10])):
         raise ValidationError('CPF inválido (dígitos verificadores não conferem).', code='invalid_check_digits')
+    
+    
