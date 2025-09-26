@@ -90,11 +90,11 @@ ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv("DB_NAME"),
-        'USER': os.getenv("DB_USER"),
-        'PASSWORD': os.getenv("DB_PASS"),
-        'HOST': os.getenv("DB_HOST", "localhost"),
-        'PORT': os.getenv("DB_PORT", "3306"),
+        'NAME': "brisa_db",
+        'USER': "root",
+        'PASSWORD': os.getenv("DB_PASSWORD"),
+        'HOST': "localhost",
+        'PORT': "3306",
     }
 }
 
@@ -156,5 +156,5 @@ AUTH_USER_MODEL = 'users.CustomUser'
 LOGIN_URL = 'login'
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-DEBUG = os.getenv("DEBUG", "False").lower() == "true"
+DEBUG = True
 ALLOWED_HOSTS = []
