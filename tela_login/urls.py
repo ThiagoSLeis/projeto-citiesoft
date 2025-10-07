@@ -20,4 +20,8 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('authentication.urls')),
+<<<<<<< HEAD
+=======
+    
+>>>>>>> 5422c51b9ec5a8741a037bae8a7ae7915a36aefd
 ]
