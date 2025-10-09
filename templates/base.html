@@ -4,6 +4,488 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+<<<<<<< HEAD
+    <title>Brisa - CitieSoft</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
+    
+    {% if user.is_authenticated %}
+    <style>
+      :root {
+        --primary-blue: #0d6efd;
+        --dark-blue: #0a58ca;
+        --light-blue: #e3f2fd;
+        --sidebar-width-collapsed: 80px;
+        --sidebar-width-expanded: 280px;
+      }
+     
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f8f9fa;
+      }
+     
+      .sidebar {
+        min-height: 100vh;
+        background: linear-gradient(180deg, var(--primary-blue) 0%, var(--dark-blue) 100%);
+        color: white;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        z-index: 1000;
+        position: fixed;
+        width: var(--sidebar-width-collapsed);
+        overflow: hidden;
+      }
+     
+      .sidebar:hover {
+        width: var(--sidebar-width-expanded);
+      }
+     
+      .sidebar .nav-link {
+        color: rgba(255, 255, 255, 0.85);
+        padding: 12px 20px;
+        margin: 4px 0;
+        border-radius: 8px;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+        opacity: 0;
+        transform: translateX(-20px);
+        transition: all 0.3s ease 0.1s;
+        position: relative;
+      }
+     
+      .sidebar:hover .nav-link {
+        opacity: 1;
+        transform: translateX(0);
+      }
+     
+      .sidebar .nav-link:hover, .sidebar .nav-link.active {
+        background-color: rgba(255, 255, 255, 0.15);
+        color: white;
+        transform: translateX(5px);
+      }
+     
+      .sidebar .nav-link i {
+        margin-right: 12px;
+        font-size: 1.1rem;
+        min-width: 20px;
+        text-align: center;
+        transition: all 0.3s;
+      }
+     
+      .sidebar-header {
+        padding: 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+        opacity: 0;
+      }
+     
+      .sidebar:hover .sidebar-header {
+        opacity: 1;
+      }
+     
+      .user-info {
+        padding: 15px 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+     
+      .sidebar:hover .user-info {
+        opacity: 1;
+        transform: translateX(0);
+      }
+     
+      .user-avatar {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #ffffff 0%, #e3f2fd 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 12px;
+        color: var(--primary-blue);
+        font-weight: bold;
+        font-size: 1rem;
+        flex-shrink: 0;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      }
+     
+      .user-details {
+        opacity: 0;
+        transition: opacity 0.3s ease 0.2s;
+        overflow: hidden;
+      }
+     
+      .sidebar:hover .user-details {
+        opacity: 1;
+      }
+     
+      .main-content {
+        padding: 20px;
+        transition: all 0.3s;
+        margin-left: var(--sidebar-width-collapsed);
+      }
+     
+      .sidebar:hover ~ .main-content {
+        margin-left: var(--sidebar-width-expanded);
+      }
+     
+      .content-header {
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        margin-bottom: 25px;
+        border-left: 4px solid var(--primary-blue);
+      }
+     
+      .content-card {
+        background: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%);
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        margin-bottom: 25px;
+        height: 100%;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+      }
+     
+      .content-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+      }
+     
+      .btn-logout {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        width: calc(100% - 40px);
+        margin: 20px;
+        padding: 12px;
+        border-radius: 8px;
+        transition: all 0.3s;
+        opacity: 0;
+        transform: translateX(-20px);
+        font-weight: 500;
+      }
+     
+      .sidebar:hover .btn-logout {
+        opacity: 1;
+        transform: translateX(0);
+        transition: all 0.3s ease 0.3s;
+      }
+     
+      .btn-logout:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+     
+      .navbar-toggler {
+        border: none;
+        font-size: 1.5rem;
+        color: var(--primary-blue);
+        background: transparent;
+      }
+     
+      .navbar-toggler:focus {
+        box-shadow: none;
+      }
+     
+      .mobile-header {
+        display: none;
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        padding: 15px 25px;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      }
+     
+      /* Badges para notificações */
+      .menu-badge {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+        color: white;
+        border-radius: 10px;
+        padding: 2px 8px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+     
+      .sidebar:hover .menu-badge {
+        opacity: 1;
+      }
+     
+      /* Separadores do menu */
+      .menu-divider {
+        height: 1px;
+        background: rgba(255, 255, 255, 0.1);
+        margin: 10px 20px;
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+     
+      .sidebar:hover .menu-divider {
+        opacity: 1;
+      }
+     
+      @media (max-width: 768px) {
+        .sidebar {
+          position: fixed;
+          left: -100%;
+          width: var(--sidebar-width-expanded) !important;
+        }
+       
+        .sidebar.active {
+          left: 0;
+        }
+       
+        .sidebar .nav-link,
+        .sidebar-header,
+        .user-info,
+        .btn-logout,
+        .menu-badge,
+        .menu-divider {
+          opacity: 1 !important;
+          transform: translateX(0) !important;
+        }
+       
+        .user-details {
+          opacity: 1 !important;
+        }
+       
+        .mobile-header {
+          display: flex;
+          align-items: center;
+        }
+       
+        .main-content {
+          margin-left: 0 !important;
+        }
+       
+        .overlay {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: rgba(0, 0, 0, 0.5);
+          z-index: 999;
+        }
+       
+        .overlay.active {
+          display: block;
+        }
+      }
+     
+      .company-logo {
+        font-weight: 700;
+        font-size: 1.4rem;
+        color: white;
+        white-space: nowrap;
+        letter-spacing: 0.5px;
+      }
+
+      .company-logo-mobile {
+        font-weight: 700;
+        font-size: 1.4rem;
+        color: var(--primary-blue);
+        white-space: nowrap;
+        margin-left: 15px;
+      }
+
+      /* Ícone do menu quando recolhido */
+      .sidebar-collapsed-icon {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        font-size: 1.5rem;
+        color: white;
+        opacity: 1;
+        transition: opacity 0.3s ease;
+      }
+     
+      .sidebar:hover .sidebar-collapsed-icon {
+        opacity: 0;
+      }
+
+      /* Estilos para submenus dinâmicos */
+      .submenu {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+        background-color: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        margin: 5px 15px;
+      }
+      
+      .submenu.show {
+        max-height: 500px;
+      }
+      
+      .submenu .nav-link {
+        padding: 10px 15px 10px 50px;
+        font-size: 0.9rem;
+        margin: 2px 0;
+        background: transparent;
+      }
+      
+      .submenu .nav-link:hover {
+        background: rgba(255, 255, 255, 0.1) !important;
+      }
+      
+      .menu-toggle {
+        position: relative;
+        cursor: pointer;
+      }
+      
+      .menu-toggle::after {
+        content: "▸";
+        position: absolute;
+        right: 20px;
+        font-size: 0.8rem;
+        transition: transform 0.3s;
+        opacity: 0;
+      }
+      
+      .sidebar:hover .menu-toggle::after {
+        opacity: 1;
+      }
+      
+      .menu-toggle.collapsed::after {
+        transform: rotate(90deg);
+      }
+
+      /* Atrasos de animação para cada item do menu */
+      .sidebar .nav-link:nth-child(1) { transition-delay: 0.1s; }
+      .sidebar .nav-link:nth-child(2) { transition-delay: 0.15s; }
+      .sidebar .nav-link:nth-child(3) { transition-delay: 0.2s; }
+      .sidebar .nav-link:nth-child(4) { transition-delay: 0.25s; }
+      .sidebar .nav-link:nth-child(5) { transition-delay: 0.3s; }
+
+      /* Status do sistema */
+      .system-status {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        padding: 12px 15px;
+        margin: 15px 20px;
+        opacity: 0;
+        transition: opacity 0.3s ease 0.4s;
+      }
+     
+      .sidebar:hover .system-status {
+        opacity: 1;
+      }
+     
+      .status-indicator {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #28a745;
+        display: inline-block;
+        margin-right: 8px;
+        animation: pulse 2s infinite;
+      }
+     
+      @keyframes pulse {
+        0% { opacity: 1; }
+        50% { opacity: 0.5; }
+        100% { opacity: 1; }
+      }
+    </style>
+    {% endif %}
+    
+    {% block extra_css %}{% endblock %}
+  </head>
+  <body>
+    
+    {% if user.is_authenticated %}
+    <!-- Layout do Dashboard (após login) - VERSÃO PROFISSIONAL -->
+    <div class="container-fluid p-0">
+      <div class="row g-0">
+        <!-- Menu Lateral -->
+        <div class="col-md-3 col-lg-2 sidebar">
+          <!-- Ícone quando menu está recolhido -->
+          <div class="sidebar-collapsed-icon">
+            <i class="fas fa-bars"></i>
+          </div>
+          
+          <div class="sidebar-header">
+            <div class="company-logo">
+              <i class="fas fa-cloud-sun me-2"></i>CitieSoft
+            </div>
+          </div>
+         
+          <div class="user-info">
+            <div class="d-flex align-items-center">
+              <div class="user-avatar">
+                {{ user.first_name|first }}{{ user.last_name|first }}
+              </div>
+              <div class="user-details">
+                <div class="fw-bold fs-6">{{ user.get_full_name|default:user.username }}</div>
+                <small class="text-light text-opacity-80">Usuário Logado</small>
+              </div>
+            </div>
+          </div>
+
+          <!-- Status do Sistema -->
+          <div class="system-status">
+            <div class="d-flex align-items-center justify-content-between">
+              <small class="text-light text-opacity-80">Status do Sistema</small>
+              <span class="status-indicator"></span>
+            </div>
+            <small class="text-light text-opacity-80 d-block mt-1">Tudo operacional</small>
+          </div>
+         
+          <ul class="nav flex-column mt-2" id="dynamicMenu">
+            <!-- Menu será populado dinamicamente via JavaScript -->
+          </ul>
+         
+          <div class="sidebar-footer mt-auto">
+            <form method="post" action="{% url 'logout' %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-logout">
+                <i class="fas fa-sign-out-alt me-2"></i>Sair do Sistema
+              </button>
+            </form>
+          </div>
+        </div>
+       
+        <!-- Conteúdo Principal -->
+        <div class="col-md-9 col-lg-10 main-content">
+          <!-- Cabeçalho Mobile -->
+          <div class="mobile-header">
+            <button class="navbar-toggler" type="button" id="sidebarToggle">
+              <i class="fas fa-bars"></i>
+            </button>
+            <div class="company-logo-mobile">
+              <i class="fas fa-cloud-sun me-2"></i>CitieSoft
+            </div>
+          </div>
+         
+          <!-- Overlay para mobile -->
+          <div class="overlay" id="overlay"></div>
+         
+          <!-- Conteúdo do dashboard será inserido aqui -->
+          {% block dashboard_content %}
+          {% endblock %}
+        </div>
+      </div>
+    </div>
+
+    {% else %}
+    <!-- Layout da Página de Login (antes do login) -->
+=======
     <title>Brisa</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="{% static 'css/main.css' %}" rel="stylesheet">
@@ -11,11 +493,273 @@
   </head>
   <body>
 
+>>>>>>> 5422c51b9ec5a8741a037bae8a7ae7915a36aefd
     <div>
         {% block content %}
         {% endblock %}
     </div>
+<<<<<<< HEAD
+    {% endif %}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    {% if user.is_authenticated %}
+    <script>
+      // Estrutura de dados para o menu dinâmico - VERSÃO PROFISSIONAL
+      const menuConfig = [
+        {
+          id: 'painel',
+          title: 'Painel Principal',
+          icon: '<i class="fas fa-chart-line"></i>',
+          url: '#',
+          active: true,
+          submenu: null
+        },
+        {
+          id: 'relatorios',
+          title: 'Relatórios',
+          icon: '<i class="fas fa-file-alt"></i>',
+          url: '#',
+          active: false,
+          badge: '3',
+          submenu: [
+            {
+              id: 'relatorio-vendas',
+              title: 'Relatório de Vendas',
+              url: '#',
+              icon: '<i class="fas fa-chart-bar"></i>'
+            },
+            {
+              id: 'relatorio-financeiro',
+              title: 'Relatório Financeiro',
+              url: '#',
+              icon: '<i class="fas fa-money-bill-wave"></i>'
+            },
+            {
+              id: 'relatorio-clientes',
+              title: 'Relatório de Clientes',
+              url: '#',
+              icon: '<i class="fas fa-users"></i>'
+            }
+          ]
+        },
+        {
+          id: 'cadastros',
+          title: 'Cadastros',
+          icon: '<i class="fas fa-edit"></i>',
+          url: '#',
+          active: false,
+          badge: '5',
+          submenu: [
+            {
+              id: 'cadastro-clientes',
+              title: 'Clientes',
+              url: '#',
+              icon: '<i class="fas fa-user"></i>'
+            },
+            {
+              id: 'cadastro-produtos',
+              title: 'Produtos',
+              url: '#',
+              icon: '<i class="fas fa-box"></i>'
+            },
+            {
+              id: 'cadastro-usuarios',
+              title: 'Usuários',
+              url: '#',
+              icon: '<i class="fas fa-user-cog"></i>'
+            },
+            {
+              id: 'cadastro-fornecedores',
+              title: 'Fornecedores',
+              url: '#',
+              icon: '<i class="fas fa-truck"></i>'
+            }
+          ]
+        },
+        {
+          id: 'separator-1',
+          type: 'divider'
+        },
+        {
+          id: 'configuracoes',
+          title: 'Configurações',
+          icon: '<i class="fas fa-cogs"></i>',
+          url: '#',
+          active: false,
+          submenu: [
+            {
+              id: 'config-geral',
+              title: 'Configurações Gerais',
+              url: '#',
+              icon: '<i class="fas fa-sliders-h"></i>'
+            },
+            {
+              id: 'config-perfis',
+              title: 'Perfis de Acesso',
+              url: '#',
+              icon: '<i class="fas fa-user-shield"></i>'
+            }
+          ]
+        },
+        {
+          id: 'suporte',
+          title: 'Suporte',
+          icon: '<i class="fas fa-headset"></i>',
+          url: '#',
+          active: false,
+          submenu: null
+        }
+      ];
+
+      document.addEventListener('DOMContentLoaded', function() {
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.querySelector('.sidebar');
+        const overlay = document.getElementById('overlay');
+        const dynamicMenu = document.getElementById('dynamicMenu');
+        const logoutButton = document.getElementById('logoutButton');
+       
+        // Função para construir o menu dinâmico
+        function buildDynamicMenu() {
+          dynamicMenu.innerHTML = '';
+          
+          menuConfig.forEach(item => {
+            if (item.type === 'divider') {
+              const divider = document.createElement('div');
+              divider.className = 'menu-divider';
+              dynamicMenu.appendChild(divider);
+              return;
+            }
+
+            const listItem = document.createElement('li');
+            listItem.className = 'nav-item';
+            
+            if (item.submenu) {
+              // Item com submenu
+              const menuLink = document.createElement('a');
+              menuLink.className = `nav-link menu-toggle ${item.active ? 'active' : ''}`;
+              menuLink.setAttribute('data-bs-toggle', 'collapse');
+              menuLink.setAttribute('data-bs-target', `#submenu-${item.id}`);
+              menuLink.setAttribute('aria-expanded', 'false');
+              menuLink.href = item.url;
+              menuLink.innerHTML = `${item.icon} ${item.title}`;
+              
+              // Adicionar badge se existir
+              if (item.badge) {
+                const badge = document.createElement('span');
+                badge.className = 'menu-badge';
+                badge.textContent = item.badge;
+                menuLink.appendChild(badge);
+              }
+              
+              const submenuDiv = document.createElement('div');
+              submenuDiv.className = 'submenu collapse';
+              submenuDiv.id = `submenu-${item.id}`;
+              
+              const submenuList = document.createElement('ul');
+              submenuList.className = 'nav flex-column';
+              
+              item.submenu.forEach(subItem => {
+                const subListItem = document.createElement('li');
+                subListItem.className = 'nav-item';
+                
+                const subLink = document.createElement('a');
+                subLink.className = 'nav-link';
+                subLink.href = subItem.url;
+                subLink.innerHTML = `${subItem.icon} ${subItem.title}`;
+                
+                subListItem.appendChild(subLink);
+                submenuList.appendChild(subListItem);
+              });
+              
+              submenuDiv.appendChild(submenuList);
+              listItem.appendChild(menuLink);
+              listItem.appendChild(submenuDiv);
+            } else {
+              // Item simples sem submenu
+              const menuLink = document.createElement('a');
+              menuLink.className = `nav-link ${item.active ? 'active' : ''}`;
+              menuLink.href = item.url;
+              menuLink.innerHTML = `${item.icon} ${item.title}`;
+              
+              // Adicionar badge se existir
+              if (item.badge) {
+                const badge = document.createElement('span');
+                badge.className = 'menu-badge';
+                badge.textContent = item.badge;
+                menuLink.appendChild(badge);
+              }
+              
+              listItem.appendChild(menuLink);
+            }
+            
+            dynamicMenu.appendChild(listItem);
+          });
+        }
+        
+        // Inicializar o menu
+        buildDynamicMenu();
+        
+        // Inicializar componentes de colapso do Bootstrap
+        const collapseElementList = document.querySelectorAll('.submenu');
+        const collapseList = [...collapseElementList].map(collapseEl => new bootstrap.Collapse(collapseEl, {
+          toggle: false
+        }));
+       
+        // Menu mobile toggle
+        sidebarToggle.addEventListener('click', function() {
+          sidebar.classList.toggle('active');
+          overlay.classList.toggle('active');
+        });
+       
+        overlay.addEventListener('click', function() {
+          sidebar.classList.remove('active');
+          overlay.classList.remove('active');
+        });
+        
+        // Fechar menu mobile ao clicar em um link
+        document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+          link.addEventListener('click', function() {
+            if (window.innerWidth <= 768) {
+              sidebar.classList.remove('active');
+              overlay.classList.remove('active');
+            }
+          });
+        });
+       
+        // Botão de logout funcional
+        logoutButton.addEventListener('click', function(e) {
+          e.preventDefault();
+          if (confirm('Tem certeza que deseja sair do sistema?')) {
+            e.target.closest('form').submit();
+          }
+        });
+
+        // Adicionar classe collapsed aos menu-toggle quando submenu estiver fechado
+        document.querySelectorAll('.menu-toggle').forEach(toggle => {
+          toggle.addEventListener('click', function() {
+            this.classList.toggle('collapsed');
+          });
+        });
+
+        // Efeito de hover suave nos cards
+        document.querySelectorAll('.content-card').forEach(card => {
+          card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-2px)';
+          });
+          
+          card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+          });
+        });
+      });
+    </script>
+    {% endif %}
+    
+    {% block extra_js %}{% endblock %}
+=======
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+>>>>>>> 5422c51b9ec5a8741a037bae8a7ae7915a36aefd
   </body>
 </html>

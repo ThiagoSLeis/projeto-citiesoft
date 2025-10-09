@@ -4,6 +4,13 @@ from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import RegistrationForm
+<<<<<<< HEAD
+
+def login_view(request):
+    if request.user.is_authenticated:
+        return redirect('dashboard')
+    
+=======
 from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth import views as auth_views
@@ -11,6 +18,7 @@ from django.contrib.auth import views as auth_views
 
 
 def login_view(request):
+>>>>>>> 5422c51b9ec5a8741a037bae8a7ae7915a36aefd
     if request.method == 'POST':
         cpf_com_formatacao = request.POST.get('cpf')
         password = request.POST.get('password')
@@ -34,11 +42,20 @@ def login_view(request):
 
     return render(request, 'authentication/login.html')
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> 5422c51b9ec5a8741a037bae8a7ae7915a36aefd
 @login_required
 def dashboard_view(request):
     return render(request, 'authentication/dashboard.html')
 
+<<<<<<< HEAD
+def register_view(request):
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+=======
 
 def register_view(request):
     if request.method == 'POST':
@@ -47,11 +64,15 @@ def register_view(request):
         if form.is_valid():
             # Se for válido, salva o novo usuário no banco de dados.
             # O form.save() já cuida de criptografar a senha!
+>>>>>>> 5422c51b9ec5a8741a037bae8a7ae7915a36aefd
             form.save()
             messages.success(request, 'Cadastro realizado com sucesso! Por favor, faça o login.')
             return redirect('login')
     else:
         form = RegistrationForm()
+<<<<<<< HEAD
+    return render(request, 'authentication/register.html', {'form': form})
+=======
     return render(request, 'authentication/register.html', {'form': form})
 
 def recuperar_view (request):
@@ -111,3 +132,4 @@ def password_reset_confirm(request, uidb64=None, token=None):
 def password_reset_complete(request):
     messages.success(request, "Senha redefinida com sucesso! Agora faça login.")
     return redirect("login")
+>>>>>>> 5422c51b9ec5a8741a037bae8a7ae7915a36aefd

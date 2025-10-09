@@ -13,6 +13,14 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+<<<<<<< HEAD
+
+load_dotenv()
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+=======
 from dotenv import load_dotenv
 
 #load_dotenv()
@@ -20,12 +28,17 @@ from dotenv import load_dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
+>>>>>>> 5422c51b9ec5a8741a037bae8a7ae7915a36aefd
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+<<<<<<< HEAD
+SECRET_KEY = 'django-insecure-cscu%@71f$=j4bnjsyasglx2p+45pyea0l5bst2!k)t*&xo4fe'
+=======
 #SECRET_KEY = 'django-insecure-cscu%@71f$=j4bnjsyasglx2p+45pyea0l5bst2!k)t*&xo4fe'
+>>>>>>> 5422c51b9ec5a8741a037bae8a7ae7915a36aefd
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -57,10 +70,16 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+<<<<<<< HEAD
+]
+
+ROOT_URLCONF = 'tela_login.urls'
+=======
     
     
 ]
 ROOT_URLCONF = "tela_login.urls"
+>>>>>>> 5422c51b9ec5a8741a037bae8a7ae7915a36aefd
 
 TEMPLATES = [
     {
@@ -83,6 +102,16 @@ WSGI_APPLICATION = 'tela_login.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+<<<<<<< HEAD
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'brisa_db',
+        'USER': 'root',
+        'PASSWORD': '032206Fl33%',
+        'HOST': 'localhost',
+        'PORT': '3306',
+=======
 SECRET_KEY = os.getenv("SECRET_KEY", "fallback-secret-key")
 
 DEBUG = os.getenv("DEBUG", "False").lower() == "true"
@@ -95,11 +124,15 @@ DATABASES = {
         'PASSWORD': os.getenv("DB_PASSWORD"),
         'HOST': "localhost",
         'PORT': "3306",
+>>>>>>> 5422c51b9ec5a8741a037bae8a7ae7915a36aefd
     }
 }
 
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> 5422c51b9ec5a8741a037bae8a7ae7915a36aefd
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
@@ -122,7 +155,11 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
+<<<<<<< HEAD
+LANGUAGE_CODE = 'en-us'
+=======
 LANGUAGE_CODE = 'pt-br'
+>>>>>>> 5422c51b9ec5a8741a037bae8a7ae7915a36aefd
 
 TIME_ZONE = 'UTC'
 
@@ -154,7 +191,10 @@ PASSWORD_HASHERS = [
 
 AUTH_USER_MODEL = 'users.CustomUser'
 LOGIN_URL = 'login'
+<<<<<<< HEAD
+=======
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 DEBUG = True
 ALLOWED_HOSTS = []
+>>>>>>> 5422c51b9ec5a8741a037bae8a7ae7915a36aefd
