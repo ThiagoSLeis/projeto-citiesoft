@@ -1,0 +1,731 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'authentication/css/style_register.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="background-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+    
+    <div class="container">
+        <div class="header">
+            <i class="fas fa-user-plus"></i>
+            <h1>Cadastro Completo</h1>
+            <p class="subtitle">Preencha seus dados para criar sua conta</p>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+        
+        <div class="step-indicator">
+            <div class="step active">1</div>
+            <div class="step">2</div>
+            <div class="step">3</div>
+        </div>
+        
+        <div class="info-box">
+            <p><i class="fas fa-info-circle"></i> Preencha todos os campos obrigatórios marcados com <span class="required">*</span>.</p>
+        </div>
+        
+        <div id="message" class="message"></div>
+        
+        <form id="cadastroForm">
+            <!-- Nome e Sobrenome ocupam largura total do container centralizado -->
+            <div class="row">
+                <div class="col-half">
+                    <div class="form-group">
+                        <label for="nome">Nome <span class="required">*</span></label>
+                        <div class="input-container">
+                            <input type="text" id="nome" name="nome" required placeholder="Seu nome">
+                            <i class="fas fa-user input-icon"></i>
+                        </div>
+                        <div class="field-error" id="nome-error"></div>
+                    </div>
+                </div>
+                <div class="col-half">
+                    <div class="form-group">
+                        <label for="sobrenome">Sobrenome <span class="required">*</span></label>
+                        <div class="input-container">
+                            <input type="text" id="sobrenome" name="sobrenome" required placeholder="Seu sobrenome">
+                            <i class="fas fa-user input-icon"></i>
+                        </div>
+                        <div class="field-error" id="sobrenome-error"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tipo de Pessoa -->
+            <div class="tipo-pessoa-group">
+                <label>Tipo de Pessoa <span class="required">*</span></label>
+                <div class="tipo-pessoa-options">
+                    <div class="tipo-pessoa-option" data-tipo="fisica">
+                        <i class="fas fa-user"></i>
+                        <div>Pessoa Física</div>
+                    </div>
+                    <div class="tipo-pessoa-option" data-tipo="juridica">
+                        <i class="fas fa-building"></i>
+                        <div>Pessoa Jurídica</div>
+                    </div>
+                </div>
+                <input type="hidden" id="tipo_pessoa" name="tipo_pessoa" required>
+                <div class="field-error" id="tipo_pessoa-error"></div>
+            </div>
+            
+            <!-- CPF/CNPJ e Contato com largura compacta -->
+            <div class="row">
+                <div class="col-half">
+                    <div class="form-group documento-field" id="cpf-field">
+                        <label for="cpf">CPF <span class="required">*</span></label>
+                        <div class="input-container">
+                            <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00">
+                            <i class="fas fa-id-card input-icon"></i>
+                        </div>
+                        <div class="field-error" id="cpf-error"></div>
+                    </div>
+                    
+                    <div class="form-group documento-field" id="cnpj-field">
+                        <label for="cnpj">CNPJ <span class="required">*</span></label>
+                        <div class="input-container">
+                            <input type="text" id="cnpj" name="cnpj" placeholder="00.000.000/0000-00">
+                            <i class="fas fa-id-card input-icon"></i>
+                        </div>
+                        <div class="field-error" id="cnpj-error"></div>
+                    </div>
+                </div>
+                <div class="col-half">
+                    <div class="form-group">
+                        <label for="contato">Contato <span class="required">*</span></label>
+                        <div class="input-container">
+                            <input type="text" id="contato" name="contato" required placeholder="(00) 00000-0000">
+                            <i class="fas fa-phone input-icon"></i>
+                        </div>
+                        <div class="field-error" id="contato-error"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CEP com largura compacta -->
+            <div class="row">
+                <div class="col-half">
+                    <div class="form-group">
+                        <label for="cep">CEP <span class="required">*</span></label>
+                        <div class="input-container">
+                            <input type="text" id="cep" name="cep" required placeholder="00000-000">
+                            <i class="fas fa-map-marker-alt input-icon"></i>
+                        </div>
+                        <div class="field-error" id="cep-error"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Estado e Cidade com largura compacta -->
+            <div class="row">
+                <div class="col-half">
+                    <div class="form-group">
+                        <label for="uf">Estado (UF) <span class="required">*</span></label>
+                        <div class="input-container">
+                            <select id="uf" name="uf" required>
+                                <option value="">Selecione um estado</option>
+                            </select>
+                            <i class="fas fa-chevron-down input-icon"></i>
+                        </div>
+                        <div class="field-error" id="uf-error"></div>
+                    </div>
+                </div>
+                <div class="col-half">
+                    <div class="form-group">
+                        <label for="cidade">Cidade <span class="required">*</span></label>
+                        <div class="input-container">
+                            <select id="cidade" name="cidade" required>
+                                <option value="">Selecione uma cidade</option>
+                            </select>
+                            <i class="fas fa-city input-icon"></i>
+                        </div>
+                        <div class="field-error" id="cidade-error"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bairro e Logradouro com largura compacta -->
+            <div class="row">
+                <div class="col-half">
+                    <div class="form-group">
+                        <label for="bairro">Bairro <span class="required">*</span></label>
+                        <div class="input-container">
+                            <input type="text" id="bairro" name="bairro" required placeholder="Seu bairro">
+                            <i class="fas fa-map input-icon"></i>
+                        </div>
+                        <div class="field-error" id="bairro-error"></div>
+                    </div>
+                </div>
+                <div class="col-half">
+                    <div class="form-group">
+                        <label for="logradouro">Logradouro <span class="required">*</span></label>
+                        <div class="input-container">
+                            <input type="text" id="logradouro" name="logradouro" required placeholder="Rua, Avenida, etc.">
+                            <i class="fas fa-road input-icon"></i>
+                        </div>
+                        <div class="field-error" id="logradouro-error"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- E-mail com largura compacta -->
+            <div class="row">
+                <div class="col-half">
+                    <div class="form-group">
+                        <label for="email">E-mail <span class="required">*</span></label>
+                        <div class="input-container">
+                            <input type="email" id="email" name="email" required placeholder="seu@email.com">
+                            <i class="fas fa-envelope input-icon"></i>
+                        </div>
+                        <div class="field-error" id="email-error"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Senhas com largura compacta -->
+            <div class="row">
+                <div class="col-half">
+                    <div class="form-group">
+                        <label for="senha">Senha <span class="required">*</span></label>
+                        <div class="input-container">
+                            <input type="password" id="senha" name="senha" required placeholder="Crie uma senha">
+                            <i class="fas fa-eye input-icon password-toggle" id="toggleSenha"></i>
+                        </div>
+                        <div class="password-strength">
+                            <div class="password-strength-bar" id="password-strength-bar"></div>
+                        </div>
+                        <div class="password-strength-text" id="password-strength-text"></div>
+                        <div class="field-error" id="senha-error"></div>
+                    </div>
+                </div>
+                <div class="col-half">
+                    <div class="form-group">
+                        <label for="confirmar_senha">Confirmar Senha <span class="required">*</span></label>
+                        <div class="input-container">
+                            <input type="password" id="confirmar_senha" name="confirmar_senha" required placeholder="Confirme sua senha">
+                            <i class="fas fa-eye input-icon password-toggle" id="toggleConfirmarSenha"></i>
+                        </div>
+                        <div class="field-error" id="confirmar_senha-error"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Botão centralizado com 50% de largura -->
+            <button type="submit">
+                <i class="fas fa-paper-plane"></i> Finalizar Cadastro
+            </button>
+            
+            <div class="home-link">
+                <a href="index.html"><i class="fas fa-home"></i> Voltar para a Página Inicial</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // JavaScript permanece o mesmo da versão anterior
+        document.addEventListener('DOMContentLoaded', function() {
+            // Carregar estados ao carregar a página
+            carregarEstados();
+            
+            // Evento para seleção do tipo de pessoa
+            document.querySelectorAll('.tipo-pessoa-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remover seleção anterior
+                    document.querySelectorAll('.tipo-pessoa-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    
+                    // Adicionar seleção atual
+                    this.classList.add('selected');
+                    
+                    // Atualizar campo oculto
+                    const tipo = this.getAttribute('data-tipo');
+                    document.getElementById('tipo_pessoa').value = tipo;
+                    
+                    // Mostrar campo de documento correspondente
+                    if (tipo === 'fisica') {
+                        document.getElementById('cpf-field').classList.add('active');
+                        document.getElementById('cnpj-field').classList.remove('active');
+                        document.getElementById('cnpj').required = false;
+                        document.getElementById('cpf').required = true;
+                    } else if (tipo === 'juridica') {
+                        document.getElementById('cnpj-field').classList.add('active');
+                        document.getElementById('cpf-field').classList.remove('active');
+                        document.getElementById('cpf').required = false;
+                        document.getElementById('cnpj').required = true;
+                    }
+                });
+            });
+            
+            // Evento para buscar endereço pelo CEP
+            document.getElementById('cep').addEventListener('blur', function() {
+                const cep = this.value.replace(/\D/g, '');
+                if (cep.length === 8) {
+                    buscarEndereco(cep);
+                }
+            });
+            
+            // Evento de envio do formulário
+            document.getElementById('cadastroForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                validarFormulario();
+            });
+            
+            // Formatação automática dos campos
+            document.getElementById('cpf').addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                
+                // Formatação para CPF
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+                
+                e.target.value = value;
+            });
+            
+            document.getElementById('cnpj').addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                
+                // Formatação para CNPJ
+                value = value.replace(/^(\d{2})(\d)/, '$1.$2');
+                value = value.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
+                value = value.replace(/\.(\d{3})(\d)/, '.$1/$2');
+                value = value.replace(/(\d{4})(\d)/, '$1-$2');
+                
+                e.target.value = value;
+            });
+            
+            document.getElementById('contato').addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                
+                if (value.length > 10) {
+                    value = value.replace(/^(\d{2})(\d)/g, '($1) $2');
+                    value = value.replace(/(\d{5})(\d)/, '$1-$2');
+                } else if (value.length > 5) {
+                    value = value.replace(/^(\d{2})(\d)/g, '($1) $2');
+                    value = value.replace(/(\d{4})(\d)/, '$1-$2');
+                } else if (value.length > 2) {
+                    value = value.replace(/^(\d{2})(\d)/g, '($1) $2');
+                }
+                
+                e.target.value = value;
+            });
+            
+            document.getElementById('cep').addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                
+                if (value.length > 5) {
+                    value = value.replace(/^(\d{5})(\d)/, '$1-$2');
+                }
+                
+                e.target.value = value;
+            });
+            
+            // Toggle para mostrar/ocultar senha
+            document.getElementById('toggleSenha').addEventListener('click', function() {
+                const senhaInput = document.getElementById('senha');
+                const type = senhaInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                senhaInput.setAttribute('type', type);
+                this.classList.toggle('fa-eye');
+                this.classList.toggle('fa-eye-slash');
+            });
+            
+            document.getElementById('toggleConfirmarSenha').addEventListener('click', function() {
+                const confirmarSenhaInput = document.getElementById('confirmar_senha');
+                const type = confirmarSenhaInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                confirmarSenhaInput.setAttribute('type', type);
+                this.classList.toggle('fa-eye');
+                this.classList.toggle('fa-eye-slash');
+            });
+            
+            // Atualizar barra de progresso conforme preenchimento
+            const inputs = document.querySelectorAll('input, select');
+            inputs.forEach(input => {
+                input.addEventListener('input', atualizarProgresso);
+                input.addEventListener('change', atualizarProgresso);
+            });
+            
+            // Verificar força da senha em tempo real
+            document.getElementById('senha').addEventListener('input', function() {
+                verificarForcaSenha(this.value);
+            });
+            
+            // Animar elementos ao rolar a página
+            window.addEventListener('scroll', animarElementos);
+            animarElementos(); // Executar uma vez ao carregar
+        });
+        
+        // Função para atualizar barra de progresso
+        function atualizarProgresso() {
+            const inputs = document.querySelectorAll('input, select');
+            let preenchidos = 0;
+            
+            inputs.forEach(input => {
+                if (input.value.trim() !== '' && input.id !== 'tipo_pessoa') {
+                    preenchidos++;
+                }
+            });
+            
+            const progresso = (preenchidos / inputs.length) * 100;
+            document.getElementById('progress').style.width = progresso + '%';
+            
+            // Atualizar indicadores de etapa
+            const steps = document.querySelectorAll('.step');
+            if (progresso < 33) {
+                steps[0].classList.add('active');
+                steps[1].classList.remove('active');
+                steps[2].classList.remove('active');
+            } else if (progresso < 66) {
+                steps[0].classList.add('active');
+                steps[1].classList.add('active');
+                steps[2].classList.remove('active');
+            } else {
+                steps[0].classList.add('active');
+                steps[1].classList.add('active');
+                steps[2].classList.add('active');
+            }
+        }
+        
+        // Função para animar elementos ao rolar
+        function animarElementos() {
+            const elementos = document.querySelectorAll('.form-group');
+            elementos.forEach(elemento => {
+                const elementoTop = elemento.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (elementoTop < windowHeight - 100) {
+                    elemento.style.opacity = '1';
+                    elemento.style.transform = 'translateY(0)';
+                }
+            });
+        }
+        
+        // Função para carregar os estados do Brasil
+        function carregarEstados() {
+            fetch('https://servicodados.ibge.gov.br/api/v1/localidades/estados')
+                .then(response => response.json())
+                .then(estados => {
+                    const ufSelect = document.getElementById('uf');
+                    
+                    // Ordenar estados por nome
+                    estados.sort((a, b) => a.nome.localeCompare(b.nome));
+                    
+                    estados.forEach(estado => {
+                        const option = document.createElement('option');
+                        option.value = estado.sigla;
+                        option.textContent = estado.nome;
+                        ufSelect.appendChild(option);
+                    });
+                    
+                    // Carregar cidades do primeiro estado por padrão
+                    if (estados.length > 0) {
+                        carregarCidades(estados[0].sigla);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao carregar estados:', error);
+                    mostrarMensagem('Erro ao carregar estados. Tente novamente.', 'error');
+                });
+        }
+        
+        // Função para carregar as cidades de um estado específico
+        function carregarCidades(uf) {
+            const cidadeSelect = document.getElementById('cidade');
+            cidadeSelect.innerHTML = '<option value="">Carregando...</option>';
+            
+            fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`)
+                .then(response => response.json())
+                .then(cidades => {
+                    cidadeSelect.innerHTML = '';
+                    
+                    // Ordenar cidades por nome
+                    cidades.sort((a, b) => a.nome.localeCompare(b.nome));
+                    
+                    cidades.forEach(cidade => {
+                        const option = document.createElement('option');
+                        option.value = cidade.id;
+                        option.textContent = cidade.nome;
+                        cidadeSelect.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Erro ao carregar cidades:', error);
+                    cidadeSelect.innerHTML = '<option value="">Erro ao carregar cidades</option>';
+                    mostrarMensagem('Erro ao carregar cidades. Tente novamente.', 'error');
+                });
+        }
+        
+        // Função para buscar endereço pelo CEP
+        function buscarEndereco(cep) {
+            fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.erro) {
+                        document.getElementById('logradouro').value = data.logradouro || '';
+                        document.getElementById('bairro').value = data.bairro || '';
+                        
+                        // Preencher o estado e carregar as cidades
+                        if (data.uf) {
+                            document.getElementById('uf').value = data.uf;
+                            carregarCidades(data.uf);
+                            
+                            // Aguardar um pouco para as cidades carregarem antes de selecionar
+                            setTimeout(() => {
+                                const cidadeSelect = document.getElementById('cidade');
+                                // Encontrar a cidade pelo nome
+                                for (let i = 0; i < cidadeSelect.options.length; i++) {
+                                    if (cidadeSelect.options[i].text === data.localidade) {
+                                        cidadeSelect.selectedIndex = i;
+                                        break;
+                                    }
+                                }
+                            }, 1000);
+                        }
+                    } else {
+                        mostrarMensagem('CEP não encontrado.', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar CEP:', error);
+                    mostrarMensagem('Erro ao buscar CEP. Verifique o número digitado.', 'error');
+                });
+        }
+        
+        // Função para verificar a força da senha
+        function verificarForcaSenha(senha) {
+            const bar = document.getElementById('password-strength-bar');
+            const text = document.getElementById('password-strength-text');
+            
+            let forca = 0;
+            let mensagem = '';
+            let cor = '';
+            
+            // Verificar comprimento
+            if (senha.length >= 8) forca += 25;
+            
+            // Verificar letras maiúsculas e minúsculas
+            if (/[a-z]/.test(senha) && /[A-Z]/.test(senha)) forca += 25;
+            
+            // Verificar números
+            if (/\d/.test(senha)) forca += 25;
+            
+            // Verificar caracteres especiais
+            if (/[^a-zA-Z0-9]/.test(senha)) forca += 25;
+            
+            // Definir mensagem e cor baseada na força
+            if (forca === 0) {
+                mensagem = '';
+                cor = '#e5e7eb';
+            } else if (forca <= 25) {
+                mensagem = 'Senha fraca';
+                cor = '#ef4444';
+            } else if (forca <= 50) {
+                mensagem = 'Senha razoável';
+                cor = '#f59e0b';
+            } else if (forca <= 75) {
+                mensagem = 'Senha boa';
+                cor = '#3b82f6';
+            } else {
+                mensagem = 'Senha forte';
+                cor = '#10b981';
+            }
+            
+            // Atualizar a barra e o texto
+            bar.style.width = forca + '%';
+            bar.style.backgroundColor = cor;
+            text.textContent = mensagem;
+            text.style.color = cor;
+        }
+        
+        // Função para validar CPF
+        function validarCPF(cpf) {
+            cpf = cpf.replace(/\D/g, '');
+            
+            if (cpf.length !== 11) return false;
+            
+            // Verificar se todos os dígitos são iguais
+            if (/^(\d)\1+$/.test(cpf)) return false;
+            
+            // Validar primeiro dígito verificador
+            let soma = 0;
+            for (let i = 0; i < 9; i++) {
+                soma += parseInt(cpf.charAt(i)) * (10 - i);
+            }
+            let resto = (soma * 10) % 11;
+            if (resto === 10 || resto === 11) resto = 0;
+            if (resto !== parseInt(cpf.charAt(9))) return false;
+            
+            // Validar segundo dígito verificador
+            soma = 0;
+            for (let i = 0; i < 10; i++) {
+                soma += parseInt(cpf.charAt(i)) * (11 - i);
+            }
+            resto = (soma * 10) % 11;
+            if (resto === 10 || resto === 11) resto = 0;
+            if (resto !== parseInt(cpf.charAt(10))) return false;
+            
+            return true;
+        }
+        
+        // Função para validar CNPJ
+        function validarCNPJ(cnpj) {
+            cnpj = cnpj.replace(/\D/g, '');
+            
+            if (cnpj.length !== 14) return false;
+            
+            // Verificar se todos os dígitos são iguais
+            if (/^(\d)\1+$/.test(cnpj)) return false;
+            
+            // Validar primeiro dígito verificador
+            let tamanho = cnpj.length - 2;
+            let numeros = cnpj.substring(0, tamanho);
+            let digitos = cnpj.substring(tamanho);
+            let soma = 0;
+            let pos = tamanho - 7;
+            
+            for (let i = tamanho; i >= 1; i--) {
+                soma += parseInt(numeros.charAt(tamanho - i)) * pos--;
+                if (pos < 2) pos = 9;
+            }
+            
+            let resultado = soma % 11 < 2 ? 0 : 11 - (soma % 11);
+            if (resultado !== parseInt(digitos.charAt(0))) return false;
+            
+            // Validar segundo dígito verificador
+            tamanho = tamanho + 1;
+            numeros = cnpj.substring(0, tamanho);
+            soma = 0;
+            pos = tamanho - 7;
+            
+            for (let i = tamanho; i >= 1; i--) {
+                soma += parseInt(numeros.charAt(tamanho - i)) * pos--;
+                if (pos < 2) pos = 9;
+            }
+            
+            resultado = soma % 11 < 2 ? 0 : 11 - (soma % 11);
+            if (resultado !== parseInt(digitos.charAt(1))) return false;
+            
+            return true;
+        }
+        
+        // Função para validar e enviar o formulário
+        function validarFormulario() {
+            // Limpar erros anteriores
+            document.querySelectorAll('.field-error').forEach(el => {
+                el.style.display = 'none';
+            });
+            document.querySelectorAll('.input-error').forEach(el => {
+                el.classList.remove('input-error');
+            });
+            
+            let valido = true;
+            
+            // Validar tipo de pessoa
+            const tipoPessoa = document.getElementById('tipo_pessoa').value;
+            const tipoPessoaError = document.getElementById('tipo_pessoa-error');
+            
+            if (!tipoPessoa) {
+                tipoPessoaError.textContent = 'Selecione o tipo de pessoa';
+                tipoPessoaError.style.display = 'block';
+                valido = false;
+            }
+            
+            // Validar CPF/CNPJ
+            if (tipoPessoa === 'fisica') {
+                const cpf = document.getElementById('cpf').value.replace(/\D/g, '');
+                const cpfError = document.getElementById('cpf-error');
+                
+                if (!validarCPF(cpf)) {
+                    cpfError.textContent = 'CPF inválido';
+                    cpfError.style.display = 'block';
+                    document.getElementById('cpf').classList.add('input-error');
+                    valido = false;
+                }
+            } else if (tipoPessoa === 'juridica') {
+                const cnpj = document.getElementById('cnpj').value.replace(/\D/g, '');
+                const cnpjError = document.getElementById('cnpj-error');
+                
+                if (!validarCNPJ(cnpj)) {
+                    cnpjError.textContent = 'CNPJ inválido';
+                    cnpjError.style.display = 'block';
+                    document.getElementById('cnpj').classList.add('input-error');
+                    valido = false;
+                }
+            }
+            
+            // Validar se as senhas coincidem
+            const senha = document.getElementById('senha').value;
+            const confirmarSenha = document.getElementById('confirmar_senha').value;
+            const confirmarSenhaError = document.getElementById('confirmar_senha-error');
+            
+            if (senha !== confirmarSenha) {
+                confirmarSenhaError.textContent = 'As senhas não coincidem';
+                confirmarSenhaError.style.display = 'block';
+                document.getElementById('confirmar_senha').classList.add('input-error');
+                valido = false;
+            }
+            
+            // Validar força da senha
+            if (senha.length < 6) {
+                document.getElementById('senha-error').textContent = 'A senha deve ter pelo menos 6 caracteres';
+                document.getElementById('senha-error').style.display = 'block';
+                document.getElementById('senha').classList.add('input-error');
+                valido = false;
+            }
+            
+            // Se o formulário for válido, simular envio
+            if (valido) {
+                // Simular envio de dados
+                mostrarMensagem('Cadastro realizado com sucesso! Redirecionando para a página inicial...', 'success');
+                
+                // Adicionar contador regressivo
+                let countdown = 5;
+                const countdownElement = document.createElement('div');
+                countdownElement.className = 'redirect-countdown';
+                countdownElement.innerHTML = `Redirecionando em ${countdown} segundos...`;
+                document.getElementById('message').appendChild(countdownElement);
+                
+                // Atualizar contador
+                const countdownInterval = setInterval(() => {
+                    countdown--;
+                    countdownElement.innerHTML = `Redirecionando em ${countdown} segundos...`;
+                    
+                    if (countdown <= 0) {
+                        clearInterval(countdownInterval);
+                        redirecionarParaHome();
+                    }
+                }, 1000);
+            } else {
+                mostrarMensagem('Por favor, corrija os erros destacados no formulário.', 'error');
+            }
+        }
+        
+        // Função para redirecionar para a página inicial
+        function redirecionarParaHome() {
+            // Aqui você pode alterar a URL para a página inicial real do seu site
+            window.location.href = 'index.html';
+        }
+        
+        // Função para exibir mensagens
+        function mostrarMensagem(mensagem, tipo) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = mensagem;
+            messageDiv.className = `message ${tipo}`;
+            messageDiv.style.display = 'block';
+            
+            // Rolando para a mensagem
+            messageDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
+{% endblock %}
