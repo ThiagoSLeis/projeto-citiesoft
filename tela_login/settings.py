@@ -161,3 +161,34 @@ LOGIN_URL = 'login'
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 DEBUG = True
 ALLOWED_HOSTS = []
+
+# CONFIGURAÇÕES DE AUTENTICAÇÃO - ADICIONE ESTAS LINHAS
+LOGIN_REDIRECT_URL = '/dashboard/'  # Para onde ir após o login
+LOGOUT_REDIRECT_URL = '/login/'     # Para onde ir após o logout
+
+# CONFIGURAÇÕES DE SEGURANÇA
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']  # Hosts permitidos
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000', 'http://localhost:8000']  # Origens confiáveis para CSRF
+
+# CONFIGURAÇÕES DE SESSÃO - IMPORTANTE para controle de acesso
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Sessão expira ao fechar navegador
+SESSION_COOKIE_AGE = 3600  # 1 hora em segundos (tempo máximo da sessão)
+SESSION_SAVE_EVERY_REQUEST = True  # Renova a sessão a cada clique
+
+# Configurações de segurança de sessão
+SESSION_COOKIE_HTTPONLY = True  # Impede acesso JavaScript ao cookie
+SESSION_COOKIE_SECURE = False  # Mude para True em produção com HTTPS
+SESSION_COOKIE_SAMESITE = 'Lax'  # Proteção contra CSRF
+CSRF_COOKIE_HTTPONLY = False  # IMPORTANTE: False para permitir JavaScript acessar o CSRF token
+
+# Configuração adicional para static files
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+]
+
+# Para desenvolvimento - garantir que static files funcionem
+if DEBUG:
+    import mimetypes
+    mimetypes.add_type("application/javascript", ".js", True)
+

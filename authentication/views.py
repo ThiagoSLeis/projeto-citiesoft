@@ -111,3 +111,9 @@ def password_reset_confirm(request, uidb64=None, token=None):
 def password_reset_complete(request):
     messages.success(request, "Senha redefinida com sucesso! Agora faça login.")
     return redirect("login")
+
+# --- LOGOUT (opcional, caso queira usar função personalizada) ---
+def logout_view(request):
+    logout(request)
+    messages.info(request, 'Você saiu da sua conta.')
+    return redirect('login')
