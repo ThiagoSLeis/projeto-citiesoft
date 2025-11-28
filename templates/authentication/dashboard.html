@@ -2,295 +2,1284 @@
 {% load static %}
 
 {% block dashboard_content %}
-<div class="full-width-content animate-fade-in">
-    <!-- CLASSE ADICIONADA: full-bleed para esticar até as bordas -->
-    <div class="hero-section text-white mb-4 full-bleed">
-        <div class="ia-animation-overlay"></div>
-        <div class="row align-items-center position-relative z-1 p-4">
-            <div class="col-md-8">
-                <div class="text-animation">
-                    <h1 class="h3 mb-2 animate-text-gradient">Bem-vindo a CitieSoft</h1>
-                    <p class="mb-0 opacity-90 animate-subtitle">Transformamos ideias em sistemas</p>
+<div class="dashboard-container">
+    <!-- Top Bar com Logo e Status -->
+    <div class="top-bar">
+        <div class="top-bar-left">
+            <div class="top-bar-logo">
+                <h2 class="top-bar-logo-text">Citiesoft</h2>
+            </div>
+        </div>
+        <div class="top-bar-status-container">
+            <div class="top-bar-status">
+                <span class="status-indicator"></span>
+                <span>Online</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <div class="content-header">
+        <h1><i class="fas fa-tachometer-alt me-2"></i>Dashboard - Painel de Controle</h1>
+        <p class="mb-0 mt-2">Visão geral do sistema - <span id="currentDate"></span></p>
+        <div class="quick-actions">
+            <button class="quick-btn" onclick="openModal('novoAtivoModal')">
+                <i class="fas fa-laptop-medical"></i> Novo Ativo
+            </button>
+            <button class="quick-btn" onclick="openModal('novoTicketModal')">
+                <i class="fas fa-ticket-alt"></i> Novo Ticket
+            </button>
+            <button class="quick-btn" onclick="openModal('novoChamadoModal')">
+                <i class="fas fa-headset"></i> Novo Chamado
+            </button>
+            <button class="quick-btn" onclick="openModal('relatoriosModal')">
+                <i class="fas fa-file-pdf"></i> Relatório
+            </button>
+        </div>
+    </div>
+
+    <!-- Stats Cards Row 1 -->
+    <div class="row mb-4">
+        <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+            <div class="content-card stat-card blue">
+                <i class="fas fa-laptop"></i>
+                <h3 id="activosCount">142</h3>
+                <p>Ativos Totais</p>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+            <div class="content-card stat-card green">
+                <i class="fas fa-check-circle"></i>
+                <h3 id="ativosAtivosCount">118</h3>
+                <p>Ativos Ativos</p>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+            <div class="content-card stat-card red">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h3 id="ativosManutencaoCount">24</h3>
+                <p>Em Manutenção</p>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+            <div class="content-card stat-card orange">
+                <i class="fas fa-ticket-alt"></i>
+                <h3 id="ticketsAbertosCount">18</h3>
+                <p>Tickets Abertos</p>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+            <div class="content-card stat-card cyan">
+                <i class="fas fa-phone-volume"></i>
+                <h3 id="chamadosCount">23</h3>
+                <p>Chamados OCS</p>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+            <div class="content-card stat-card purple">
+                <i class="fas fa-users"></i>
+                <h3 id="usuariosCount">47</h3>
+                <p>Usuários Ativos</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts and System Info -->
+    <div class="row">
+        <!-- Ativos por Status -->
+        <div class="col-lg-3 mb-4">
+            <div class="content-card">
+                <h5 class="mb-3"><i class="fas fa-chart-pie me-2"></i>Ativos por Status</h5>
+                <div class="chart-container" style="height: 280px;">
+                    <canvas id="ativosChart"></canvas>
                 </div>
             </div>
-            <div class="col-md-4 text-end">
-                <div class="border border-2 border-white rounded-pill px-3 py-2 d-inline-block">
-                    <small class="text-ia-primary bg-white px-1 rounded">
-                        <i class="fas fa-circle text-success me-1"></i>
-                        Sistema Online
-                    </small>
+        </div>
+
+        <!-- Tickets por Prioridade -->
+        <div class="col-lg-3 mb-4">
+            <div class="content-card">
+                <h5 class="mb-3"><i class="fas fa-chart-bar me-2"></i>Tickets por Prioridade</h5>
+                <div class="chart-container" style="height: 280px;">
+                    <canvas id="ticketsChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Informações do Sistema -->
+        <div class="col-lg-3 mb-4">
+            <div class="content-card">
+                <h5 class="mb-3"><i class="fas fa-server me-2"></i>Status do Sistema - Servidor</h5>
+                <div class="system-info-item">
+                    <div class="system-info-icon orange">
+                        <i class="fas fa-hdd"></i>
+                    </div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; color: #333;">Armazenamento</div>
+                        <div style="font-size: 0.9rem; color: #666;">256 GB / 500 GB</div>
+                        <div class="progress-custom mt-2">
+                            <div class="progress-bar-custom" style="width: 51%; background: linear-gradient(90deg, #ffc107, #ff9800);"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="system-info-item">
+                    <div class="system-info-icon green">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; color: #333;">CPU</div>
+                        <div style="font-size: 0.9rem; color: #666;">45% em uso</div>
+                        <div class="progress-custom mt-2">
+                            <div class="progress-bar-custom" style="width: 45%; background: linear-gradient(90deg, #28a745, #20c997);"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="system-info-item">
+                    <div class="system-info-icon blue">
+                        <i class="fas fa-memory"></i>
+                    </div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; color: #333;">Memória RAM</div>
+                        <div style="font-size: 0.9rem; color: #666;">6.2 GB / 16 GB</div>
+                        <div class="progress-custom mt-2">
+                            <div class="progress-bar-custom" style="width: 38%; background: linear-gradient(90deg, #00A6FF, #0056b3);"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Métricas de KPI -->
+        <div class="col-lg-3 mb-4">
+            <div class="content-card">
+                <h5 class="mb-3"><i class="fas fa-chart-line me-2"></i>Métricas de KPI</h5>
+                
+                <div class="kpi-item">
+                    <div class="kpi-header">
+                        <span class="kpi-label">Taxa de Resolução</span>
+                        <span class="kpi-value success">94.2%</span>
+                    </div>
+                    <div class="progress-custom mt-2">
+                        <div class="progress-bar-custom" style="width: 94.2%; background: linear-gradient(90deg, #28a745, #20c997);"></div>
+                    </div>
+                </div>
+
+                <div class="kpi-item">
+                    <div class="kpi-header">
+                        <span class="kpi-label">SLA Cumprido</span>
+                        <span class="kpi-value warning">87.5%</span>
+                    </div>
+                    <div class="progress-custom mt-2">
+                        <div class="progress-bar-custom" style="width: 87.5%; background: linear-gradient(90deg, #ffc107, #ff9800);"></div>
+                    </div>
+                </div>
+
+                <div class="kpi-item">
+                    <div class="kpi-header">
+                        <span class="kpi-label">Satisfação Cliente</span>
+                        <span class="kpi-value success">4.7/5.0</span>
+                    </div>
+                    <div class="progress-custom mt-2">
+                        <div class="progress-bar-custom" style="width: 94%; background: linear-gradient(90deg, #00A6FF, #0056b3);"></div>
+                    </div>
+                </div>
+
+                <div class="kpi-item">
+                    <div class="kpi-header">
+                        <span class="kpi-label">Tempo Médio Resposta</span>
+                        <span class="kpi-value info">2.3h</span>
+                    </div>
+                    <div class="progress-custom mt-2">
+                        <div class="progress-bar-custom" style="width: 76%; background: linear-gradient(90deg, #17a2b8, #138496);"></div>
+                    </div>
+                </div>
+
+                <div class="kpi-item" style="border-bottom: none;">
+                    <div class="kpi-header">
+                        <span class="kpi-label">Uptime do Sistema</span>
+                        <span class="kpi-value success">99.8%</span>
+                    </div>
+                    <div class="progress-custom mt-2">
+                        <div class="progress-bar-custom" style="width: 99.8%; background: linear-gradient(90deg, #28a745, #20c997);"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- CLASSE ADICIONADA: full-bleed para esticar o container principal -->
-    <div class="container-fluid py-4 content-main full-bleed"> 
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="card card-modern border-0 shadow-lg animate-fade-in">
-                    <div class="card-header bg-transparent py-3 border-0">
-                        <h5 class="mb-0 text-ia-primary">
-                            <i class="fas fa-building me-2"></i>Sobre a CitieSoft
-                        </h5>
-                    </div>
-                    <div class="card-body pt-0">
-                        <div class="row">
-                            <div class="col-md-4 mb-3">
-                                <div class="text-center p-4 bg-light rounded-3 h-100">
-                                    <i class="fas fa-bullseye fa-2x text-ia-primary mb-3"></i>
-                                    <h6 class="text-ia-primary">Missão</h6>
-                                    <p class="small text-muted mb-0">
-                                        Desenvolver soluções digitais que simplifiquem processos, aproximem pessoas e ajudem empresas e instituições a alcançarem resultados reais.
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <div class="text-center p-4 bg-light rounded-3 h-100">
-                                    <i class="fas fa-eye fa-2x text-success mb-3"></i>
-                                    <h6 class="text-success">Visão</h6>
-                                    <p class="small text-muted mb-0">
-                                        Ser referência em soluções digitais inovadoras, transformando a maneira como empresas e pessoas se relacionam com a tecnologia.
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <div class="text-center p-4 bg-light rounded-3 h-100">
-                                    <i class="fas fa-heart fa-2x text-info mb-3"></i>
-                                    <h6 class="text-info">Valores</h6>
-                                    <p class="small text-muted mb-0">
-                                        Inovação, transparência, excelência e compromisso com resultados que impactem positivamente nossos clientes e a sociedade.
-                                    </p>
-                                </div>
+    <!-- Gestão de Chamados - Usuários -->
+    <div class="row">
+        <div class="col-lg-12 mb-4">
+            <div class="content-card">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0"><i class="fas fa-headphones me-2"></i>Gestão de Chamados - Usuários</h5>
+                </div>
+                <!-- Cards de Status -->
+                <div class="row mb-3">
+                    <div class="col-lg-2 col-md-4 col-sm-6 mb-2">
+                        <div class="chamado-card novo" onclick="abrirNovoChamado()">
+                            <div class="chamado-icon"><i class="fas fa-plus-circle"></i></div>
+                            <div class="chamado-info">
+                                <h4 id="novoChamadoCount">1</h4>
+                                <p>Abrir Novo Chamado</p>
                             </div>
                         </div>
-
-                        <div class="mt-4 pt-4 border-top">
-                            <h6 class="text-gray-800 mb-3">Nossa Equipe</h6>
-                            <div class="row">
-                                <div class="col-md-3 col-6 text-center mb-3">
-                                    <div class="bg-ia-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
-                                        <i class="fas fa-user-tie fa-2x text-ia-primary"></i>
-                                    </div>
-                                    <p class="small mt-2 mb-1"><strong>Herbeth</strong></p>
-                                    <p class="small text-muted">Gerente de T.I</p>
-                                </div>
-                                <div class="col-md-3 col-6 text-center mb-3">
-                                    <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
-                                        <i class="fas fa-code fa-2x text-success"></i>
-                                    </div>
-                                    <p class="small mt-2 mb-1"><strong>Equipe Técnica</strong></p>
-                                    <p class="small text-muted">Desenvolvedores</p>
-                                </div>
-                                <div class="col-md-3 col-6 text-center mb-3">
-                                    <div class="bg-info bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
-                                        <i class="fas fa-paint-brush fa-2x text-info"></i>
-                                    </div>
-                                    <p class="small mt-2 mb-1"><strong>Design Team</strong></p>
-                                    <p class="small text-muted">UX/UI Designers</p>
-                                </div>
-                                <div class="col-md-3 col-6 text-center mb-3">
-                                    <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
-                                        <i class="fas fa-headset fa-2x text-warning"></i>
-                                    </div>
-                                    <p class="small mt-2 mb-1"><strong>Suporte</strong></p>
-                                    <p class="small text-muted">Customer Success</p>
-                                </div>
+                    </div>
+                    <div class="col-lg-2 col-md-4 col-sm-6 mb-2">
+                        <div class="chamado-card abertos" onclick="filtrarChamadosAbertos()">
+                            <div class="chamado-icon"><i class="fas fa-folder-open"></i></div>
+                            <div class="chamado-info">
+                                <h4 id="abertosCount">23</h4>
+                                <p>Chamados Abertos</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-4 col-sm-6 mb-2">
+                        <div class="chamado-card atendimento" onclick="filtrarChamadosAndamento()">
+                            <div class="chamado-icon"><i class="fas fa-spinner"></i></div>
+                            <div class="chamado-info">
+                                <h4 id="atendimentoCount">18</h4>
+                                <p>Em Andamento</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-4 col-sm-6 mb-2">
+                        <div class="chamado-card solucionados" onclick="filtrarChamadosConcluidos()">
+                            <div class="chamado-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="chamado-info">
+                                <h4 id="solucionadosCount">115</h4>
+                                <p>Concluídos</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-4 col-sm-6 mb-2">
+                        <div class="chamado-card aguardando" onclick="filtrarChamadosAguardando()">
+                            <div class="chamado-icon"><i class="fas fa-hourglass-half"></i></div>
+                            <div class="chamado-info">
+                                <h4 id="aguardandoCount">7</h4>
+                                <p>Aguardando Ação</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-4 col-sm-6 mb-2">
+                        <div class="chamado-card historico" onclick="verHistoricoChamados()">
+                            <div class="chamado-icon"><i class="fas fa-history"></i></div>
+                            <div class="chamado-info">
+                                <h4 id="historicoCount">156</h4>
+                                <p>Histórico de Chamadas</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="row">
-            <div class="col-lg-8 mb-4">
-                <div class="card card-modern border-0 shadow-lg h-100 animate-fade-in">
-                    <div class="card-header bg-transparent py-3 border-0">
-                        <h5 class="mb-0 text-ia-primary">
-                            <i class="fas fa-envelope me-2"></i>Contato
-                        </h5>
+    <!-- Gestão de Tickets - Atribuição e Escalonamento -->
+    <div class="row">
+        <div class="col-lg-12 mb-4">
+            <div class="content-card">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0"><i class="fas fa-tasks me-2"></i>Gestão de Tickets - Atribuição e Escalonamento</h5>
+                    <div class="btn-toolbar">
+                        <button class="btn btn-sm btn-primary" onclick="atribuirTicketsAutomaticamente()">
+                            <i class="fas fa-robot"></i> Atribuição Automática
+                        </button>
+                        <button class="btn btn-sm btn-warning" onclick="escalonarTicketsCriticos()">
+                            <i class="fas fa-exclamation-triangle"></i> Escalonar Críticos
+                        </button>
                     </div>
-                    <div class="card-body pt-0">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="contact-info">
-                                    <div class="d-flex align-items-center mb-3">
-                                        <div class="bg-ia-primary bg-opacity-10 rounded-circle p-2 me-3">
-                                            <i class="fas fa-envelope text-ia-primary"></i>
-                                        </div>
-                                        <div>
-                                            <small class="text-muted d-block">E-mail Principal</small>
-                                            <strong>contato@citiesoft.com.br</strong>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex align-items-center mb-3">
-                                        <div class="bg-success bg-opacity-10 rounded-circle p-2 me-3">
-                                            <i class="fas fa-phone text-success"></i>
-                                        </div>
-                                        <div>
-                                            <small class="text-muted d-block">Telefone</small>
-                                            <strong>+55 (47) 99999-9999</strong>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="bg-info bg-opacity-10 rounded-circle p-2 me-3">
-                                            <i class="fas fa-globe text-info"></i>
-                                        </div>
-                                        <div>
-                                            <small class="text-muted d-block">Website</small>
-                                            <a href="https://citiesoft.com.br" target="_blank" class="text-dark" style="text-decoration: none;"><strong>https://citiesoft.com.br</strong></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <form class="contact-form">
-                                    <div class="mb-3">
-                                        <label class="form-label small text-muted">Seu Nome</label>
-                                        <input type="text" class="form-control form-control-sm" placeholder="Digite seu nome">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label small text-muted">E-mail</label>
-                                        <input type="email" class="form-control form-control-sm" placeholder="seu@email.com">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label small text-muted">Mensagem</label>
-                                        <textarea class="form-control form-control-sm" rows="3" placeholder="Sua mensagem..."></textarea>
-                                    </div>
-                                    <button type="button" class="btn btn-ia-primary btn-sm w-100">
-                                        <i class="fas fa-paper-plane me-2"></i>Enviar Mensagem
-                                    </button>
-                                </form>
-                            </div>
+                </div>
+                <!-- Filtros Rápidos -->
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <div class="btn-toolbar">
+                            <button class="btn btn-sm btn-outline-primary active" onclick="filtrarTickets('todos')">
+                                Todos os Tickets
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning" onclick="filtrarTickets('pendentes')">
+                                <i class="fas fa-clock"></i> Pendentes
+                            </button>
+                            <button class="btn btn-sm btn-outline-info" onclick="filtrarTickets('atribuidos')">
+                                <i class="fas fa-user-check"></i> Atribuídos
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="filtrarTickets('escalonados')">
+                                <i class="fas fa-level-up-alt"></i> Escalonados
+                            </button>
+                            <button class="btn btn-sm btn-outline-success" onclick="filtrarTickets('solucionados')">
+                                <i class="fas fa-check-circle"></i> Solucionados
+                            </button>
                         </div>
                     </div>
                 </div>
+                <!-- Tabela de Gestão de Tickets -->
+                <div class="table-responsive">
+                    <table class="activity-table table">
+                        <thead>
+                            <tr>
+                                <th>Ticket ID</th>
+                                <th>Assunto</th>
+                                <th>Prioridade</th>
+                                <th>Técnico</th>
+                                <th>Status</th>
+                                <th>Tempo Decorrido</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="gestaoTicketsTable">
+                            <!-- Dados preenchidos via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
+        </div>
+    </div>
 
-            <div class="col-lg-4 mb-4">
-                <div class="card card-modern border-0 shadow-lg h-100 animate-fade-in">
-                    <div class="card-header bg-transparent py-3 border-0">
-                        <h5 class="mb-0 text-ia-primary">
-                            <i class="fas fa-bolt me-2"></i>Ações Rápidas
-                        </h5>
-                    </div>
-                    <div class="card-body pt-0">
-                        <div class="d-grid gap-2">
-                            <button class="btn btn-outline-ia-primary btn-hover text-start">
-                                <i class="fas fa-plus-circle me-2"></i>Novo Projeto
-                            </button>
-                            <button class="btn btn-outline-success btn-hover text-start">
-                                <i class="fas fa-chart-bar me-2"></i>Relatórios
-                            </button>
-                            <button class="btn btn-outline-info btn-hover text-start">
-                                <i class="fas fa-cog me-2"></i>Configurações
-                            </button>
-                            <button class="btn btn-outline-warning btn-hover text-start">
-                                <i class="fas fa-question-circle me-2"></i>Ajuda
-                            </button>
-                        </div>
-
-                        <div class="mt-4 pt-3 border-top">
-                            <h6 class="text-gray-800 mb-3">Status do Sistema</h6>
-                            <div class="system-status">
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <span class="small">Servidores</span>
-                                    <span class="badge bg-success">Online</span>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <span class="small">Banco de Dados</span>
-                                    <span class="badge bg-success">Online</span>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="small">Última Atualização</span>
-                                    <span class="badge bg-ia-primary">Agora</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <!-- Inventário e Notificações -->
+    <div class="row">
+        <!-- Inventário de Tickets -->
+        <div class="col-lg-8 mb-4">
+            <div class="content-card">
+                <h5 class="mb-3"><i class="fas fa-clipboard-list me-2"></i>Inventário de Tickets - Chamados</h5>
+                <div class="table-responsive">
+                    <table class="activity-table table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Tipo de Problema</th>
+                                <th>Solicitante</th>
+                                <th>Prioridade</th>
+                                <th>Status</th>
+                                <th>Abertura</th>
+                                <th>Produto</th>
+                                <th>Categoria</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ticketsTable">
+                            <!-- Dados preenchidos via JavaScript -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
 
-        <div class="row mt-4">
-            <div class="col-12">
-                <div class="card card-modern border-0 shadow-lg animate-fade-in">
-                    <div class="card-body text-center py-4">
-                        <h6 class="text-gray-800 mb-3">Siga a CitieSoft nas Redes Sociais</h6>
-                        <div class="d-flex justify-content-center gap-3">
-                            <a href="https://www.linkedin.com/company/citiesoft/"
-                                target="_blank"
-                                class="btn btn-linkedin btn-hover">
-                                <i class="fab fa-linkedin me-2"></i>LinkedIn
-                            </a>
-                            <a href="https://www.instagram.com/citiesoft_/"
-                                target="_blank"
-                                class="btn btn-instagram btn-hover">
-                                <i class="fab fa-instagram me-2"></i>Instagram
-                            </a>
-                        </div>
-                    </div>
+        <!-- Notificações -->
+        <div class="col-lg-4 mb-4">
+            <div class="content-card">
+                <h5 class="mb-3">
+                    <i class="fas fa-bell me-2"></i>Notificações
+                    <span class="badge bg-danger ms-2" id="notificationCount">5</span>
+                </h5>
+                <div id="notificationsList">
+                    <!-- Notificações preenchidas via JavaScript -->
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ativos Recentes e Chamados OCS -->
+    <div class="row">
+        <!-- Ativos Cadastrados Recentemente -->
+        <div class="col-lg-6 mb-4">
+            <div class="content-card">
+                <h5 class="mb-3"><i class="fas fa-laptop me-2"></i>Ativos Recentes</h5>
+                <div class="table-responsive">
+                    <table class="activity-table table">
+                        <thead>
+                            <tr>
+                                <th>Patrimônio</th>
+                                <th>Tipo</th>
+                                <th>Departamento</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ativosTable">
+                            <!-- Dados preenchidos via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chamados OCS -->
+        <div class="col-lg-6 mb-4">
+            <div class="content-card">
+                <h5 class="mb-3"><i class="fas fa-headset me-2"></i>Últimos Chamados OCS</h5>
+                <div class="table-responsive">
+                    <table class="activity-table table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Tipo</th>
+                                <th>Assunto</th>
+                                <th>Técnico</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="chamadosTable">
+                            <!-- Dados preenchidos via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rodapé Centralizado -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="text-center py-3" style="border-top: 1px solid #e0e0e0;">
+                <p class="text-muted mb-0">
+                    © 2025 Citiesoft — Todos os direitos reservados.
+                </p>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Modais -->
+<!-- Modal Novo Ativo -->
+<div class="modal fade" id="novoAtivoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-laptop-medical me-2"></i>Cadastrar Novo Ativo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formNovoAtivo">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Patrimônio</label>
+                                <input type="text" class="form-control" placeholder="Ex: NB-2025-001" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Tipo</label>
+                                <select class="form-control" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="notebook">Notebook</option>
+                                    <option value="desktop">Desktop</option>
+                                    <option value="monitor">Monitor</option>
+                                    <option value="impressora">Impressora</option>
+                                    <option value="tablet">Tablet</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Departamento</label>
+                                <select class="form-control" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="ti">TI</option>
+                                    <option value="financeiro">Financeiro</option>
+                                    <option value="rh">RH</option>
+                                    <option value="vendas">Recepção</option>
+                                    <option value="admin">Administrativo</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Status</label>
+                                <select class="form-control" required>
+                                    <option value="ativo">Ativo</option>
+                                    <option value="manutencao">Em Manutenção</option>
+                                    <option value="desativado">Desativado</option>
+                                    <option value="reserva">Reserva</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Descrição</label>
+                        <textarea class="form-control" rows="3" placeholder="Descrição detalhada do ativo..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="saveAtivo()">Salvar Ativo</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Novo Ticket -->
+<div class="modal fade" id="novoTicketModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-ticket-alt me-2"></i>Abrir Novo Ticket</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formNovoTicket">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label class="form-label">Título</label>
+                                <input type="text" class="form-control" placeholder="Ex: Impressora não funciona" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="form-label">Prioridade</label>
+                                <select class="form-control" required>
+                                    <option value="baixa">Baixa</option>
+                                    <option value="normal">Normal</option>
+                                    <option value="alta">Alta</option>
+                                    <option value="urgente">Urgente</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Solicitante</label>
+                                <input type="text" class="form-control" placeholder="Nome do solicitante" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Departamento</label>
+                                <select class="form-control" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="ti">TI</option>
+                                    <option value="financeiro">Financeiro</option>
+                                    <option value="rh">RH</option>
+                                    <option value="vendas">Recepção</option>
+                                    <option value="admin">Administrativo</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Descrição</label>
+                        <textarea class="form-control" rows="4" placeholder="Descreva o problema detalhadamente..." required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="saveTicket()">Abrir Ticket</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Novo Chamado -->
+<div class="modal fade" id="novoChamadoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-headset me-2"></i>Registrar Novo Chamado</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formNovoChamado">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Tipo</label>
+                                <select class="form-control" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="hardware">Hardware</option>
+                                    <option value="software">Software</option>
+                                    <option value="rede">Rede</option>
+                                    <option value="instalacao">Instalação</option>
+                                    <option value="outro">Outro</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Assunto</label>
+                                <input type="text" class="form-control" placeholder="Ex: Reparo de impressora" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Solicitante</label>
+                                <input type="text" class="form-control" placeholder="Nome do solicitante" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Técnico Responsável</label>
+                                <select class="form-control" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="marcos">Marcos Tech</option>
+                                    <option value="paula">Paula Lima</option>
+                                    <option value="roberto">Roberto Net</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Descrição</label>
+                        <textarea class="form-control" rows="4" placeholder="Descreva o problema detalhadamente..." required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="saveChamado()">Registrar Chamado</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Relatórios -->
+<div class="modal fade" id="relatoriosModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-file-alt me-2"></i>Gerar Relatórios</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formRelatorios">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Tipo de Relatório</label>
+                                <select class="form-control" id="tipoRelatorio" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="logs-sistema">Logs do Sistema</option>
+                                    <option value="chamados-usuarios">Chamados de Usuários</option>
+                                    <option value="tempo-resposta">Tempo de Resposta</option>
+                                    <option value="sla-cumprido">SLA Cumprido</option>
+                                    <option value="atividades-tecnicos">Atividades dos Técnicos</option>
+                                    <option value="logs-completo">Relatório Completo</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Formato</label>
+                                <select class="form-control" id="formatoRelatorio" required>
+                                    <option value="pdf">PDF</option>
+                                    <option value="excel">Excel</option>
+                                    <option value="csv">CSV</option>
+                                    <option value="html">HTML</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Data Inicial</label>
+                                <input type="date" class="form-control" id="dataInicial" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Data Final</label>
+                                <input type="date" class="form-control" id="dataFinal" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Filtros Adicionais</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="incluirLogsSistema">
+                            <label class="form-check-label" for="incluirLogsSistema">
+                                Incluir Logs do Sistema
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="incluirDetalhesChamados">
+                            <label class="form-check-label" for="incluirDetalhesChamados">
+                                Incluir Detalhes dos Chamados
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="incluirAnexos">
+                            <label class="form-check-label" for="incluirAnexos">
+                                Incluir Anexos
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Observações</label>
+                        <textarea class="form-control" rows="3" placeholder="Observações adicionais para o relatório..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="gerarRelatorio()">Gerar Relatório</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="{% static 'js/dashboard.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+
+<script>
+// Função para popular as tabelas com dados
+function populateTables() {
+    // Dados para a tabela de Gestão de Tickets
+    const gestaoTicketsData = [
+        { id: 'TK-2025-001', assunto: 'Impressora não imprime', prioridade: 'Alta', tecnico: 'Marcos Tech', status: 'Em Andamento', tempo: '2h 15min' },
+        { id: 'TK-2025-002', assunto: 'Software não abre', prioridade: 'Normal', tecnico: 'Paula Lima', status: 'Atribuído', tempo: '1h 30min' },
+        { id: 'TK-2025-003', assunto: 'Problema de rede', prioridade: 'Urgente', tecnico: 'Roberto Net', status: 'Pendente', tempo: '45min' },
+        { id: 'TK-2025-004', assunto: 'Instalação de software', prioridade: 'Baixa', tecnico: 'Carla Silva', status: 'Concluído', tempo: '3h 20min' },
+        { id: 'TK-2025-005', assunto: 'Computador lento', prioridade: 'Normal', tecnico: 'João Santos', status: 'Em Andamento', tempo: '1h 10min' },
+        { id: 'TK-2025-006', assunto: 'Acesso negado ao sistema', prioridade: 'Alta', tecnico: 'Ana Costa', status: 'Atribuído', tempo: '50min' },
+        { id: 'TK-2025-007', assunto: 'Monitor piscando', prioridade: 'Normal', tecnico: 'Pedro Alves', status: 'Concluído', tempo: '1h 45min' }
+    ];
+
+    const gestaoTicketsTable = document.getElementById('gestaoTicketsTable');
+    gestaoTicketsData.forEach(ticket => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td><strong>${ticket.id}</strong></td>
+            <td>${ticket.assunto}</td>
+            <td><span class="badge ${getPriorityClass(ticket.prioridade)}">${ticket.prioridade}</span></td>
+            <td>${ticket.tecnico}</td>
+            <td><span class="badge ${getStatusClass(ticket.status)}">${ticket.status}</span></td>
+            <td>${ticket.tempo}</td>
+            <td>
+                <button class="btn btn-sm btn-outline-primary me-1" onclick="atribuirTicket('${ticket.id}')" title="Atribuir">
+                    <i class="fas fa-user-check"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-success me-1" onclick="registrarSolucao('${ticket.id}')" title="Solução">
+                    <i class="fas fa-check-circle"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-warning" onclick="escalonarTicket('${ticket.id}')" title="Escalonar">
+                    <i class="fas fa-level-up-alt"></i>
+                </button>
+            </td>
+        `;
+        gestaoTicketsTable.appendChild(row);
+    });
+
+    // Dados para a tabela de Inventário de Tickets
+    const ticketsData = [
+        { id: 'CH-2025-001', tipo: 'Hardware', solicitante: 'Ana Silva', prioridade: 'Alta', status: 'Aberto', abertura: '15/01/2025', produto: 'Notebook Dell', categoria: 'TI' },
+        { id: 'CH-2025-002', tipo: 'Software', solicitante: 'Carlos Lima', prioridade: 'Normal', status: 'Em Andamento', abertura: '14/01/2025', produto: 'Windows 11', categoria: 'Suporte' },
+        { id: 'CH-2025-003', tipo: 'Rede', solicitante: 'Maria Santos', prioridade: 'Urgente', status: 'Fechado', abertura: '13/01/2025', produto: 'Router Cisco', categoria: 'Infra' },
+        { id: 'CH-2025-004', tipo: 'Instalação', solicitante: 'Pedro Costa', prioridade: 'Baixa', status: 'Aguardando', abertura: '12/01/2025', produto: 'Office 365', categoria: 'TI' },
+        { id: 'CH-2025-005', tipo: 'Hardware', solicitante: 'Juliana Rocha', prioridade: 'Normal', status: 'Aberto', abertura: '11/01/2025', produto: 'Monitor LG', categoria: 'TI' },
+        { id: 'CH-2025-006', tipo: 'Software', solicitante: 'Ricardo Oliveira', prioridade: 'Alta', status: 'Em Andamento', abertura: '10/01/2025', produto: 'Sistema ERP', categoria: 'Desenvolvimento' },
+        { id: 'CH-2025-007', tipo: 'Consultoria', solicitante: 'Fernanda Souza', prioridade: 'Normal', status: 'Concluído', abertura: '09/01/2025', produto: 'Treinamento', categoria: 'RH' }
+    ];
+
+    const ticketsTable = document.getElementById('ticketsTable');
+    ticketsData.forEach(ticket => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td><strong>${ticket.id}</strong></td>
+            <td>${ticket.tipo}</td>
+            <td>${ticket.solicitante}</td>
+            <td><span class="badge ${getPriorityClass(ticket.prioridade)}">${ticket.prioridade}</span></td>
+            <td><span class="badge ${getStatusClass(ticket.status)}">${ticket.status}</span></td>
+            <td>${ticket.abertura}</td>
+            <td>${ticket.produto}</td>
+            <td>${ticket.categoria}</td>
+        `;
+        ticketsTable.appendChild(row);
+    });
+
+    // Dados para a tabela de Ativos Recentes
+    const ativosData = [
+        { patrimonio: 'NB-2025-001', tipo: 'Notebook', departamento: 'TI', status: 'Ativo' },
+        { patrimonio: 'DT-2025-002', tipo: 'Desktop', departamento: 'Financeiro', status: 'Ativo' },
+        { patrimonio: 'MN-2025-003', tipo: 'Monitor', departamento: 'RH', status: 'Manutenção' },
+        { patrimonio: 'IP-2025-004', tipo: 'Impressora', departamento: 'Vendas', status: 'Ativo' },
+        { patrimonio: 'TB-2025-005', tipo: 'Tablet', departamento: 'Admin', status: 'Reserva' },
+        { patrimonio: 'NB-2025-006', tipo: 'Notebook', departamento: 'Marketing', status: 'Ativo' },
+        { patrimonio: 'DT-2025-007', tipo: 'Desktop', departamento: 'Operações', status: 'Ativo' },
+        { patrimonio: 'MN-2025-008', tipo: 'Monitor', departamento: 'TI', status: 'Ativo' }
+    ];
+
+    const ativosTable = document.getElementById('ativosTable');
+    ativosData.forEach(ativo => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td><strong>${ativo.patrimonio}</strong></td>
+            <td>${ativo.tipo}</td>
+            <td>${ativo.departamento}</td>
+            <td><span class="badge ${getStatusClass(ativo.status)}">${ativo.status}</span></td>
+        `;
+        ativosTable.appendChild(row);
+    });
+
+    // Dados para a tabela de Chamados OCS
+    const chamadosData = [
+        { id: 'OCS-001', tipo: 'Suporte', assunto: 'Configuração Email', tecnico: 'Marcos Tech', status: 'Concluído' },
+        { id: 'OCS-002', tipo: 'Manutenção', assunto: 'Troca de HD', tecnico: 'Paula Lima', status: 'Em Andamento' },
+        { id: 'OCS-003', tipo: 'Instalação', assunto: 'Software Novo', tecnico: 'Roberto Net', status: 'Pendente' },
+        { id: 'OCS-004', tipo: 'Consulta', assunto: 'Dúvida Sistema', tecnico: 'Carla Silva', status: 'Concluído' },
+        { id: 'OCS-005', tipo: 'Emergência', assunto: 'Rede Caiu', tecnico: 'João Santos', status: 'Atendendo' },
+        { id: 'OCS-006', tipo: 'Suporte', assunto: 'Backup Sistema', tecnico: 'Ana Costa', status: 'Concluído' },
+        { id: 'OCS-007', tipo: 'Manutenção', assunto: 'Upgrade Memória', tecnico: 'Pedro Alves', status: 'Em Andamento' }
+    ];
+
+    const chamadosTable = document.getElementById('chamadosTable');
+    chamadosData.forEach(chamado => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td><strong>${chamado.id}</strong></td>
+            <td>${chamado.tipo}</td>
+            <td>${chamado.assunto}</td>
+            <td>${chamado.tecnico}</td>
+            <td><span class="badge ${getStatusClass(chamado.status)}">${chamado.status}</span></td>
+        `;
+        chamadosTable.appendChild(row);
+    });
+
+    // Popular notificações
+    const notificationsData = [
+        { text: 'Novo ticket aberto: TK-2025-008 - Problema de login', time: '5 min atrás', type: 'info' },
+        { text: 'Chamado OCS-002 requer atenção urgente', time: '15 min atrás', type: 'warning' },
+        { text: 'Backup do sistema concluído com sucesso', time: '1 hora atrás', type: 'success' },
+        { text: 'Novo usuário cadastrado: João Silva - Departamento Financeiro', time: '2 horas atrás', type: 'info' },
+        { text: 'Alerta: Uso de CPU acima de 80% no servidor principal', time: '3 horas atrás', type: 'danger' }
+    ];
+
+    const notificationsList = document.getElementById('notificationsList');
+    notificationsData.forEach(notification => {
+        const notificationItem = document.createElement('div');
+        notificationItem.className = `notification-item ${notification.type}`;
+        notificationItem.innerHTML = `
+            <div class="notification-text">${notification.text}</div>
+            <div class="notification-time">${notification.time}</div>
+        `;
+        notificationsList.appendChild(notificationItem);
+    });
+}
+
+// Funções auxiliares para classes CSS
+function getPriorityClass(priority) {
+    switch(priority) {
+        case 'Baixa': return 'bg-info';
+        case 'Normal': return 'bg-success';
+        case 'Alta': return 'bg-warning';
+        case 'Urgente': return 'bg-danger';
+        default: return 'bg-secondary';
+    }
+}
+
+function getStatusClass(status) {
+    switch(status) {
+        case 'Pendente': return 'bg-warning';
+        case 'Atribuído': return 'bg-info';
+        case 'Em Andamento': return 'bg-primary';
+        case 'Concluído': return 'bg-success';
+        case 'Fechado': return 'bg-success';
+        case 'Aberto': return 'bg-warning';
+        case 'Aguardando': return 'bg-secondary';
+        case 'Atendendo': return 'bg-info';
+        case 'Ativo': return 'bg-success';
+        case 'Manutenção': return 'bg-warning';
+        case 'Reserva': return 'bg-info';
+        default: return 'bg-secondary';
+    }
+}
+
+// Inicialização quando a página carregar
+document.addEventListener('DOMContentLoaded', function() {
+    // Atualizar data atual
+    const currentDateElement = document.getElementById('currentDate');
+    const now = new Date();
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    currentDateElement.textContent = now.toLocaleDateString('pt-BR', options);
+    
+    // Popular todas as tabelas
+    populateTables();
+    
+    // Inicializar gráficos
+    initializeCharts();
+});
+
+// Inicializar gráficos
+function initializeCharts() {
+    // Gráfico de Ativos por Status
+    const ativosCtx = document.getElementById('ativosChart').getContext('2d');
+    new Chart(ativosCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Ativos', 'Em Manutenção', 'Desativados', 'Reserva'],
+            datasets: [{
+                data: [118, 24, 8, 12],
+                backgroundColor: [
+                    '#28a745',
+                    '#ffc107',
+                    '#dc3545',
+                    '#6f42c1'
+                ],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+    
+    // Gráfico de Tickets por Prioridade
+    const ticketsCtx = document.getElementById('ticketsChart').getContext('2d');
+    new Chart(ticketsCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Baixa', 'Normal', 'Alta', 'Urgente'],
+            datasets: [{
+                label: 'Quantidade',
+                data: [12, 25, 8, 5],
+                backgroundColor: [
+                    '#17a2b8',
+                    '#28a745',
+                    '#ffc107',
+                    '#dc3545'
+                ],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+// Funções para os botões de ação
+function atribuirTicket(ticketId) {
+    alert(`Atribuindo ticket: ${ticketId}`);
+}
+
+function registrarSolucao(ticketId) {
+    alert(`Registrando solução para: ${ticketId}`);
+}
+
+function escalonarTicket(ticketId) {
+    alert(`Escalonando ticket: ${ticketId}`);
+}
+
+function atribuirTicketsAutomaticamente() {
+    alert('Atribuição automática de tickets realizada!');
+}
+
+function escalonarTicketsCriticos() {
+    alert('Tickets críticos escalonados!');
+}
+
+function filtrarTickets(tipo) {
+    alert(`Filtrando tickets: ${tipo}`);
+}
+
+// Funções para gestão de chamados
+function abrirNovoChamado() {
+    openModal('novoChamadoModal');
+}
+
+function filtrarChamadosAbertos() {
+    alert('Filtrando chamados abertos...');
+}
+
+function filtrarChamadosAndamento() {
+    alert('Filtrando chamados em andamento...');
+}
+
+function filtrarChamadosConcluidos() {
+    alert('Filtrando chamados concluídos...');
+}
+
+function filtrarChamadosAguardando() {
+    alert('Filtrando chamados aguardando ação...');
+}
+
+function verHistoricoChamados() {
+    alert('Exibindo histórico de chamados...');
+}
+
+// Funções para modais
+function openModal(modalId) {
+    const modal = new bootstrap.Modal(document.getElementById(modalId));
+    modal.show();
+}
+
+function saveAtivo() {
+    alert('Ativo salvo com sucesso!');
+    bootstrap.Modal.getInstance(document.getElementById('novoAtivoModal')).hide();
+}
+
+function saveTicket() {
+    alert('Ticket aberto com sucesso!');
+    bootstrap.Modal.getInstance(document.getElementById('novoTicketModal')).hide();
+}
+
+function saveChamado() {
+    alert('Chamado registrado com sucesso!');
+    bootstrap.Modal.getInstance(document.getElementById('novoChamadoModal')).hide();
+}
+
+function gerarRelatorio() {
+    alert('Relatório gerado com sucesso!');
+    bootstrap.Modal.getInstance(document.getElementById('relatoriosModal')).hide();
+}
+</script>
+
 <style>
-    /* Variáveis de Cor para o Novo Azul IA - Mantido */
-    :root {
-        --ia-blue-vibrant: #00A6FF;
-        --ia-blue-dark: #0056b3;
-        /* Padding padrão do container pai no ambiente (geralmente 15px do Bootstrap) */
-        --parent-padding: 15px; 
+/* Estilos para o status Online com gradê AZUL */
+.top-bar-status {
+    display: flex;
+    align-items: center;
+    background: linear-gradient(135deg, #0066CC, #004499);
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    color: white;
+    font-weight: 500;
+    box-shadow: 0 2px 8px rgba(0, 102, 204, 0.3);
+    transition: all 0.3s ease;
+}
+
+.top-bar-status:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 102, 204, 0.4);
+}
+
+.status-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: white;
+    margin-right: 8px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
     }
-
-    /* Cores de Destaque Atualizadas - Mantido */
-    .text-ia-primary { color: var(--ia-blue-vibrant) !important; }
-    .bg-ia-primary { background-color: var(--ia-blue-vibrant) !important; }
-    .bg-opacity-10 { background-color: rgba(0, 166, 255, 0.1) !important; }
-
-    /* Estilo de Card: Moderno e Transparente (Glassmorphism-like) - Mantido */
-    .card-modern {
-        background: rgba(255, 255, 255, 0.9);
-        backdrop-filter: blur(5px);
-        border-radius: 12px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        overflow: hidden;
+    70% {
+        box-shadow: 0 0 0 6px rgba(255, 255, 255, 0);
     }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+    }
+}
 
-    /* ========================================================= */
-    /* 🚀 CORREÇÃO PRINCIPAL: FULL BLEED PARA PREENCHER A DIREITA 🚀 */
-    /* Este CSS força o elemento a esticar nas laterais, ignorando o padding do contêiner pai, mas mantendo o espaçamento interno do conteúdo. */
-    /* ========================================================= */
+/* Estilos para os cards de Gestão de Chamados */
+.chamado-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    height: 100%;
+    border: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.chamado-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--color1), var(--color2));
+}
+
+.chamado-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.chamado-card.novo {
+    --color1: #0066CC;
+    --color2: #004499;
+}
+
+.chamado-card.abertos {
+    --color1: #ffc107;
+    --color2: #ff9800;
+}
+
+.chamado-card.atendimento {
+    --color1: #17a2b8;
+    --color2: #138496;
+}
+
+.chamado-card.solucionados {
+    --color1: #28a745;
+    --color2: #20c997;
+}
+
+.chamado-card.aguardando {
+    --color1: #dc3545;
+    --color2: #c82333;
+}
+
+.chamado-card.historico {
+    --color1: #6f42c1;
+    --color2: #5a2d91;
+}
+
+.chamado-icon {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    color: var(--color1);
+    transition: all 0.3s ease;
+}
+
+.chamado-card:hover .chamado-icon {
+    transform: scale(1.1);
+}
+
+.chamado-info h4 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+.chamado-card:hover .chamado-info h4 {
+    color: var(--color1);
+}
+
+.chamado-info p {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0;
+    font-weight: 500;
+}
+
+/* Estilos para as notificações */
+.notification-item {
+    padding: 12px 15px;
+    border-left: 4px solid #007bff;
+    margin-bottom: 12px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.notification-item:hover {
+    background: #e9ecef;
+    transform: translateX(5px);
+}
+
+.notification-item.info { border-left-color: #17a2b8; }
+.notification-item.warning { border-left-color: #ffc107; }
+.notification-item.success { border-left-color: #28a745; }
+.notification-item.danger { border-left-color: #dc3545; }
+
+.notification-text {
+    font-size: 0.9rem;
+    color: #333;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.notification-time {
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+/* Estilos para as tabelas */
+.activity-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.activity-table th {
+    background: #f8f9fa;
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    color: #495057;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.activity-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #dee2e6;
+    vertical-align: middle;
+}
+
+.activity-table tr:hover {
+    background-color: #f8f9fa;
+}
+
+.badge {
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.btn-sm {
+    padding: 4px 8px;
+    font-size: 0.8rem;
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+    .activity-table {
+        font-size: 0.8rem;
+    }
     
-    .full-bleed {
-        /* Puxa o elemento para fora do padding esquerdo e direito do container pai (15px) */
-        margin-left: calc(-1 * var(--parent-padding)) !important;
-        margin-right: calc(-1 * var(--parent-padding)) !important;
-        
-        /* Estende a largura para cobrir o espaço criado pelas margens negativas (15px + 15px = 30px) */
-        width: calc(100% + (2 * var(--parent-padding))) !important; 
-        
-        /* Adiciona o padding de volta ao elemento para que o conteúdo interno não fique colado nas bordas. */
-        padding-left: var(--parent-padding) !important; 
-        padding-right: var(--parent-padding) !important;
-        
-        position: relative;
-        overflow: hidden;
+    .activity-table th,
+    .activity-table td {
+        padding: 8px 10px;
     }
     
-    /* Configuração específica do Hero Section */
-    .hero-section {
-        background: linear-gradient(135deg, var(--ia-blue-vibrant) 0%, var(--ia-blue-dark) 100%);
+    .notification-item {
+        padding: 10px 12px;
     }
-
-    /* Garante que a barra de rolagem horizontal não apareça, se o full-bleed vazar */
-    body {
-        overflow-x: hidden;
+    
+    .top-bar-status {
+        padding: 6px 15px;
+        font-size: 0.8rem;
     }
-
+    
+    .chamado-card {
+        padding: 15px;
+    }
+    
+    .chamado-icon {
+        font-size: 2rem;
+    }
+    
+    .chamado-info h4 {
+        font-size: 1.5rem;
+    }
+}
 </style>
+
 {% endblock %}
