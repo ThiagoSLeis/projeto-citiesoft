@@ -18,22 +18,10 @@ const menuConfig = [
         active: false,
         submenu: [
             {
-                id: 'inventario-ativos',
-                title: 'Ativos',
-                url: '#',
-                icon: 'fas fa-laptop'
-            },
-            {
-                id: 'inventario-tickets',
-                title: 'Tickets',
+                id: 'meus-tickets',
+                title: 'Meus Tickets',
                 url: '#',
                 icon: 'fas fa-ticket-alt'
-            },
-            {
-                id: 'inventario-chamados',
-                title: 'Chamados (OCS)',
-                url: '#',
-                icon: 'fas fa-headset'
             }
         ]
     },
@@ -45,82 +33,10 @@ const menuConfig = [
         active: false,
         submenu: [
             {
-                id: 'relatorio-ativos',
-                title: 'Relatório de Ativos',
-                url: '#',
-                icon: 'fas fa-laptop'
-            },
-            {
                 id: 'relatorio-tickets',
                 title: 'Relatório de Tickets',
                 url: '#',
                 icon: 'fas fa-ticket-alt'
-            },
-            {
-                id: 'relatorio-usuarios',
-                title: 'Relatório de Usuários',
-                url: '#',
-                icon: 'fas fa-users'
-            },
-            {
-                id: 'relatorio-analise',
-                title: 'Análise e Métricas',
-                url: '#',
-                icon: 'fas fa-chart-pie'
-            }
-        ]
-    },
-    {
-        id: 'cadastros',
-        title: 'Cadastros',
-        icon: 'fas fa-edit',
-        url: '#',
-        active: false,
-        submenu: [
-            {
-                id: 'cadastro-usuarios',
-                title: 'Usuários',
-                url: '#',
-                icon: 'fas fa-user-cog'
-            },
-            {
-                id: 'cadastro-clientes',
-                title: 'Clientes',
-                url: '#',
-                icon: 'fas fa-user'
-            },
-            {
-                id: 'cadastro-ativos',
-                title: 'Ativos',
-                url: '#',
-                icon: 'fas fa-laptop'
-            },
-            {
-                id: 'cadastro-fornecedores',
-                title: 'Fornecedores',
-                url: '#',
-                icon: 'fas fa-truck'
-            }
-        ]
-    },
-    {
-        id: 'configuracoes',
-        title: 'Configurações',
-        icon: 'fas fa-cogs',
-        url: '#',
-        active: false,
-        submenu: [
-            {
-                id: 'config-geral',
-                title: 'Configurações Gerais',
-                url: '#',
-                icon: 'fas fa-sliders-h'
-            },
-            {
-                id: 'config-perfis',
-                title: 'Perfis de Acesso',
-                url: '#',
-                icon: 'fas fa-user-shield'
             }
         ]
     },
@@ -132,28 +48,16 @@ const menuConfig = [
         active: false,
         submenu: [
             {
-                id: 'dicas-manutencao',
-                title: 'Dicas de Manutenção',
-                url: '#',
-                icon: 'fas fa-tools'
-            },
-            {
-                id: 'glossario',
-                title: 'Glossário',
-                url: '#',
-                icon: 'fas fa-book-open'
-            },
-            {
                 id: 'dicionario-software',
                 title: 'Dicionário de Software',
                 url: '#',
                 icon: 'fas fa-laptop-code'
             },
             {
-                id: 'artigos',
-                title: 'Artigos',
+                id: 'faq',
+                title: 'FAQ',
                 url: '#',
-                icon: 'fas fa-newspaper'
+                icon: 'fas fa-question-circle'
             }
         ]
     },
@@ -165,10 +69,10 @@ const menuConfig = [
         active: false,
         submenu: [
             {
-                id: 'suporte-contato',
-                title: 'Contato Suporte',
-                url: '#',
-                icon: 'fas fa-headset'
+                id: 'suporte-email',
+                title: 'Suporte por Email',
+                url: 'mailto:suporte@citiesoft.com',
+                icon: 'fas fa-envelope'
             }
         ]
     }
@@ -228,6 +132,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         <i class="${subItem.icon}"></i> 
                         <span class="menu-text">${subItem.title}</span>
                     `;
+                    
+                    // Para o email de suporte, abrir em uma nova aba se for mailto
+                    if (subItem.url.startsWith('mailto:')) {
+                        subLink.target = '_blank';
+                    }
                     
                     subListItem.appendChild(subLink);
                     submenuList.appendChild(subListItem);
