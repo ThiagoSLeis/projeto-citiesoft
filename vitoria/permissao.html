@@ -1,0 +1,94 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seleção de Tipo de Cadastro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+         </style>
+</head>
+<body>
+    <!-- Elementos de fundo animados -->
+    <div class="background-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+    
+    <div class="container">
+        <!-- Cabeçalho -->
+        <div class="header">
+            <i class="fas fa-user-shield"></i>
+            <h1>Tipo de Cadastro</h1>
+            <p class="subtitle">Escolha como deseja se cadastrar</p>
+        </div>
+        
+        <!-- Conteúdo Principal -->
+        <div class="content">
+            <h2 class="form-title">Selecione uma opção</h2>
+            <p class="form-subtitle">Marque a opção que corresponde ao seu perfil</p>
+            
+            <!-- Botões de seleção -->
+            <div class="checkbox-group">
+                <div class="checkbox-item" id="client-item">
+                    <div class="custom-checkbox"></div>
+                    <div class="checkbox-label">
+                        <div class="checkbox-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="checkbox-text">
+                            <div class="checkbox-name">Cliente</div>
+                            <div class="checkbox-desc">Acessar produtos e serviços</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="checkbox-item" id="server-item">
+                    <div class="custom-checkbox"></div>
+                    <div class="checkbox-label">
+                        <div class="checkbox-icon">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <div class="checkbox-text">
+                            <div class="checkbox-name">Servidor</div>
+                            <div class="checkbox-desc">Funcionário da empresa</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Alerta para Servidor -->
+            <div class="alert-box" id="alert-box">
+                <div class="alert-title">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>Cadastro de Servidor</span>
+                </div>
+                <p class="alert-text">
+                    O cadastro como servidor requer aprovação. Seus dados serão verificados antes do acesso aos recursos administrativos.
+                </p>
+            </div>
+            
+            <!-- Termos de aceitação -->
+            <div class="terms-container" id="terms-container">
+                <div class="terms-check">
+                    <input type="checkbox" id="agree-terms">
+                    <label for="agree-terms">Li e concordo com os termos</label>
+                </div>
+            </div>
+            
+            <!-- Botão de Continuar -->
+            <button class="submit-btn" id="submit-btn">
+                Continuar Cadastro
+            </button>
+            
+            <div class="login-link">
+                <a href="#">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Já tem uma conta? Faça login
+                </a>
+            </div>
+        </div>
+    </div>
