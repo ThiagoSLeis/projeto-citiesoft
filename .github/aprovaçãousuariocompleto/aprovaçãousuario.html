@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprovação de Usuários - Citiesoft</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS Personalizado -->
+    <link rel="stylesheet" href="aprovaçaousuario.css">
+</head>
+<body>
+    <div class="approval-container">
+        <!-- Cabeçalho -->
+        <div class="approval-header">
+            <div class="header-overlay"></div>
+            <h1 class="approval-title">
+                <i class="fas fa-user-check me-3"></i>
+                Aprovação de Usuários
+            </h1>
+            <p class="approval-subtitle">Gerencie solicitações de acesso ao sistema Citiesoft</p>
+        </div>
+
+        <!-- Conteúdo Principal -->
+        <div class="approval-content">
+            <!-- Cards de Estatísticas -->
+            <div class="stats-cards">
+                <div class="stat-card pending">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="pendingCount">12</div>
+                        <div class="stat-label">Pendentes</div>
+                    </div>
+                </div>
+                <div class="stat-card approved">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="approvedCount">45</div>
+                        <div class="stat-label">Aprovados</div>
+                    </div>
+                </div>
+                <div class="stat-card rejected">
+                    <div class="stat-icon">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="rejectedCount">8</div>
+                        <div class="stat-label">Rejeitados</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="totalCount">65</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Busca e Filtros -->
+            <div class="search-filter">
+                <div class="row g-3">
+                    <div class="col-lg-8">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="searchInput" class="form-control" placeholder="Buscar usuário por nome, email ou departamento...">
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <select id="statusFilter" class="form-select">
+                            <option value="all">Todos os status</option>
+                            <option value="pending">Pendentes</option>
+                            <option value="approved">Aprovados</option>
+                            <option value="rejected">Rejeitados</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">Todos</button>
+                    <button class="filter-btn" data-filter="today">Hoje</button>
+                    <button class="filter-btn" data-filter="week">Esta Semana</button>
+                    <button class="filter-btn" data-filter="month">Este Mês</button>
+                </div>
+            </div>
+
+            <!-- Tabela de Usuários -->
+            <div class="users-table-container">
+                <div class="table-header">
+                    <h5 class="table-title">Solicitações de Acesso</h5>
+                    <div class="table-actions">
+                        <button class="btn btn-sm btn-outline-primary" id="refreshBtn">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="users-table">
+                        <thead>
+                            <tr>
+                                <th>Usuário</th>
+                                <th>Email</th>
+                                <th>Departamento</th>
+                                <th>Data Solicitação</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                            <!-- Usuários serão inseridos aqui via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination-container">
+                    <div class="page-info">
+                        Mostrando <span id="startItem">1</span>-<span id="endItem">5</span> de <span id="totalItems">10</span> usuários
+                    </div>
+                    <div class="pagination">
+                        <button class="page-btn" id="prevPage">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <!-- Páginas serão inseridas aqui via JavaScript -->
+                        <button class="page-btn" id="nextPage">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Detalhes do Usuário -->
+    <div class="modal-overlay" id="userModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4><i class="fas fa-user-circle me-2"></i> Detalhes do Usuário</h4>
+                <button class="btn-close-modal" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Conteúdo será inserido via JavaScript -->
+            </div>
+            <div class="modal-footer" id="modalFooter">
+                <!-- Botões serão inseridos via JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Container para Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- JavaScript Personalizado -->
+    <script src="aprovaçaousuario.js"></script>
+</body>
+</html>
