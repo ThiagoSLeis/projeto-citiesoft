@@ -1,0 +1,2048 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprovação de Usuários - Citiesoft</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ===== VARIÁVEIS DE CORES CITIESOFT ===== */
+        :root {
+            --primary-blue: #00A6FF;
+            --dark-blue: #0056b3;
+            --light-blue: #e6f7ff;
+            --lighter-blue: #f0f9ff;
+            --lightest-blue: #f8fcff;
+            --success-green: #28a745;
+            --warning-orange: #ffc107;
+            --danger-red: #dc3545;
+            --info-cyan: #17a2b8;
+            --sidebar-width-collapsed: 80px;
+            --sidebar-width-expanded: 280px;
+            --sidebar-gradient: linear-gradient(145deg, #00A6FF 0%, #0056b3 100%);
+            --card-gradient: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%);
+            
+            --text-primary: #2c3e50;
+            --text-secondary: #6c757d;
+            --text-light: #f8f9fa;
+            
+            --bg-light: #f8f9fa;
+            --bg-white: #ffffff;
+            --bg-hover: rgba(0, 166, 255, 0.05);
+            
+            --border-color: #dee2e6;
+            --border-light: rgba(0, 166, 255, 0.1);
+            --border-dark: rgba(0, 166, 255, 0.3);
+            
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.15);
+            --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.25);
+            
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --radius-full: 50px;
+        }
+
+        /* ===== RESET E CONFIGURAÇÕES GERAIS ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* FUNDO AZUL CLARO E SUAVE - Citiesoft */
+            background: linear-gradient(135deg, #f8fcff 0%, #e6f7ff 50%, #f0f9ff 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: var(--text-primary);
+        }
+
+        /* ===== CONTAINER PRINCIPAL ===== */
+        .approval-container {
+            background: var(--bg-white);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            overflow: hidden;
+            max-width: 1400px;
+            width: 100%;
+            animation: fadeInUp 0.6s ease-out;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        /* ===== HEADER ===== */
+        .approval-header {
+            background: linear-gradient(135deg, #00A6FF 0%, #0056b3 100%);
+            color: var(--text-light);
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            z-index: 1;
+        }
+
+        .approval-title {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 2;
+            background: linear-gradient(135deg, #ffffff 0%, rgba(255,255,255,0.9) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .approval-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+            font-weight: 300;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ===== CONTEÚDO PRINCIPAL ===== */
+        .approval-content {
+            padding: 30px;
+        }
+
+        /* ===== CARDS DE ESTATÍSTICAS ===== */
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--card-gradient);
+            border-radius: var(--radius-lg);
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border: none;
+            box-shadow: var(--shadow-md);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            min-height: 120px;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(135deg, #00A6FF 0%, #0056b3 100%);
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+            transition: height 0.3s ease;
+        }
+
+        .stat-card:hover::before {
+            height: 100%;
+            opacity: 0.1;
+        }
+
+        .stat-card.pending::before {
+            background: linear-gradient(90deg, var(--warning-orange), #e0a800);
+        }
+
+        .stat-card.approved::before {
+            background: linear-gradient(90deg, var(--success-green), #1e7e34);
+        }
+
+        .stat-card.rejected::before {
+            background: linear-gradient(90deg, var(--danger-red), #c82333);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Ícones dos cards */
+        .stat-icon {
+            font-size: 2.2rem;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-md);
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: var(--shadow-sm);
+            flex-shrink: 0;
+            z-index: 2;
+        }
+
+        .stat-card.pending .stat-icon {
+            color: var(--warning-orange);
+            background: rgba(255, 193, 7, 0.1);
+        }
+
+        .stat-card.approved .stat-icon {
+            color: var(--success-green);
+            background: rgba(40, 167, 69, 0.1);
+        }
+
+        .stat-card.rejected .stat-icon {
+            color: var(--danger-red);
+            background: rgba(220, 53, 69, 0.1);
+        }
+
+        .stat-card .stat-icon:not(.pending, .approved, .rejected) {
+            color: #00A6FF;
+            background: rgba(0, 166, 255, 0.1);
+        }
+
+        /* Conteúdo dos cards */
+        .stat-content {
+            flex: 1;
+            z-index: 2;
+        }
+
+        .stat-number {
+            font-size: 2.8rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #00A6FF 0%, #0056b3 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .stat-card.pending .stat-number {
+            background: linear-gradient(135deg, var(--warning-orange), #e0a800);
+            -webkit-background-clip: text;
+        }
+
+        .stat-card.approved .stat-number {
+            background: linear-gradient(135deg, var(--success-green), #1e7e34);
+            -webkit-background-clip: text;
+        }
+
+        .stat-card.rejected .stat-number {
+            background: linear-gradient(135deg, var(--danger-red), #c82333);
+            -webkit-background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ===== BUSCA E FILTROS ===== */
+        .search-filter {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(230, 247, 255, 0.7));
+            border-radius: var(--radius-lg);
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(0, 166, 255, 0.15);
+            box-shadow: var(--shadow-md);
+            backdrop-filter: blur(5px);
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            padding-left: 50px;
+            border-radius: var(--radius-md);
+            border: 2px solid rgba(0, 166, 255, 0.2);
+            transition: all 0.3s ease;
+            height: 50px;
+            font-size: 1rem;
+            background: var(--bg-white);
+        }
+
+        .search-box input:focus {
+            border-color: #00A6FF;
+            box-shadow: 0 0 0 0.25rem rgba(0, 166, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #00A6FF;
+            z-index: 10;
+            font-size: 1.2rem;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .filter-btn {
+            padding: 10px 25px;
+            border-radius: var(--radius-full);
+            border: 2px solid rgba(0, 166, 255, 0.3);
+            background: rgba(255, 255, 255, 0.9);
+            color: #00A6FF;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            backdrop-filter: blur(5px);
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: linear-gradient(135deg, #00A6FF 0%, #0056b3 100%);
+            color: var(--text-light);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 166, 255, 0.2);
+            border-color: transparent;
+        }
+
+        /* ===== TABELA DE USUÁRIOS ===== */
+        .users-table-container {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(250, 251, 252, 0.95));
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 1px solid rgba(0, 166, 255, 0.1);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 30px;
+            backdrop-filter: blur(5px);
+        }
+
+        .table-header {
+            background: linear-gradient(135deg, rgba(230, 247, 255, 0.7), rgba(255, 255, 255, 0.9));
+            padding: 20px 25px;
+            border-bottom: 1px solid rgba(0, 166, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-title {
+            margin: 0;
+            color: #0056b3;
+            font-weight: 600;
+            font-size: 1.3rem;
+        }
+
+        .table-actions .btn {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .users-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .users-table thead {
+            background: linear-gradient(135deg, rgba(0, 166, 255, 0.03), rgba(23, 162, 184, 0.03));
+        }
+
+        .users-table th {
+            padding: 18px 15px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-primary);
+            border-bottom: 2px solid rgba(0, 166, 255, 0.3);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        .users-table td {
+            padding: 20px 15px;
+            border-bottom: 1px solid rgba(0, 166, 255, 0.1);
+            vertical-align: middle;
+            font-size: 0.95rem;
+        }
+
+        .users-table tbody tr {
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .users-table tbody tr:hover {
+            background: linear-gradient(135deg, rgba(0, 166, 255, 0.05), rgba(23, 162, 184, 0.05));
+            transform: translateX(5px);
+        }
+
+        .users-table tbody tr:nth-child(even) {
+            background: rgba(0, 166, 255, 0.02);
+        }
+
+        .users-table tbody tr:nth-child(even):hover {
+            background: linear-gradient(135deg, rgba(0, 166, 255, 0.08), rgba(23, 162, 184, 0.08));
+        }
+
+        /* Avatar do usuário */
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00A6FF 0%, #0056b3 100%);
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 10px rgba(0, 166, 255, 0.2);
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .user-info:hover .user-avatar {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 6px 15px rgba(0, 166, 255, 0.3);
+        }
+
+        .user-details h6 {
+            margin: 0;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .user-details p {
+            margin: 5px 0 0 0;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Badges de status */
+        .status-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: var(--radius-full);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .status-pending {
+            background: linear-gradient(135deg, var(--warning-orange), #e0a800);
+            color: var(--text-light);
+        }
+
+        .status-approved {
+            background: linear-gradient(135deg, var(--success-green), #1e7e34);
+            color: var(--text-light);
+        }
+
+        .status-rejected {
+            background: linear-gradient(135deg, var(--danger-red), #c82333);
+            color: var(--text-light);
+        }
+
+        /* Badge de departamento */
+        td .badge {
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            font-weight: 500;
+            background: rgba(0, 166, 255, 0.1);
+            color: #0056b3;
+            border: 1px solid rgba(0, 166, 255, 0.2);
+        }
+
+        /* Botões de ação */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .btn-action {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-action::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-action:hover::before {
+            left: 100%;
+        }
+
+        .btn-approve {
+            background: linear-gradient(135deg, var(--success-green), #1e7e34);
+            color: var(--text-light);
+        }
+
+        .btn-approve:hover {
+            transform: scale(1.15) rotate(5deg);
+            box-shadow: 0 8px 20px rgba(40, 167, 69, 0.3);
+        }
+
+        .btn-reject {
+            background: linear-gradient(135deg, var(--danger-red), #c82333);
+            color: var(--text-light);
+        }
+
+        .btn-reject:hover {
+            transform: scale(1.15) rotate(-5deg);
+            box-shadow: 0 8px 20px rgba(220, 53, 69, 0.3);
+        }
+
+        .btn-view {
+            background: linear-gradient(135deg, #00A6FF 0%, #0056b3 100%);
+            color: var(--text-light);
+        }
+
+        .btn-view:hover {
+            transform: scale(1.15);
+            box-shadow: 0 8px 20px rgba(0, 166, 255, 0.3);
+        }
+
+        /* ===== PAGINAÇÃO ===== */
+        .pagination-container {
+            padding: 20px 25px;
+            background: linear-gradient(135deg, rgba(230, 247, 255, 0.7), rgba(255, 255, 255, 0.9));
+            border-top: 1px solid rgba(0, 166, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            backdrop-filter: blur(5px);
+        }
+
+        .page-info {
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .pagination {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .page-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 166, 255, 0.2);
+            color: #00A6FF;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            backdrop-filter: blur(5px);
+        }
+
+        .page-btn:hover {
+            background: linear-gradient(135deg, #00A6FF 0%, #0056b3 100%);
+            color: var(--text-light);
+            border-color: #00A6FF;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 166, 255, 0.2);
+        }
+
+        .page-btn.active {
+            background: linear-gradient(135deg, #00A6FF 0%, #0056b3 100%);
+            color: var(--text-light);
+            border-color: #00A6FF;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 166, 255, 0.2);
+        }
+
+        .page-btn.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .page-ellipsis {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* ===== MODAL ===== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease-out;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(250, 251, 252, 0.98));
+            border-radius: var(--radius-xl);
+            width: 100%;
+            max-width: 500px;
+            animation: modalSlideIn 0.3s ease-out;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #00A6FF 0%, #0056b3 100%);
+            color: var(--text-light);
+            padding: 25px;
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+            position: relative;
+        }
+
+        .modal-header h4 {
+            margin: 0;
+            font-weight: 600;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .btn-close-modal {
+            position: absolute;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .btn-close-modal:hover {
+            transform: translateY(-50%) rotate(90deg);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-body {
+            padding: 30px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .user-detail-item {
+            display: flex;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .user-detail-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .user-detail-label {
+            flex: 0 0 150px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .user-detail-value {
+            flex: 1;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .user-document {
+            background: var(--bg-light);
+            border-radius: var(--radius-md);
+            padding: 15px;
+            margin-top: 20px;
+            border: 1px dashed var(--border-color);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .modal-footer {
+            padding: 20px 30px;
+            background: var(--bg-light);
+            border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .btn-modal {
+            padding: 12px 30px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+            text-align: center;
+        }
+
+        .btn-modal-primary {
+            background: linear-gradient(135deg, #00A6FF 0%, #0056b3 100%);
+            color: var(--text-light);
+        }
+
+        .btn-modal-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 166, 255, 0.2);
+        }
+
+        .btn-modal-secondary {
+            background: var(--text-secondary);
+            color: var(--text-light);
+        }
+
+        .btn-modal-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.2);
+        }
+
+        .btn-modal-success {
+            background: linear-gradient(135deg, var(--success-green), #1e7e34);
+            color: var(--text-light);
+        }
+
+        .btn-modal-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.2);
+        }
+
+        .btn-modal-danger {
+            background: linear-gradient(135deg, var(--danger-red), #c82333);
+            color: var(--text-light);
+        }
+
+        .btn-modal-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.2);
+        }
+
+        /* ===== TOAST NOTIFICATIONS ===== */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1100;
+            max-width: 350px;
+            width: 100%;
+        }
+
+        .toast {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(250, 251, 252, 0.95));
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: var(--shadow-lg);
+            border-left: 5px solid #00A6FF;
+            animation: slideInRight 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: none;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+        }
+
+        .toast.success {
+            border-left-color: var(--success-green);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(40, 167, 69, 0.05));
+        }
+
+        .toast.error {
+            border-left-color: var(--danger-red);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(220, 53, 69, 0.05));
+        }
+
+        .toast.show {
+            display: block;
+        }
+
+        .toast-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .toast-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 1.2rem;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .toast-close:hover {
+            background: var(--border-light);
+            color: var(--text-primary);
+        }
+
+        .toast-body {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* ===== ANIMAÇÕES ===== */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ===== RESPONSIVIDADE ===== */
+        @media (max-width: 1200px) {
+            .approval-title {
+                font-size: 2.4rem;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .approval-title {
+                font-size: 2.2rem;
+            }
+            
+            .stats-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .search-filter .row {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .approval-container {
+                border-radius: var(--radius-lg);
+            }
+            
+            .approval-header {
+                padding: 30px 20px;
+            }
+            
+            .approval-title {
+                font-size: 1.8rem;
+            }
+            
+            .approval-subtitle {
+                font-size: 1rem;
+            }
+            
+            .approval-content {
+                padding: 20px;
+            }
+            
+            .stats-cards {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .stat-card {
+                padding: 20px;
+                min-height: 100px;
+            }
+            
+            .stat-number {
+                font-size: 2.2rem;
+            }
+            
+            .stat-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 1.8rem;
+            }
+            
+            .search-filter {
+                padding: 20px;
+            }
+            
+            .filter-buttons {
+                justify-content: center;
+            }
+            
+            .users-table {
+                font-size: 0.85rem;
+            }
+            
+            .users-table th,
+            .users-table td {
+                padding: 12px 8px;
+            }
+            
+            .user-info {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+            
+            .user-avatar {
+                width: 45px;
+                height: 45px;
+                font-size: 1rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .btn-action {
+                width: 36px;
+                height: 36px;
+            }
+            
+            .pagination-container {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 10px;
+            }
+            
+            .modal-body {
+                padding: 20px;
+                max-height: 70vh;
+            }
+            
+            .user-detail-item {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .user-detail-label {
+                flex: none;
+                width: 100%;
+            }
+            
+            .modal-footer {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .btn-modal {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .approval-title {
+                font-size: 1.5rem;
+            }
+            
+            .stats-cards {
+                gap: 12px;
+            }
+            
+            .filter-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filter-btn {
+                width: 100%;
+            }
+            
+            .table-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .page-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 0.9rem;
+            }
+            
+            .toast-container {
+                left: 10px;
+                right: 10px;
+                max-width: none;
+            }
+        }
+
+        /* ===== ESTADOS ESPECIAIS ===== */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
+
+        .loading::after {
+            content: '';
+            width: 30px;
+            height: 30px;
+            border: 3px solid var(--border-color);
+            border-top-color: #00A6FF;
+            border-radius: 50%;
+            margin-left: 10px;
+            animation: spin 1s linear infinite;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        /* ===== SCROLLBAR PERSONALIZADA ===== */
+        .modal-body::-webkit-scrollbar,
+        .users-table-container::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        .modal-body::-webkit-scrollbar-track,
+        .users-table-container::-webkit-scrollbar-track {
+            background: var(--bg-light);
+            border-radius: 10px;
+        }
+
+        .modal-body::-webkit-scrollbar-thumb,
+        .users-table-container::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #00A6FF 0%, #0056b3 100%);
+            border-radius: 10px;
+        }
+
+        .modal-body::-webkit-scrollbar-thumb:hover,
+        .users-table-container::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #00A6FF 0%, #0056b3 100%);
+            opacity: 0.8;
+        }
+
+        /* ===== UTILITÁRIOS ===== */
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .slide-in {
+            animation: slideInRight 0.3s ease-out;
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        .shadow-hover {
+            transition: box-shadow 0.3s ease;
+        }
+
+        .shadow-hover:hover {
+            box-shadow: var(--shadow-lg) !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="approval-container">
+        <!-- Cabeçalho -->
+        <div class="approval-header">
+            <div class="header-overlay"></div>
+            <h1 class="approval-title">
+                <i class="fas fa-user-check me-3"></i>
+                Aprovação de Usuários
+            </h1>
+            <p class="approval-subtitle">Gerencie solicitações de acesso ao sistema Citiesoft</p>
+        </div>
+
+        <!-- Conteúdo Principal -->
+        <div class="approval-content">
+            <!-- Cards de Estatísticas -->
+            <div class="stats-cards">
+                <div class="stat-card pending">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="pendingCount">12</div>
+                        <div class="stat-label">Pendentes</div>
+                    </div>
+                </div>
+                <div class="stat-card approved">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="approvedCount">45</div>
+                        <div class="stat-label">Aprovados</div>
+                    </div>
+                </div>
+                <div class="stat-card rejected">
+                    <div class="stat-icon">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="rejectedCount">8</div>
+                        <div class="stat-label">Rejeitados</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="totalCount">65</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Busca e Filtros -->
+            <div class="search-filter">
+                <div class="row g-3">
+                    <div class="col-lg-8">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="searchInput" class="form-control" placeholder="Buscar usuário por nome, email ou departamento...">
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <select id="statusFilter" class="form-select">
+                            <option value="all">Todos os status</option>
+                            <option value="pending">Pendentes</option>
+                            <option value="approved">Aprovados</option>
+                            <option value="rejected">Rejeitados</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">Todos</button>
+                    <button class="filter-btn" data-filter="today">Hoje</button>
+                    <button class="filter-btn" data-filter="week">Esta Semana</button>
+                    <button class="filter-btn" data-filter="month">Este Mês</button>
+                </div>
+            </div>
+
+            <!-- Tabela de Usuários -->
+            <div class="users-table-container">
+                <div class="table-header">
+                    <h5 class="table-title">Solicitações de Acesso</h5>
+                    <div class="table-actions">
+                        <button class="btn btn-sm btn-outline-primary" id="refreshBtn">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="users-table">
+                        <thead>
+                            <tr>
+                                <th>Usuário</th>
+                                <th>Email</th>
+                                <th>Departamento</th>
+                                <th>Data Solicitação</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                            <!-- Usuários serão inseridos aqui via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination-container">
+                    <div class="page-info">
+                        Mostrando <span id="startItem">1</span>-<span id="endItem">5</span> de <span id="totalItems">10</span> usuários
+                    </div>
+                    <div class="pagination">
+                        <button class="page-btn" id="prevPage">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <!-- Páginas serão inseridas aqui via JavaScript -->
+                        <button class="page-btn" id="nextPage">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Detalhes do Usuário -->
+    <div class="modal-overlay" id="userModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4><i class="fas fa-user-circle me-2"></i> Detalhes do Usuário</h4>
+                <button class="btn-close-modal" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Conteúdo será inserido via JavaScript -->
+            </div>
+            <div class="modal-footer" id="modalFooter">
+                <!-- Botões serão inseridos via JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Container para Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // ===== DADOS DE EXEMPLO =====
+        const users = [
+            {
+                id: 1,
+                name: "Carlos Silva",
+                email: "carlos.silva@empresa.com",
+                department: "TI",
+                role: "Analista de Sistemas",
+                phone: "(11) 98765-4321",
+                requestDate: "2025-01-15",
+                status: "pending",
+                avatarInitials: "CS",
+                justification: "Necessário acesso ao sistema de tickets para suporte técnico.",
+                document: "RG: 12.345.678-9, CPF: 123.456.789-00"
+            },
+            {
+                id: 2,
+                name: "Maria Santos",
+                email: "maria.santos@empresa.com",
+                department: "RH",
+                role: "Recrutadora",
+                phone: "(11) 91234-5678",
+                requestDate: "2025-01-14",
+                status: "approved",
+                avatarInitials: "MS",
+                justification: "Acesso necessário para cadastro de novos funcionários.",
+                document: "RG: 98.765.432-1, CPF: 987.654.321-00"
+            },
+            {
+                id: 3,
+                name: "João Oliveira",
+                email: "joao.oliveira@empresa.com",
+                department: "Financeiro",
+                role: "Contador",
+                phone: "(11) 99876-5432",
+                requestDate: "2025-01-13",
+                status: "rejected",
+                avatarInitials: "JO",
+                justification: "Acesso para análise de relatórios financeiros.",
+                document: "RG: 45.678.912-3, CPF: 456.789.123-00"
+            },
+            {
+                id: 4,
+                name: "Ana Costa",
+                email: "ana.costa@empresa.com",
+                department: "Marketing",
+                role: "Gerente",
+                phone: "(11) 97654-3210",
+                requestDate: "2025-01-12",
+                status: "pending",
+                avatarInitials: "AC",
+                justification: "Acesso para campanhas de marketing e análise de dados.",
+                document: "RG: 23.456.789-0, CPF: 234.567.890-00"
+            },
+            {
+                id: 5,
+                name: "Pedro Almeida",
+                email: "pedro.almeida@empresa.com",
+                department: "Vendas",
+                role: "Vendedor Sênior",
+                phone: "(11) 96543-2109",
+                requestDate: "2025-01-11",
+                status: "approved",
+                avatarInitials: "PA",
+                justification: "Acesso ao CRM para gerenciamento de clientes.",
+                document: "RG: 34.567.890-1, CPF: 345.678.901-00"
+            },
+            {
+                id: 6,
+                name: "Juliana Lima",
+                email: "juliana.lima@empresa.com",
+                department: "Operações",
+                role: "Coordenadora",
+                phone: "(11) 95432-1098",
+                requestDate: "2025-01-10",
+                status: "pending",
+                avatarInitials: "JL",
+                justification: "Acesso necessário para gestão de operações.",
+                document: "RG: 56.789.012-3, CPF: 567.890.123-00"
+            },
+            {
+                id: 7,
+                name: "Roberto Santos",
+                email: "roberto.santos@empresa.com",
+                department: "TI",
+                role: "Desenvolvedor",
+                phone: "(11) 94321-0987",
+                requestDate: "2025-01-09",
+                status: "approved",
+                avatarInitials: "RS",
+                justification: "Acesso ao sistema para desenvolvimento de novas features.",
+                document: "RG: 67.890.123-4, CPF: 678.901.234-00"
+            },
+            {
+                id: 8,
+                name: "Fernanda Oliveira",
+                email: "fernanda.oliveira@empresa.com",
+                department: "RH",
+                role: "Analista",
+                phone: "(11) 93210-9876",
+                requestDate: "2025-01-08",
+                status: "rejected",
+                avatarInitials: "FO",
+                justification: "Acesso para análise de desempenho de funcionários.",
+                document: "RG: 78.901.234-5, CPF: 789.012.345-00"
+            },
+            {
+                id: 9,
+                name: "Marcos Souza",
+                email: "marcos.souza@empresa.com",
+                department: "Financeiro",
+                role: "Analista Financeiro",
+                phone: "(11) 92109-8765",
+                requestDate: "2025-01-07",
+                status: "pending",
+                avatarInitials: "MS",
+                justification: "Acesso para relatórios financeiros e controle de orçamento.",
+                document: "RG: 89.012.345-6, CPF: 890.123.456-00"
+            },
+            {
+                id: 10,
+                name: "Patrícia Alves",
+                email: "patricia.alves@empresa.com",
+                department: "Marketing",
+                role: "Designer",
+                phone: "(11) 91098-7654",
+                requestDate: "2025-01-06",
+                status: "approved",
+                avatarInitials: "PA",
+                justification: "Acesso para criação de materiais de marketing.",
+                document: "RG: 90.123.456-7, CPF: 901.234.567-00"
+            }
+        ];
+
+        // ===== ESTADO DA APLICAÇÃO =====
+        let currentFilter = 'all';
+        let currentSearch = '';
+        let currentStatus = 'all';
+        let currentPage = 1;
+        const itemsPerPage = 5;
+        
+        // Data de referência para os filtros (2025-01-15)
+        const referenceDate = new Date('2025-01-15');
+
+        // ===== ELEMENTOS DOM =====
+        const usersTableBody = document.getElementById('usersTableBody');
+        const searchInput = document.getElementById('searchInput');
+        const statusFilter = document.getElementById('statusFilter');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const modal = document.getElementById('userModal');
+        const closeModalBtn = document.getElementById('closeModal');
+        const toastContainer = document.getElementById('toastContainer');
+        const refreshBtn = document.getElementById('refreshBtn');
+
+        // ===== INICIALIZAÇÃO =====
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('=== APROVAÇÃO DE USUÁRIOS - INICIANDO ===');
+            
+            // Carregar dados iniciais
+            renderUsersTable();
+            updateStats();
+            setupEventListeners();
+            
+            // Mostrar mensagem de boas-vindas
+            setTimeout(() => {
+                showToast('Sistema de aprovação carregado com sucesso!', 'success');
+            }, 1000);
+        });
+
+        // ===== CONFIGURAR EVENT LISTENERS =====
+        function setupEventListeners() {
+            // Busca em tempo real
+            searchInput.addEventListener('input', debounce((e) => {
+                currentSearch = e.target.value.toLowerCase();
+                currentPage = 1;
+                renderUsersTable();
+            }, 300));
+
+            // Filtro de status
+            statusFilter.addEventListener('change', (e) => {
+                currentStatus = e.target.value;
+                currentPage = 1;
+                renderUsersTable();
+            });
+
+            // Filtros por data
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    currentFilter = button.dataset.filter;
+                    currentPage = 1;
+                    renderUsersTable();
+                });
+            });
+
+            // Fechar modal
+            closeModalBtn.addEventListener('click', () => {
+                closeModal();
+            });
+
+            // Fechar modal clicando fora
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+
+            // Botão de refresh
+            refreshBtn.addEventListener('click', () => {
+                refreshData();
+            });
+
+            // Tecla ESC para fechar modal
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('active')) {
+                    closeModal();
+                }
+            });
+        }
+
+        // ===== DEBOUNCE PARA BUSCA =====
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // ===== FUNÇÕES PRINCIPAIS =====
+
+        // Obter usuários filtrados
+        function getFilteredUsers() {
+            return users.filter(user => {
+                // Filtro de busca
+                const searchMatch = !currentSearch || 
+                    user.name.toLowerCase().includes(currentSearch) ||
+                    user.email.toLowerCase().includes(currentSearch) ||
+                    user.department.toLowerCase().includes(currentSearch) ||
+                    user.role.toLowerCase().includes(currentSearch);
+
+                // Filtro de status
+                const statusMatch = currentStatus === 'all' || user.status === currentStatus;
+
+                // Filtro de data
+                let dateMatch = true;
+                if (currentFilter !== 'all') {
+                    const requestDate = new Date(user.requestDate);
+                    
+                    switch(currentFilter) {
+                        case 'today':
+                            // Filtrar solicitações do dia de referência (2024-01-15)
+                            const todayStr = referenceDate.toISOString().split('T')[0];
+                            dateMatch = user.requestDate === todayStr;
+                            break;
+                        case 'week':
+                            // Filtrar solicitações dos últimos 7 dias a partir da data de referência
+                            const weekAgo = new Date(referenceDate);
+                            weekAgo.setDate(referenceDate.getDate() - 7);
+                            dateMatch = requestDate >= weekAgo && requestDate <= referenceDate;
+                            break;
+                        case 'month':
+                            // Filtrar solicitações dos últimos 30 dias a partir da data de referência
+                            const monthAgo = new Date(referenceDate);
+                            monthAgo.setMonth(referenceDate.getMonth() - 1);
+                            dateMatch = requestDate >= monthAgo && requestDate <= referenceDate;
+                            break;
+                        default:
+                            dateMatch = true;
+                    }
+                }
+
+                return searchMatch && statusMatch && dateMatch;
+            });
+        }
+
+        // Renderizar tabela de usuários
+        function renderUsersTable() {
+            const filteredUsers = getFilteredUsers();
+            const totalItems = filteredUsers.length;
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            
+            // Garantir que a página atual é válida
+            if (currentPage > totalPages && totalPages > 0) {
+                currentPage = totalPages;
+            } else if (totalPages === 0) {
+                currentPage = 1;
+            }
+            
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+            const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
+
+            // Atualizar informações de paginação
+            document.getElementById('startItem').textContent = totalItems > 0 ? startIndex + 1 : 0;
+            document.getElementById('endItem').textContent = endIndex;
+            document.getElementById('totalItems').textContent = totalItems;
+
+            // Limpar tabela
+            usersTableBody.innerHTML = '';
+
+            // Se não houver usuários
+            if (paginatedUsers.length === 0) {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td colspan="6" class="text-center py-5">
+                        <div class="empty-state">
+                            <i class="fas fa-search fa-3x mb-3"></i>
+                            <h5 class="text-muted">Nenhum usuário encontrado</h5>
+                            <p class="text-muted">Tente ajustar os filtros de busca</p>
+                        </div>
+                    </td>
+                `;
+                usersTableBody.appendChild(row);
+                return;
+            }
+
+            // Adicionar usuários com animação
+            paginatedUsers.forEach((user, index) => {
+                const row = document.createElement('tr');
+                row.style.animationDelay = `${index * 0.1}s`;
+                row.classList.add('fade-in');
+                
+                let statusText, statusClass;
+                switch(user.status) {
+                    case 'pending':
+                        statusText = 'Pendente';
+                        statusClass = 'status-pending';
+                        break;
+                    case 'approved':
+                        statusText = 'Aprovado';
+                        statusClass = 'status-approved';
+                        break;
+                    case 'rejected':
+                        statusText = 'Rejeitado';
+                        statusClass = 'status-rejected';
+                        break;
+                }
+
+                row.innerHTML = `
+                    <td>
+                        <div class="user-info">
+                            <div class="user-avatar">${user.avatarInitials}</div>
+                            <div class="user-details">
+                                <h6>${user.name}</h6>
+                                <p><i class="fas fa-briefcase me-1 text-muted"></i>${user.role}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td><i class="fas fa-envelope me-2 text-muted"></i>${user.email}</td>
+                    <td><span class="badge">${user.department}</span></td>
+                    <td><i class="fas fa-calendar me-2 text-muted"></i>${formatDate(user.requestDate)}</td>
+                    <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-action btn-view" onclick="viewUserDetails(${user.id})" title="Ver detalhes">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            ${user.status === 'pending' ? `
+                                <button class="btn-action btn-approve" onclick="approveUser(${user.id})" title="Aprovar">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                                <button class="btn-action btn-reject" onclick="rejectUser(${user.id})" title="Rejeitar">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            ` : ''}
+                        </div>
+                    </td>
+                `;
+
+                usersTableBody.appendChild(row);
+            });
+
+            // Atualizar botões de paginação
+            updatePaginationButtons(totalItems, totalPages);
+        }
+
+        // Atualizar botões de paginação
+        function updatePaginationButtons(totalItems, totalPages) {
+            const prevBtn = document.getElementById('prevPage');
+            const nextBtn = document.getElementById('nextPage');
+            const paginationContainer = document.querySelector('.pagination');
+            
+            // Atualizar botões anterior/próximo
+            prevBtn.classList.toggle('disabled', currentPage === 1);
+            nextBtn.classList.toggle('disabled', currentPage === totalPages || totalPages === 0);
+            
+            // Configurar eventos dos botões de seta
+            prevBtn.onclick = () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderUsersTable();
+                    scrollToTable();
+                }
+            };
+            
+            nextBtn.onclick = () => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderUsersTable();
+                    scrollToTable();
+                }
+            };
+            
+            // Limpar números das páginas (exceto os botões de seta)
+            const pageButtons = paginationContainer.querySelectorAll('.page-btn:not(#prevPage):not(#nextPage)');
+            pageButtons.forEach(btn => btn.remove());
+            
+            // Limpar elipses
+            const ellipses = paginationContainer.querySelectorAll('.page-ellipsis');
+            ellipses.forEach(el => el.remove());
+            
+            // Se não houver páginas, retornar
+            if (totalPages === 0) return;
+            
+            // Configurar visibilidade das páginas
+            const maxVisiblePages = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+            
+            if (endPage - startPage + 1 < maxVisiblePages) {
+                startPage = Math.max(1, endPage - maxVisiblePages + 1);
+            }
+            
+            // Adicionar primeira página se necessário
+            if (startPage > 1) {
+                const firstBtn = createPageButton(1);
+                paginationContainer.insertBefore(firstBtn, nextBtn);
+                
+                if (startPage > 2) {
+                    const ellipsis = document.createElement('span');
+                    ellipsis.className = 'page-ellipsis';
+                    ellipsis.innerHTML = '...';
+                    paginationContainer.insertBefore(ellipsis, nextBtn);
+                }
+            }
+            
+            // Adicionar páginas visíveis
+            for (let i = startPage; i <= endPage; i++) {
+                const pageBtn = createPageButton(i);
+                paginationContainer.insertBefore(pageBtn, nextBtn);
+            }
+            
+            // Adicionar última página se necessário
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    const ellipsis = document.createElement('span');
+                    ellipsis.className = 'page-ellipsis';
+                    ellipsis.innerHTML = '...';
+                    paginationContainer.insertBefore(ellipsis, nextBtn);
+                }
+                
+                const lastBtn = createPageButton(totalPages);
+                paginationContainer.insertBefore(lastBtn, nextBtn);
+            }
+        }
+
+        // Criar botão de página
+        function createPageButton(pageNumber) {
+            const pageBtn = document.createElement('button');
+            pageBtn.className = `page-btn ${pageNumber === currentPage ? 'active' : ''}`;
+            pageBtn.textContent = pageNumber;
+            pageBtn.onclick = () => {
+                currentPage = pageNumber;
+                renderUsersTable();
+                scrollToTable();
+            };
+            return pageBtn;
+        }
+
+        // Atualizar estatísticas
+        function updateStats() {
+            const pendingCount = users.filter(u => u.status === 'pending').length;
+            const approvedCount = users.filter(u => u.status === 'approved').length;
+            const rejectedCount = users.filter(u => u.status === 'rejected').length;
+            const totalCount = users.length;
+
+            document.getElementById('pendingCount').textContent = pendingCount;
+            document.getElementById('approvedCount').textContent = approvedCount;
+            document.getElementById('rejectedCount').textContent = rejectedCount;
+            document.getElementById('totalCount').textContent = totalCount;
+        }
+
+        // ===== FUNÇÕES UTILITÁRIAS =====
+
+        // Formatar data
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+        }
+
+        // Scroll suave para a tabela
+        function scrollToTable() {
+            const tableContainer = document.querySelector('.users-table-container');
+            tableContainer.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+        // ===== FUNÇÕES DO MODAL =====
+
+        // Ver detalhes do usuário
+        function viewUserDetails(userId) {
+            const user = users.find(u => u.id === userId);
+            if (!user) {
+                showToast('Usuário não encontrado', 'error');
+                return;
+            }
+
+            // Configurar conteúdo do modal
+            document.getElementById('modalBody').innerHTML = `
+                <div class="user-detail-item">
+                    <div class="user-detail-label">Nome Completo:</div>
+                    <div class="user-detail-value">${user.name}</div>
+                </div>
+                <div class="user-detail-item">
+                    <div class="user-detail-label">Email Corporativo:</div>
+                    <div class="user-detail-value">${user.email}</div>
+                </div>
+                <div class="user-detail-item">
+                    <div class="user-detail-label">Telefone:</div>
+                    <div class="user-detail-value">${user.phone}</div>
+                </div>
+                <div class="user-detail-item">
+                    <div class="user-detail-label">Departamento:</div>
+                    <div class="user-detail-value">${user.department}</div>
+                </div>
+                <div class="user-detail-item">
+                    <div class="user-detail-label">Cargo:</div>
+                    <div class="user-detail-value">${user.role}</div>
+                </div>
+                <div class="user-detail-item">
+                    <div class="user-detail-label">Data da Solicitação:</div>
+                    <div class="user-detail-value">${formatDate(user.requestDate)}</div>
+                </div>
+                <div class="user-detail-item">
+                    <div class="user-detail-label">Justificativa:</div>
+                    <div class="user-detail-value">${user.justification}</div>
+                </div>
+                <div class="user-document">
+                    <strong><i class="fas fa-id-card me-2"></i>Documentos:</strong><br>
+                    ${user.document}
+                </div>
+            `;
+
+            // Configurar botões do modal
+            const modalFooter = document.getElementById('modalFooter');
+            modalFooter.innerHTML = '';
+
+            if (user.status === 'pending') {
+                modalFooter.innerHTML = `
+                    <button class="btn-modal btn-modal-secondary" onclick="closeModal()">
+                        <i class="fas fa-times me-2"></i>Fechar
+                    </button>
+                    <button class="btn-modal btn-modal-danger" onclick="rejectUser(${user.id})">
+                        <i class="fas fa-times me-2"></i>Rejeitar
+                    </button>
+                    <button class="btn-modal btn-modal-success" onclick="approveUser(${user.id})">
+                        <i class="fas fa-check me-2"></i>Aprovar
+                    </button>
+                `;
+            } else {
+                modalFooter.innerHTML = `
+                    <button class="btn-modal btn-modal-primary" onclick="closeModal()">
+                        <i class="fas fa-times me-2"></i>Fechar
+                    </button>
+                `;
+            }
+
+            // Mostrar modal
+            modal.classList.add('active');
+        }
+
+        // Fechar modal
+        function closeModal() {
+            modal.classList.remove('active');
+        }
+
+        // ===== FUNÇÕES DE APROVAÇÃO/REJEIÇÃO =====
+
+        // Aprovar usuário
+        function approveUser(userId) {
+            const user = users.find(u => u.id === userId);
+            if (!user) return;
+
+            if (confirm(`Deseja aprovar o acesso de ${user.name}?`)) {
+                const userIndex = users.findIndex(u => u.id === userId);
+                if (userIndex !== -1) {
+                    users[userIndex].status = 'approved';
+                    renderUsersTable();
+                    updateStats();
+                    closeModal();
+                    showToast(`Acesso de ${user.name} foi aprovado com sucesso!`, 'success');
+                }
+            }
+        }
+
+        // Rejeitar usuário
+        function rejectUser(userId) {
+            const user = users.find(u => u.id === userId);
+            if (!user) return;
+
+            const reason = prompt(`Informe o motivo da rejeição do acesso de ${user.name}:`);
+            if (reason !== null) {
+                const userIndex = users.findIndex(u => u.id === userId);
+                if (userIndex !== -1) {
+                    users[userIndex].status = 'rejected';
+                    renderUsersTable();
+                    updateStats();
+                    closeModal();
+                    showToast(`Acesso de ${user.name} foi rejeitado. Motivo: ${reason}`, 'error');
+                }
+            }
+        }
+
+        // Atualizar dados
+        function refreshData() {
+            // Animação de loading no botão
+            const originalHTML = refreshBtn.innerHTML;
+            refreshBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            refreshBtn.disabled = true;
+            
+            // Simulação de carregamento
+            setTimeout(() => {
+                renderUsersTable();
+                updateStats();
+                refreshBtn.innerHTML = originalHTML;
+                refreshBtn.disabled = false;
+                showToast('Dados atualizados com sucesso!', 'success');
+            }, 800);
+        }
+
+        // ===== SISTEMA DE NOTIFICAÇÕES =====
+
+        // Mostrar notificação
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type} show`;
+            toast.innerHTML = `
+                <div class="toast-header">
+                    <div class="toast-title">
+                        <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'} me-2"></i>
+                        ${type === 'success' ? 'Sucesso!' : 'Atenção!'}
+                    </div>
+                    <button class="toast-close" onclick="this.parentElement.parentElement.remove()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="toast-body">${message}</div>
+            `;
+
+            toastContainer.appendChild(toast);
+
+            // Remover automaticamente após 5 segundos
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateX(100%)';
+                    setTimeout(() => {
+                        if (toast.parentNode) {
+                            toast.remove();
+                        }
+                    }, 300);
+                }
+            }, 5000);
+        }
+
+        // ===== EXPORTAR FUNÇÕES PARA USO GLOBAL =====
+        window.viewUserDetails = viewUserDetails;
+        window.approveUser = approveUser;
+        window.rejectUser = rejectUser;
+        window.closeModal = closeModal;
+
+        // ===== INICIALIZAÇÃO FINAL =====
+        console.log('=== APROVAÇÃO DE USUÁRIOS - PRONTO PARA USO ===');
+    </script>
+</body>
+</html>
