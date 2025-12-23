@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Central de Suporte</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-headset"></i> Central de Suporte</h1>
+            <p class="subtitle">Encontre respostas para suas dúvidas</p>
+        </div>
+
+        <!-- BARRA DE BUSCA -->
+        <div class="search-container">
+            <div class="search-icon">
+                <i class="fas fa-search"></i>
+            </div>
+            <input type="text" class="search" id="search" placeholder="Buscar perguntas...">
+            <div class="search-hint" id="searchHint"></div>
+        </div>
+
+        <!-- FAQ -->
+        <div id="faq" class="faq-container"></div>
+
+        <!-- MENSAGEM DE ESTADO VAZIO -->
+        <div id="emptyState" class="empty-state" style="display: none;">
+            <div class="empty-icon">
+                <i class="fas fa-search"></i>
+            </div>
+            <div class="empty-title">Nenhuma pergunta encontrada</div>
+            <div class="empty-text" id="emptyText"></div>
+            <button class="btn btn-primary" id="addFirstBtn">
+                <i class="fas fa-plus"></i> Adicionar Primeira Pergunta
+            </button>
+        </div>
+    </div>
+
+    <!-- BOTÃO ADICIONAR -->
+    <button class="add-btn" id="addBtn">
+        <i class="fas fa-plus"></i>
+    </button>
+
+    <!-- MODAL -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-question-circle"></i> Nova Pergunta</h2>
+                <button class="close-btn" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="input-group">
+                    <label class="input-label">
+                        <i class="fas fa-question"></i> Pergunta
+                    </label>
+                    <input type="text" class="modal-input" id="newQuestion" placeholder="Digite a pergunta">
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">
+                        <i class="fas fa-comment-alt"></i> Resposta
+                    </label>
+                    <textarea class="modal-textarea" id="newAnswer" placeholder="Digite a resposta"></textarea>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" id="cancelBtn">
+                        <i class="fas fa-times"></i> Cancelar
+                    </button>
+                    <button class="btn btn-primary" id="saveBtn">
+                        <i class="fas fa-save"></i> Salvar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
