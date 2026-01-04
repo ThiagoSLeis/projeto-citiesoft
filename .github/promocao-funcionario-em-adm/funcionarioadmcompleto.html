@@ -1,0 +1,2672 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Promoção para Administrador | Citiesoft</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ===== VARIÁVEIS DE CORES CITIESOFT ===== */
+        :root {
+            --primary-blue: #00A6FF;
+            --dark-blue: #0056b3;
+            --light-blue: #e6f7ff;
+            --lighter-blue: #f0f9ff;
+            --lightest-blue: #f8fcff;
+            --success-green: #28a745;
+            --warning-orange: #ffc107;
+            --danger-red: #dc3545;
+            --info-cyan: #17a2b8;
+            --teal: #20c997;
+            
+            --promotion-gradient: linear-gradient(145deg, #00A6FF 0%, #0056b3 100%);
+            --card-gradient: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%);
+            
+            --text-primary: #2c3e50;
+            --text-secondary: #6c757d;
+            --text-light: #f8f9fa;
+            
+            --bg-light: #f8f9fa;
+            --bg-white: #ffffff;
+            --bg-hover: rgba(0, 166, 255, 0.05);
+            
+            --border-color: #dee2e6;
+            --border-light: rgba(0, 166, 255, 0.1);
+            --border-dark: rgba(0, 166, 255, 0.3);
+            
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.15);
+            --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.25);
+            
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --radius-full: 50px;
+        }
+
+        /* ===== RESET E CONFIGURAÇÕES GERAIS ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f8fcff 0%, #e6f7ff 50%, #f0f9ff 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: var(--text-primary);
+            padding: 20px;
+        }
+
+        /* ===== HEADER ===== */
+        .page-header {
+            background: var(--promotion-gradient);
+            color: var(--text-light);
+            padding: 40px 30px;
+            border-radius: var(--radius-xl);
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-xl);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            z-index: 1;
+        }
+
+        .page-title {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 2;
+            background: linear-gradient(135deg, #ffffff 0%, rgba(255,255,255,0.9) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+            font-weight: 300;
+            max-width: 600px;
+        }
+
+        /* ===== LAYOUT PRINCIPAL ===== */
+        .main-container {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 30px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 1200px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ===== COLUNA FUNCIONÁRIOS ===== */
+        .sidebar-employees {
+            background: var(--card-gradient);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            height: fit-content;
+        }
+
+        .sidebar-header {
+            background: var(--promotion-gradient);
+            color: var(--text-light);
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            z-index: 1;
+        }
+
+        .sidebar-title {
+            margin: 0;
+            font-weight: 600;
+            font-size: 1.5rem;
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar-subtitle {
+            margin: 8px 0 0 0;
+            opacity: 0.9;
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 2;
+            font-weight: 300;
+        }
+
+        .employee-count {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 12px;
+            border-radius: var(--radius-full);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .sidebar-search {
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(230, 247, 255, 0.7));
+            border-bottom: 1px solid rgba(0, 166, 255, 0.15);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            padding-left: 50px;
+            border-radius: var(--radius-md);
+            border: 2px solid rgba(0, 166, 255, 0.2);
+            transition: all 0.3s ease;
+            height: 50px;
+            font-size: 1rem;
+            background: var(--bg-white);
+            width: 100%;
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 0.25rem rgba(0, 166, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-blue);
+            z-index: 10;
+            font-size: 1.2rem;
+        }
+
+        .employees-container {
+            max-height: 700px;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        /* ===== CONTEÚDO PRINCIPAL ===== */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        /* ===== PROMOÇÃO CONTAINER ===== */
+        .promotion-container {
+            background: var(--card-gradient);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .promotion-header {
+            background: var(--promotion-gradient);
+            color: var(--text-light);
+            padding: 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .promotion-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            z-index: 1;
+        }
+
+        .promotion-title {
+            margin: 0;
+            font-weight: 600;
+            font-size: 1.5rem;
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .promotion-actions {
+            display: flex;
+            gap: 12px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ===== PAINEL DE PROMOÇÃO ===== */
+        .promotion-panel {
+            padding: 30px;
+        }
+
+        .panel-header {
+            margin-bottom: 30px;
+        }
+
+        .panel-title {
+            margin: 0;
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .panel-subtitle {
+            margin: 8px 0 0 0;
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .panel-content {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 30px;
+        }
+
+        @media (max-width: 1200px) {
+            .panel-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ===== INFORMAÇÕES DO FUNCIONÁRIO ===== */
+        .employee-info-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .info-header {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            padding: 25px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(230, 247, 255, 0.3));
+            border-radius: var(--radius-lg);
+            border: 2px solid rgba(0, 166, 255, 0.1);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .employee-avatar-large {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--promotion-gradient);
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 2.5rem;
+            box-shadow: 0 8px 20px rgba(0, 166, 255, 0.3);
+            flex-shrink: 0;
+        }
+
+        .employee-details-large {
+            flex: 1;
+        }
+
+        .employee-details-large h5 {
+            margin: 0 0 8px 0;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .employee-details-large p {
+            margin: 0 0 15px 0;
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .employee-meta {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            background: rgba(0, 166, 255, 0.05);
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+        }
+
+        .meta-item i {
+            color: var(--primary-blue);
+        }
+
+        /* ===== FORMULÁRIO DE PROMOÇÃO ===== */
+        .promotion-form {
+            padding: 25px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(230, 247, 255, 0.3));
+            border-radius: var(--radius-lg);
+            border: 2px solid rgba(0, 166, 255, 0.1);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .form-title {
+            margin: 0 0 25px 0;
+            font-size: 1.3rem;
+            color: var(--text-primary);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: var(--radius-md);
+            border: 2px solid rgba(0, 166, 255, 0.2);
+            background: var(--bg-white);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 0.25rem rgba(0, 166, 255, 0.15);
+            outline: none;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 166, 255, 0.1);
+        }
+
+        /* ===== PAINEL DE AVALIAÇÃO ===== */
+        .evaluation-panel {
+            padding: 25px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(230, 247, 255, 0.3));
+            border-radius: var(--radius-lg);
+            border: 2px solid rgba(0, 166, 255, 0.1);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .evaluation-panel .panel-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+
+        .eligibility-status {
+            padding: 25px;
+            border-radius: var(--radius-md);
+            background: rgba(255, 255, 255, 0.5);
+            border: 2px solid rgba(0, 166, 255, 0.1);
+            text-align: center;
+        }
+
+        .eligibility-status h6 {
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .status-text {
+            font-size: 1.1rem;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+        }
+
+        .status-text.eligible {
+            background: rgba(40, 167, 69, 0.1);
+            color: var(--success-green);
+            border: 1px solid rgba(40, 167, 69, 0.2);
+        }
+
+        .status-text.not-eligible {
+            background: rgba(220, 53, 69, 0.1);
+            color: var(--danger-red);
+            border: 1px solid rgba(220, 53, 69, 0.2);
+        }
+
+        .status-text.pending {
+            background: rgba(255, 193, 7, 0.1);
+            color: var(--warning-orange);
+            border: 1px solid rgba(255, 193, 7, 0.2);
+        }
+
+        .basic-info {
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 166, 255, 0.1);
+        }
+
+        .basic-info h6 {
+            margin: 0 0 15px 0;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.9rem;
+            padding: 10px;
+            border-radius: var(--radius-sm);
+            background: rgba(0, 0, 0, 0.02);
+            transition: all 0.3s ease;
+        }
+
+        .info-item i {
+            font-size: 1.1rem;
+            color: var(--primary-blue);
+        }
+
+        /* ===== CARD FUNCIONÁRIO ===== */
+        .employee-card {
+            background: var(--card-gradient);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 2px solid transparent;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+        }
+
+        .employee-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+            border-color: rgba(0, 166, 255, 0.3);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(230, 247, 255, 0.3));
+        }
+
+        .employee-card.selected {
+            border-color: var(--primary-blue);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(0, 166, 255, 0.1));
+            box-shadow: 0 0 0 3px rgba(0, 166, 255, 0.1);
+        }
+
+        .employee-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .employee-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--promotion-gradient);
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 10px rgba(0, 166, 255, 0.3);
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .employee-info:hover .employee-avatar {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 6px 15px rgba(0, 166, 255, 0.4);
+        }
+
+        .employee-details {
+            flex: 1;
+        }
+
+        .employee-name {
+            margin: 0;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+        }
+
+        .employee-role {
+            margin: 5px 0 0 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .employee-stats {
+            display: flex;
+            gap: 20px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .stat-item {
+            text-align: center;
+            flex: 1;
+        }
+
+        .employee-stat-number {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            line-height: 1;
+        }
+
+        .employee-stat-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 3px;
+        }
+
+        /* ===== TIPOS DE USUÁRIO ===== */
+        .user-type-badge {
+            padding: 4px 12px;
+            border-radius: var(--radius-full);
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .badge-admin {
+            background: rgba(0, 166, 255, 0.1);
+            color: var(--dark-blue);
+            border: 1px solid rgba(0, 166, 255, 0.2);
+        }
+
+        .badge-employee {
+            background: rgba(0, 166, 255, 0.05);
+            color: var(--primary-blue);
+            border: 1px solid rgba(0, 166, 255, 0.15);
+        }
+
+        .badge-client {
+            background: rgba(40, 167, 69, 0.1);
+            color: var(--success-green);
+            border: 1px solid rgba(40, 167, 69, 0.2);
+        }
+
+        .admin-permissions {
+            background: rgba(0, 166, 255, 0.05);
+            border: 1px solid rgba(0, 166, 255, 0.1);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .permission-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        .permission-item i {
+            color: var(--primary-blue);
+            margin-right: 10px;
+            width: 20px;
+        }
+
+        /* ===== MODAL ===== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease-out;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--card-gradient);
+            border-radius: var(--radius-xl);
+            width: 100%;
+            max-width: 500px;
+            animation: modalSlideIn 0.3s ease-out;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-content.large-modal {
+            max-width: 800px;
+        }
+
+        .modal-header {
+            background: var(--promotion-gradient);
+            color: var(--text-light);
+            padding: 25px;
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+            position: relative;
+        }
+
+        .modal-header h4 {
+            margin: 0;
+            font-weight: 600;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .btn-close-modal {
+            position: absolute;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .btn-close-modal:hover {
+            transform: translateY(-50%) rotate(90deg);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-body {
+            padding: 30px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .modal-footer {
+            padding: 20px 30px;
+            background: linear-gradient(135deg, var(--bg-light), var(--light-blue));
+            border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+
+        /* ===== HISTÓRICO ===== */
+        .history-filters {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(0, 166, 255, 0.1);
+        }
+
+        .history-filters .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .history-filters label {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .history-item {
+            padding: 20px;
+            border-radius: var(--radius-lg);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(230, 247, 255, 0.3));
+            border-left: 5px solid var(--primary-blue);
+        }
+
+        .history-item.undo {
+            border-left-color: var(--warning-orange);
+        }
+
+        .history-item.client {
+            border-left-color: var(--success-green);
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .history-employee {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+        }
+
+        .history-date {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            background: rgba(0, 166, 255, 0.05);
+            padding: 4px 10px;
+            border-radius: var(--radius-sm);
+        }
+
+        .history-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .history-detail {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .history-detail i {
+            color: var(--primary-blue);
+        }
+
+        .history-reason {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(0, 166, 255, 0.1);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* ===== TOAST NOTIFICATIONS ===== */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1100;
+            max-width: 350px;
+            width: 100%;
+        }
+
+        .toast {
+            background: var(--card-gradient);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: var(--shadow-lg);
+            border-left: 5px solid var(--primary-blue);
+            animation: slideInRight 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .toast.success {
+            border-left-color: var(--success-green);
+            background: linear-gradient(135deg, var(--card-gradient), rgba(40, 167, 69, 0.05));
+        }
+
+        .toast.error {
+            border-left-color: var(--danger-red);
+            background: linear-gradient(135deg, var(--card-gradient), rgba(220, 53, 69, 0.05));
+        }
+
+        .toast.warning {
+            border-left-color: var(--warning-orange);
+            background: linear-gradient(135deg, var(--card-gradient), rgba(255, 193, 7, 0.05));
+        }
+
+        .toast.show {
+            display: block;
+        }
+
+        .toast-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .toast-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 1.2rem;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .toast-close:hover {
+            background: var(--border-light);
+            color: var(--text-primary);
+        }
+
+        .toast-body {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* ===== BOTÕES ===== */
+        .btn {
+            padding: 12px 25px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-primary {
+            background: var(--promotion-gradient);
+            color: var(--text-light);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 166, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+        }
+
+        .btn-secondary:hover {
+            background: var(--promotion-gradient);
+            color: var(--text-light);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 166, 255, 0.3);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success-green), #1e7e34);
+            color: var(--text-light);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger-red), #c82333);
+            color: var(--text-light);
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, var(--warning-orange), #e0a800);
+            color: var(--text-light);
+        }
+
+        .btn-warning:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 193, 7, 0.3);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, var(--info-cyan), #138496);
+            color: var(--text-light);
+        }
+
+        .btn-info:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(23, 162, 184, 0.3);
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+
+        /* ===== ANIMAÇÕES ===== */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ===== SCROLLBAR PERSONALIZADA ===== */
+        .employees-container::-webkit-scrollbar,
+        .modal-body::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        .employees-container::-webkit-scrollbar-track,
+        .modal-body::-webkit-scrollbar-track {
+            background: var(--bg-light);
+            border-radius: 10px;
+        }
+
+        .employees-container::-webkit-scrollbar-thumb,
+        .modal-body::-webkit-scrollbar-thumb {
+            background: var(--promotion-gradient);
+            border-radius: 10px;
+        }
+
+        .employees-container::-webkit-scrollbar-thumb:hover,
+        .modal-body::-webkit-scrollbar-thumb:hover {
+            background: var(--promotion-gradient);
+            opacity: 0.8;
+        }
+
+        /* ===== ESTADOS ESPECIAIS ===== */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
+
+        .loading::after {
+            content: '';
+            width: 30px;
+            height: 30px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--primary-blue);
+            border-radius: 50%;
+            margin-left: 10px;
+            animation: spin 1s linear infinite;
+        }
+
+        /* ===== RESPONSIVIDADE ===== */
+        @media (max-width: 1200px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar-employees {
+                order: 2;
+            }
+            
+            .main-content {
+                order: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .page-header {
+                padding: 30px 20px;
+                border-radius: var(--radius-lg);
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .page-subtitle {
+                font-size: 1rem;
+            }
+            
+            .promotion-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .info-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .employee-avatar-large {
+                width: 80px;
+                height: 80px;
+                font-size: 2rem;
+            }
+            
+            .employee-details-large h5 {
+                font-size: 1.3rem;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 10px;
+            }
+            
+            .modal-body {
+                padding: 20px;
+                max-height: 70vh;
+            }
+            
+            .modal-footer {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 1.6rem;
+            }
+            
+            .sidebar-title,
+            .promotion-title {
+                font-size: 1.2rem;
+            }
+            
+            .employee-stats {
+                flex-wrap: wrap;
+            }
+            
+            .employee-meta {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="page-header">
+        <div class="header-overlay"></div>
+        <h1 class="page-title">
+            <i class="fas fa-user-shield me-3"></i>
+            Promoção para Administrador
+        </h1>
+        <p class="page-subtitle">Sistema de Promoção para Administradores | Citiesoft</p>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar Funcionários -->
+        <div class="sidebar-employees">
+            <div class="sidebar-header">
+                <h3 class="sidebar-title">
+                    <i class="fas fa-users"></i>
+                    Funcionários Elegíveis
+                    <span class="employee-count" id="employeeCount">0</span>
+                </h3>
+                <p class="sidebar-subtitle">Clique em um funcionário para promover para administrador</p>
+            </div>
+            
+            <div class="sidebar-search">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="employeeSearch" class="form-control" placeholder="Buscar funcionário...">
+                </div>
+            </div>
+            
+            <div class="employees-container" id="employeesContainer">
+                <!-- Funcionários serão carregados via JavaScript -->
+                <div class="loading">Carregando funcionários...</div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Promoção Container -->
+            <div class="promotion-container">
+                <div class="promotion-header">
+                    <h3 class="promotion-title">
+                        <i class="fas fa-user-shield"></i>
+                        Promover para Administrador
+                    </h3>
+                    
+                    <div class="promotion-actions">
+                        <button class="btn btn-warning btn-sm" id="btnUndoPromotion" disabled>
+                            <i class="fas fa-undo"></i> Desfazer
+                        </button>
+                        <button class="btn btn-secondary btn-sm" id="btnHistory">
+                            <i class="fas fa-history"></i> Histórico
+                        </button>
+                        <button class="btn btn-info btn-sm" id="btnRefresh">
+                            <i class="fas fa-sync-alt"></i> Atualizar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Painel de Promoção -->
+                <div class="promotion-panel" id="promotionPanel">
+                    <div class="panel-header">
+                        <h4 class="panel-title">
+                            <i class="fas fa-user-shield"></i>
+                            Nova Promoção para Administrador
+                        </h4>
+                        <div class="panel-subtitle">
+                            Preencha os dados para promover o funcionário para administrador
+                        </div>
+                    </div>
+                    
+                    <div class="panel-content">
+                        <div class="employee-info-panel">
+                            <div class="info-header">
+                                <div class="employee-avatar-large" id="promoEmployeeAvatar">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="employee-details-large">
+                                    <h5 id="promoEmployeeName">Nenhum funcionário selecionado</h5>
+                                    <p id="promoEmployeeRole">Selecione um funcionário na lista ao lado</p>
+                                    <div class="employee-meta" id="promoEmployeeMeta">
+                                        <span class="meta-item">
+                                            <i class="fas fa-building"></i>
+                                            <span id="promoEmployeeDept">-</span>
+                                        </span>
+                                        <span class="meta-item">
+                                            <i class="fas fa-calendar-alt"></i>
+                                            <span id="promoEmployeeTenure">-</span>
+                                        </span>
+                                        <span class="meta-item">
+                                            <i class="fas fa-user-tag"></i>
+                                            <span id="promoEmployeeType">Funcionário</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="promotion-form">
+                                <h5 class="form-title">Detalhes da Promoção para Administrador</h5>
+                                
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="newPosition"><i class="fas fa-user-shield"></i> Nível de Administrador</label>
+                                        <select class="form-control" id="newPosition">
+                                            <option value="">Selecione o nível</option>
+                                            <option value="admin_sistema">Administrador de Sistema</option>
+                                            <option value="usuario_cliente">Usuário Cliente</option>
+                                            <option value="usuario_funcionario">Usuário Funcionário Citiesoft</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="accessLevel"><i class="fas fa-key"></i> Nível de Acesso</label>
+                                        <select class="form-control" id="accessLevel">
+                                            <option value="">Selecione o nível</option>
+                                            <option value="1">Nível 1 - Visualização</option>
+                                            <option value="2">Nível 2 - Operacional</option>
+                                            <option value="3">Nível 3 - Gerencial</option>
+                                            <option value="5">Nível 4 - Super Usuário</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="promotionDate"><i class="fas fa-calendar"></i> Data da Promoção</label>
+                                        <input type="date" class="form-control" id="promotionDate">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="promotionReason"><i class="fas fa-comment-alt"></i> Motivo da Promoção</label>
+                                    <textarea class="form-control" id="promotionReason" rows="3" placeholder="Explique por que este funcionário deve se tornar um administrador..."></textarea>
+                                </div>
+                                
+                                <!-- Permissões de Administrador -->
+                                <div class="admin-permissions">
+                                    <h6><i class="fas fa-shield-alt"></i> Permissões de Administrador</h6>
+                                    <div class="permission-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Acesso completo ao sistema</span>
+                                    </div>
+                                    <div class="permission-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Gerenciamento de usuários</span>
+                                    </div>
+                                    <div class="permission-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Configurações do sistema</span>
+                                    </div>
+                                    <div class="permission-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Relatórios administrativos</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-actions">
+                                    <button class="btn btn-secondary" id="btnCancel">
+                                        <i class="fas fa-times"></i> Cancelar
+                                    </button>
+                                    <button class="btn btn-primary" id="btnPromote" disabled>
+                                        <i class="fas fa-user-shield"></i> Promover para Administrador
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="evaluation-panel">
+                            <h5 class="panel-title">
+                                <i class="fas fa-info-circle"></i>
+                                Status de Elegibilidade
+                            </h5>
+                            
+                            <div class="eligibility-status">
+                                <h6>Status do Funcionário</h6>
+                                <div class="status-text pending" id="eligibilityStatus">
+                                    Selecione um funcionário para verificar elegibilidade
+                                </div>
+                            </div>
+                            
+                            <div class="basic-info">
+                                <h6><i class="fas fa-clipboard-list"></i> Requisitos para Administrador</h6>
+                                <ul class="info-list">
+                                    <li class="info-item">
+                                        <i class="fas fa-calendar"></i>
+                                        <span>Tempo mínimo: <strong>2 anos</strong></span>
+                                    </li>
+                                    <li class="info-item">
+                                        <i class="fas fa-chart-line"></i>
+                                        <span>Desempenho: <strong>≥ 85%</strong></span>
+                                    </li>
+                                    <li class="info-item">
+                                        <i class="fas fa-graduation-cap"></i>
+                                        <span>Treinamento: <strong>Concluído</strong></span>
+                                    </li>
+                                    <li class="info-item">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                        <span>Advertências: <strong>Nenhuma nos últimos 6 meses</strong></span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="basic-info">
+                                <h6><i class="fas fa-user-check"></i> Dados do Funcionário</h6>
+                                <ul class="info-list" id="employeeBasicInfo">
+                                    <li class="info-item">
+                                        <i class="fas fa-calendar"></i>
+                                        <span>Tempo na empresa: <strong id="infoTenure">-</strong></span>
+                                    </li>
+                                    <li class="info-item">
+                                        <i class="fas fa-chart-line"></i>
+                                        <span>Desempenho: <strong id="infoPerformance">-</strong></span>
+                                    </li>
+                                    <li class="info-item">
+                                        <i class="fas fa-graduation-cap"></i>
+                                        <span>Treinamento: <strong id="infoTraining">-</strong></span>
+                                    </li>
+                                    <li class="info-item">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                        <span>Última advertência: <strong id="infoWarning">-</strong></span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Histórico -->
+    <div class="modal-overlay" id="historyModal">
+        <div class="modal-content large-modal">
+            <div class="modal-header">
+                <h4><i class="fas fa-history me-2"></i> Histórico de Promoções para Administrador</h4>
+                <button class="btn-close-modal" id="closeHistoryModal">&times;</button>
+            </div>
+            
+            <div class="modal-body" id="historyModalBody">
+                <div class="history-filters">
+                    <div class="filter-group">
+                        <label>Filtrar por:</label>
+                        <select id="historyFilter" class="form-control">
+                            <option value="all">Todas as promoções</option>
+                            <option value="last-month">Último mês</option>
+                            <option value="last-year">Último ano</option>
+                            <option value="active">Promoções ativas</option>
+                            <option value="undone">Promoções desfeitas</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="history-list" id="historyList">
+                    <!-- Histórico será carregado via JavaScript -->
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="btnCloseHistoryModal">
+                    <i class="fas fa-times"></i> Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Confirmação -->
+    <div class="modal-overlay" id="confirmationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4><i class="fas fa-user-shield me-2"></i> Confirmar Promoção para Administrador</h4>
+                <button class="btn-close-modal" id="closeConfirmationModal">&times;</button>
+            </div>
+            
+            <div class="modal-body" id="confirmationModalBody">
+                <!-- Conteúdo será inserido via JavaScript -->
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="btnCancelPromotion">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+                <button class="btn btn-primary" id="btnConfirmPromotion">
+                    <i class="fas fa-check"></i> Confirmar Promoção
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Desfazer -->
+    <div class="modal-overlay" id="undoModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4><i class="fas fa-undo me-2"></i> Desfazer Promoção</h4>
+                <button class="btn-close-modal" id="closeUndoModal">&times;</button>
+            </div>
+            
+            <div class="modal-body" id="undoModalBody">
+                <!-- Conteúdo será inserido via JavaScript -->
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="btnCancelUndo">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+                <button class="btn btn-warning" id="btnConfirmUndo">
+                    <i class="fas fa-undo"></i> Desfazer Promoção
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // ===== DADOS DE EXEMPLO =====
+
+        // Tipos de usuário
+        const USER_TYPES = {
+            ADMIN: 'admin',
+            EMPLOYEE: 'employee',
+            CLIENT: 'client'
+        };
+
+        // Funcionários (dados de exemplo)
+        let employees = [
+            {
+                id: 1,
+                name: "Carlos Silva",
+                role: "Analista de Sistemas",
+                department: "ti",
+                email: "carlos.silva@citiesoft.com",
+                avatarInitials: "CS",
+                userType: USER_TYPES.EMPLOYEE,
+                tenure: 4,
+                performance: 92,
+                hireDate: "2020-03-15",
+                lastPromotion: null,
+                hasManagementTraining: true,
+                lastWarning: null,
+                isAdmin: false
+            },
+            {
+                id: 2,
+                name: "Maria Santos",
+                role: "Analista de Suporte",
+                department: "ti",
+                email: "maria.santos@citiesoft.com",
+                avatarInitials: "MS",
+                userType: USER_TYPES.EMPLOYEE,
+                tenure: 3,
+                performance: 95,
+                hireDate: "2021-05-20",
+                lastPromotion: null,
+                hasManagementTraining: true,
+                lastWarning: null,
+                isAdmin: false
+            },
+            {
+                id: 3,
+                name: "João Oliveira",
+                role: "Desenvolvedor Sênior",
+                department: "ti",
+                email: "joao.oliveira@citiesoft.com",
+                avatarInitials: "JO",
+                userType: USER_TYPES.ADMIN,
+                tenure: 5,
+                performance: 98,
+                hireDate: "2019-01-10",
+                lastPromotion: "2023-06-15",
+                hasManagementTraining: true,
+                lastWarning: null,
+                isAdmin: true,
+                adminLevel: "admin_sistema",
+                accessLevel: "5"
+            },
+            {
+                id: 4,
+                name: "Ana Costa",
+                role: "Analista de Sistemas",
+                department: "ti",
+                email: "ana.costa@citiesoft.com",
+                avatarInitials: "AC",
+                userType: USER_TYPES.EMPLOYEE,
+                tenure: 1,
+                performance: 85,
+                hireDate: "2023-02-28",
+                lastPromotion: null,
+                hasManagementTraining: false,
+                lastWarning: null,
+                isAdmin: false
+            },
+            {
+                id: 5,
+                name: "Pedro Almeida",
+                role: "Técnico de Redes",
+                department: "ti",
+                email: "pedro.almeida@citiesoft.com",
+                avatarInitials: "PA",
+                userType: USER_TYPES.EMPLOYEE,
+                tenure: 2,
+                performance: 89,
+                hireDate: "2022-08-12",
+                lastPromotion: null,
+                hasManagementTraining: true,
+                lastWarning: "2024-01-15",
+                isAdmin: false
+            },
+            {
+                id: 6,
+                name: "Juliana Lima",
+                role: "Analista de RH",
+                department: "rh",
+                email: "juliana.lima@citiesoft.com",
+                avatarInitials: "JL",
+                userType: USER_TYPES.EMPLOYEE,
+                tenure: 3,
+                performance: 94,
+                hireDate: "2021-03-10",
+                lastPromotion: null,
+                hasManagementTraining: true,
+                lastWarning: null,
+                isAdmin: false
+            },
+            {
+                id: 7,
+                name: "Roberto Santos",
+                role: "Contador",
+                department: "financeiro",
+                email: "roberto.santos@citiesoft.com",
+                avatarInitials: "RS",
+                userType: USER_TYPES.EMPLOYEE,
+                tenure: 6,
+                performance: 96,
+                hireDate: "2018-11-05",
+                lastPromotion: "2022-09-20",
+                hasManagementTraining: true,
+                lastWarning: null,
+                isAdmin: false
+            },
+            {
+                id: 8,
+                name: "Fernanda Oliveira",
+                role: "Gerente de Projetos",
+                department: "ti",
+                email: "fernanda.oliveira@citiesoft.com",
+                avatarInitials: "FO",
+                userType: USER_TYPES.EMPLOYEE,
+                tenure: 5,
+                performance: 97,
+                hireDate: "2019-06-15",
+                lastPromotion: null,
+                hasManagementTraining: true,
+                lastWarning: null,
+                isAdmin: false
+            },
+            {
+                id: 9,
+                name: "Ricardo Mendes",
+                role: "Analista de Dados",
+                department: "ti",
+                email: "ricardo.mendes@citiesoft.com",
+                avatarInitials: "RM",
+                userType: USER_TYPES.EMPLOYEE,
+                tenure: 3,
+                performance: 91,
+                hireDate: "2021-08-22",
+                lastPromotion: null,
+                hasManagementTraining: true,
+                lastWarning: null,
+                isAdmin: false
+            },
+            {
+                id: 10,
+                name: "Patrícia Rocha",
+                role: "Designer UX/UI",
+                department: "marketing",
+                email: "patricia.rocha@citiesoft.com",
+                avatarInitials: "PR",
+                userType: USER_TYPES.EMPLOYEE,
+                tenure: 4,
+                performance: 93,
+                hireDate: "2020-04-10",
+                lastPromotion: null,
+                hasManagementTraining: true,
+                lastWarning: null,
+                isAdmin: false
+            },
+            {
+                id: 11,
+                name: "Lucas Ferreira",
+                role: "Analista de Qualidade",
+                department: "ti",
+                email: "lucas.ferreira@citiesoft.com",
+                avatarInitials: "LF",
+                userType: USER_TYPES.EMPLOYEE,
+                tenure: 2,
+                performance: 88,
+                hireDate: "2022-03-18",
+                lastPromotion: null,
+                hasManagementTraining: true,
+                lastWarning: null,
+                isAdmin: false
+            },
+            {
+                id: 12,
+                name: "Camila Alves",
+                role: "Analista Financeira",
+                department: "financeiro",
+                email: "camila.alves@citiesoft.com",
+                avatarInitials: "CA",
+                userType: USER_TYPES.EMPLOYEE,
+                tenure: 3,
+                performance: 95,
+                hireDate: "2021-09-05",
+                lastPromotion: null,
+                hasManagementTraining: true,
+                lastWarning: null,
+                isAdmin: false
+            }
+        ];
+
+        // Histórico de promoções
+        let promotionHistory = [
+            {
+                id: 1,
+                employeeId: 3,
+                employeeName: "João Oliveira",
+                oldRole: "Desenvolvedor Pleno",
+                newRole: "Desenvolvedor Sênior",
+                adminLevel: "admin_sistema",
+                accessLevel: "5",
+                promotionDate: "2023-06-15",
+                reason: "Excelente desempenho técnico e liderança em projetos críticos.",
+                approvedBy: "Administrador Sistema",
+                status: "active",
+                undoDate: null,
+                undoneBy: null
+            }
+        ];
+
+        // ===== ESTADO DA APLICAÇÃO =====
+        let selectedEmployee = null;
+        let employeeSearchTerm = '';
+        let selectedHistoryFilter = 'all';
+        let lastPromotionUndone = null;
+
+        // ===== ELEMENTOS DOM =====
+        const employeeCount = document.getElementById('employeeCount');
+        const employeeSearch = document.getElementById('employeeSearch');
+        const employeesContainer = document.getElementById('employeesContainer');
+        const btnUndoPromotion = document.getElementById('btnUndoPromotion');
+        const btnHistory = document.getElementById('btnHistory');
+        const btnRefresh = document.getElementById('btnRefresh');
+        const btnCancel = document.getElementById('btnCancel');
+        const btnPromote = document.getElementById('btnPromote');
+        const newPosition = document.getElementById('newPosition');
+        const promotionDate = document.getElementById('promotionDate');
+        const promotionReason = document.getElementById('promotionReason');
+        const accessLevel = document.getElementById('accessLevel');
+        const historyModal = document.getElementById('historyModal');
+        const closeHistoryModal = document.getElementById('closeHistoryModal');
+        const btnCloseHistoryModal = document.getElementById('btnCloseHistoryModal');
+        const historyFilter = document.getElementById('historyFilter');
+        const historyList = document.getElementById('historyList');
+        const confirmationModal = document.getElementById('confirmationModal');
+        const closeConfirmationModal = document.getElementById('closeConfirmationModal');
+        const btnCancelPromotion = document.getElementById('btnCancelPromotion');
+        const btnConfirmPromotion = document.getElementById('btnConfirmPromotion');
+        const confirmationModalBody = document.getElementById('confirmationModalBody');
+        const undoModal = document.getElementById('undoModal');
+        const closeUndoModal = document.getElementById('closeUndoModal');
+        const btnCancelUndo = document.getElementById('btnCancelUndo');
+        const btnConfirmUndo = document.getElementById('btnConfirmUndo');
+        const undoModalBody = document.getElementById('undoModalBody');
+        const toastContainer = document.getElementById('toastContainer');
+
+        // Elementos do painel de promoção
+        const promoEmployeeAvatar = document.getElementById('promoEmployeeAvatar');
+        const promoEmployeeName = document.getElementById('promoEmployeeName');
+        const promoEmployeeRole = document.getElementById('promoEmployeeRole');
+        const promoEmployeeDept = document.getElementById('promoEmployeeDept');
+        const promoEmployeeTenure = document.getElementById('promoEmployeeTenure');
+        const promoEmployeeType = document.getElementById('promoEmployeeType');
+
+        // Elementos do painel de informações
+        const eligibilityStatus = document.getElementById('eligibilityStatus');
+        const infoTenure = document.getElementById('infoTenure');
+        const infoPerformance = document.getElementById('infoPerformance');
+        const infoTraining = document.getElementById('infoTraining');
+        const infoWarning = document.getElementById('infoWarning');
+
+        // ===== INICIALIZAÇÃO =====
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('=== SISTEMA DE PROMOÇÃO PARA ADMINISTRADOR - INICIANDO ===');
+            
+            // Configurar data padrão para hoje
+            const today = new Date().toISOString().split('T')[0];
+            promotionDate.value = today;
+            promotionDate.min = today;
+            
+            // Carregar dados iniciais
+            renderEmployees();
+            updateUndoButton();
+            setupEventListeners();
+            
+            // Mostrar mensagem de boas-vindas
+            setTimeout(() => {
+                showToast('Sistema de promoção para administrador carregado com sucesso!', 'success');
+            }, 1000);
+        });
+
+        // ===== CONFIGURAR EVENT LISTENERS =====
+        function setupEventListeners() {
+            // Busca de funcionários
+            employeeSearch.addEventListener('input', debounce((e) => {
+                employeeSearchTerm = e.target.value.toLowerCase();
+                renderEmployees();
+            }, 300));
+            
+            // Botão histórico
+            btnHistory.addEventListener('click', showHistory);
+            
+            // Botão atualizar
+            btnRefresh.addEventListener('click', refreshData);
+            
+            // Botões do modal de histórico
+            closeHistoryModal.addEventListener('click', closeHistoryModalFunc);
+            btnCloseHistoryModal.addEventListener('click', closeHistoryModalFunc);
+            
+            // Filtro de histórico
+            historyFilter.addEventListener('change', (e) => {
+                selectedHistoryFilter = e.target.value;
+                renderHistory();
+            });
+            
+            // Botões do painel de promoção
+            btnCancel.addEventListener('click', resetPromotionForm);
+            btnPromote.addEventListener('click', showConfirmationModal);
+            btnUndoPromotion.addEventListener('click', showUndoModal);
+            
+            // Campos do formulário
+            newPosition.addEventListener('change', validateForm);
+            accessLevel.addEventListener('change', validateForm);
+            promotionReason.addEventListener('input', validateForm);
+            
+            // Modal de confirmação
+            closeConfirmationModal.addEventListener('click', closeConfirmationModalFunc);
+            btnCancelPromotion.addEventListener('click', closeConfirmationModalFunc);
+            btnConfirmPromotion.addEventListener('click', confirmPromotion);
+            
+            // Modal de desfazer
+            closeUndoModal.addEventListener('click', closeUndoModalFunc);
+            btnCancelUndo.addEventListener('click', closeUndoModalFunc);
+            btnConfirmUndo.addEventListener('click', confirmUndoPromotion);
+            
+            // Fechar modais clicando fora
+            historyModal.addEventListener('click', (e) => {
+                if (e.target === historyModal) {
+                    closeHistoryModalFunc();
+                }
+            });
+            
+            confirmationModal.addEventListener('click', (e) => {
+                if (e.target === confirmationModal) {
+                    closeConfirmationModalFunc();
+                }
+            });
+            
+            undoModal.addEventListener('click', (e) => {
+                if (e.target === undoModal) {
+                    closeUndoModalFunc();
+                }
+            });
+            
+            // Tecla ESC para fechar modais
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    if (historyModal.classList.contains('active')) {
+                        closeHistoryModalFunc();
+                    }
+                    if (confirmationModal.classList.contains('active')) {
+                        closeConfirmationModalFunc();
+                    }
+                    if (undoModal.classList.contains('active')) {
+                        closeUndoModalFunc();
+                    }
+                }
+            });
+        }
+
+        // ===== DEBOUNCE =====
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // ===== RENDERIZAR FUNCIONÁRIOS =====
+        function renderEmployees() {
+            employeesContainer.innerHTML = '';
+            
+            // Filtrar funcionários
+            let filteredEmployees = employees;
+            
+            // Filtrar por busca
+            if (employeeSearchTerm) {
+                filteredEmployees = employees.filter(employee => 
+                    employee.name.toLowerCase().includes(employeeSearchTerm) ||
+                    employee.role.toLowerCase().includes(employeeSearchTerm) ||
+                    employee.department.toLowerCase().includes(employeeSearchTerm)
+                );
+            }
+            
+            // Atualizar contador
+            employeeCount.textContent = filteredEmployees.length;
+            
+            // Se não houver funcionários
+            if (filteredEmployees.length === 0) {
+                employeesContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-user-slash fa-3x mb-3"></i>
+                        <h5 class="text-muted">Nenhum funcionário encontrado</h5>
+                        <p class="text-muted">Tente ajustar sua busca</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Renderizar cada funcionário
+            filteredEmployees.forEach(employee => {
+                const isEligible = checkEligibility(employee);
+                const isSelected = selectedEmployee?.id === employee.id;
+                const isAdmin = employee.userType === USER_TYPES.ADMIN;
+                const isClient = employee.userType === USER_TYPES.CLIENT;
+                
+                const employeeCard = document.createElement('div');
+                employeeCard.className = `employee-card ${isSelected ? 'selected' : ''}`;
+                
+                employeeCard.innerHTML = `
+                    <div class="employee-info">
+                        <div class="employee-avatar">${employee.avatarInitials}</div>
+                        <div class="employee-details">
+                            <h6 class="employee-name">${employee.name}</h6>
+                            <p class="employee-role">
+                                <i class="fas fa-briefcase me-1 text-muted"></i>${employee.role}
+                                <span class="badge-${employee.userType} user-type-badge ms-2">
+                                    <i class="fas fa-${employee.userType === USER_TYPES.ADMIN ? 'user-shield' : employee.userType === USER_TYPES.EMPLOYEE ? 'user-tie' : 'user'}"></i>
+                                    ${employee.userType === USER_TYPES.ADMIN ? 'Administrador' : employee.userType === USER_TYPES.EMPLOYEE ? 'Funcionário' : 'Cliente'}
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="employee-stats">
+                        <div class="stat-item">
+                            <div class="employee-stat-number">${employee.tenure} anos</div>
+                            <div class="employee-stat-label">Tempo</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="employee-stat-number">${employee.performance}%</div>
+                            <div class="employee-stat-label">Desempenho</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="employee-stat-number ${isEligible ? 'text-success' : 'text-danger'}">
+                                <i class="fas fa-${isEligible ? 'check' : 'times'}"></i>
+                            </div>
+                            <div class="employee-stat-label">Elegível</div>
+                        </div>
+                    </div>
+                `;
+                
+                employeeCard.addEventListener('click', () => {
+                    selectEmployee(employee);
+                });
+                
+                employeesContainer.appendChild(employeeCard);
+            });
+        }
+
+        // ===== SELECIONAR FUNCIONÁRIO =====
+        function selectEmployee(employee) {
+            // Remover seleção anterior
+            document.querySelectorAll('.employee-card.selected').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Selecionar novo
+            selectedEmployee = employee;
+            
+            // Atualizar painel de promoção
+            updatePromotionPanel(employee);
+            
+            // Atualizar informações
+            updateEmployeeInfo(employee);
+            
+            // Atualizar botão desfazer
+            updateUndoButton();
+        }
+
+        // ===== ATUALIZAR PAINEL DE PROMOÇÃO =====
+        function updatePromotionPanel(employee) {
+            if (!employee) return;
+            
+            // Atualizar informações básicas
+            promoEmployeeAvatar.innerHTML = employee.avatarInitials;
+            promoEmployeeName.textContent = employee.name;
+            promoEmployeeRole.textContent = employee.role;
+            promoEmployeeDept.textContent = getDepartmentText(employee.department);
+            promoEmployeeTenure.textContent = `${employee.tenure} anos`;
+            promoEmployeeType.textContent = getUserTypeText(employee.userType);
+            
+            // Se for administrador, preencher campos com dados atuais
+            if (employee.userType === USER_TYPES.ADMIN) {
+                newPosition.value = employee.adminLevel || '';
+                accessLevel.value = employee.accessLevel || '';
+            } else {
+                // Resetar campos
+                newPosition.value = '';
+                accessLevel.value = '';
+            }
+            
+            // Habilitar/desabilitar botão de promoção
+            validateForm();
+        }
+
+        // ===== ATUALIZAR INFORMAÇÕES DO FUNCIONÁRIO =====
+        function updateEmployeeInfo(employee) {
+            if (!employee) {
+                // Resetar informações
+                eligibilityStatus.textContent = 'Selecione um funcionário para verificar elegibilidade';
+                eligibilityStatus.className = 'status-text pending';
+                
+                infoTenure.textContent = '-';
+                infoPerformance.textContent = '-';
+                infoTraining.textContent = '-';
+                infoWarning.textContent = '-';
+                
+                return;
+            }
+            
+            // Verificar elegibilidade
+            const isEligible = checkEligibility(employee);
+            
+            if (employee.userType === USER_TYPES.ADMIN) {
+                eligibilityStatus.textContent = 'Este funcionário já é administrador';
+                eligibilityStatus.className = 'status-text not-eligible';
+            } else if (isEligible) {
+                eligibilityStatus.textContent = 'Funcionário elegível para promoção para administrador!';
+                eligibilityStatus.className = 'status-text eligible';
+            } else {
+                eligibilityStatus.textContent = 'Funcionário não elegível para promoção para administrador';
+                eligibilityStatus.className = 'status-text not-eligible';
+            }
+            
+            // Atualizar informações básicas
+            infoTenure.textContent = `${employee.tenure} anos`;
+            infoPerformance.textContent = `${employee.performance}%`;
+            infoTraining.textContent = employee.hasManagementTraining ? 'Concluído' : 'Não concluído';
+            infoWarning.textContent = employee.lastWarning ? formatDate(employee.lastWarning) : 'Nenhuma';
+        }
+
+        // ===== VERIFICAR ELEGIBILIDADE =====
+        function checkEligibility(employee) {
+            if (!employee) return false;
+            
+            // Verificar se já é administrador
+            if (employee.userType === USER_TYPES.ADMIN) return false;
+            
+            // Verificar se é cliente
+            if (employee.userType === USER_TYPES.CLIENT) return false;
+            
+            // Regras de elegibilidade para administrador
+            const hasMinimumTenure = employee.tenure >= 2;
+            const hasGoodPerformance = employee.performance >= 85;
+            const hasTraining = employee.hasManagementTraining;
+            const noRecentWarnings = !employee.lastWarning || 
+                new Date(employee.lastWarning) < new Date(Date.now() - 6 * 30 * 24 * 60 * 60 * 1000);
+            
+            return hasMinimumTenure && hasGoodPerformance && hasTraining && noRecentWarnings;
+        }
+
+        // ===== ATUALIZAR BOTÃO DESFAZER =====
+        function updateUndoButton() {
+            if (selectedEmployee && selectedEmployee.userType === USER_TYPES.ADMIN) {
+                btnUndoPromotion.disabled = false;
+            } else {
+                btnUndoPromotion.disabled = true;
+            }
+        }
+
+        // ===== VALIDAR FORMULÁRIO =====
+        function validateForm() {
+            if (!selectedEmployee) {
+                btnPromote.disabled = true;
+                return false;
+            }
+            
+            // Se já for administrador, não pode promover novamente
+            if (selectedEmployee.userType === USER_TYPES.ADMIN) {
+                btnPromote.disabled = true;
+                return false;
+            }
+            
+            // Se for cliente, não pode promover
+            if (selectedEmployee.userType === USER_TYPES.CLIENT) {
+                btnPromote.disabled = true;
+                return false;
+            }
+            
+            const isFormValid = 
+                newPosition.value !== '' && 
+                accessLevel.value !== '' &&
+                promotionReason.value.trim().length >= 10;
+            
+            const isEmployeeEligible = checkEligibility(selectedEmployee);
+            
+            btnPromote.disabled = !(isFormValid && isEmployeeEligible);
+            return isFormValid && isEmployeeEligible;
+        }
+
+        // ===== RESETAR FORMULÁRIO =====
+        function resetPromotionForm() {
+            selectedEmployee = null;
+            
+            // Remover seleção
+            document.querySelectorAll('.employee-card.selected').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Resetar formulário
+            newPosition.value = '';
+            accessLevel.value = '';
+            promotionReason.value = '';
+            
+            // Resetar painel
+            promoEmployeeAvatar.innerHTML = '<i class="fas fa-user"></i>';
+            promoEmployeeName.textContent = 'Nenhum funcionário selecionado';
+            promoEmployeeRole.textContent = 'Selecione um funcionário na lista ao lado';
+            promoEmployeeDept.textContent = '-';
+            promoEmployeeTenure.textContent = '-';
+            promoEmployeeType.textContent = '-';
+            
+            // Resetar informações
+            updateEmployeeInfo(null);
+            
+            // Desabilitar botões
+            btnPromote.disabled = true;
+            btnUndoPromotion.disabled = true;
+        }
+
+        // ===== ATUALIZAR DADOS =====
+        function refreshData() {
+            // Animação de loading
+            const originalHTML = btnRefresh.innerHTML;
+            btnRefresh.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            btnRefresh.disabled = true;
+            
+            setTimeout(() => {
+                renderEmployees();
+                btnRefresh.innerHTML = originalHTML;
+                btnRefresh.disabled = false;
+                showToast('Dados atualizados com sucesso!', 'success');
+            }, 800);
+        }
+
+        // ===== MOSTRAR MODAL DE CONFIRMAÇÃO =====
+        function showConfirmationModal() {
+            if (!validateForm()) {
+                showToast('Preencha todos os campos obrigatórios e selecione um funcionário elegível', 'warning');
+                return;
+            }
+            
+            // Criar conteúdo do modal
+            confirmationModalBody.innerHTML = `
+                <div class="confirmation-details">
+                    <div class="detail-section">
+                        <h5><i class="fas fa-user-shield"></i> Detalhes da Promoção</h5>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <span class="detail-label">Funcionário:</span>
+                                <span class="detail-value">${selectedEmployee.name}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Cargo Atual:</span>
+                                <span class="detail-value">${selectedEmployee.role}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Nível de Administrador:</span>
+                                <span class="detail-value">${getPositionText(newPosition.value)}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Nível de Acesso:</span>
+                                <span class="detail-value">Nível ${accessLevel.value}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Data da Promoção:</span>
+                                <span class="detail-value">${formatDate(promotionDate.value)}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h5><i class="fas fa-comment-alt"></i> Motivo</h5>
+                        <div class="justification">
+                            <p>${promotionReason.value}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="warning-note" style="background: rgba(0, 166, 255, 0.05); border: 1px solid rgba(0, 166, 255, 0.2); padding: 15px; border-radius: var(--radius-md); margin-top: 20px;">
+                        <i class="fas fa-exclamation-triangle" style="color: var(--primary-blue);"></i>
+                        <span><strong>Atenção:</strong> Esta ação concederá acesso administrativo completo ao sistema.</span>
+                    </div>
+                </div>
+            `;
+            
+            confirmationModal.classList.add('active');
+        }
+
+        // ===== CONFIRMAR PROMOÇÃO =====
+        function confirmPromotion() {
+            if (!selectedEmployee) {
+                showToast('Nenhum funcionário selecionado', 'error');
+                return;
+            }
+            
+            // Criar registro de promoção
+            const promotionRecord = {
+                id: promotionHistory.length + 1,
+                employeeId: selectedEmployee.id,
+                employeeName: selectedEmployee.name,
+                oldRole: selectedEmployee.role,
+                oldUserType: selectedEmployee.userType,
+                newRole: selectedEmployee.role,
+                adminLevel: newPosition.value,
+                accessLevel: accessLevel.value,
+                promotionDate: promotionDate.value,
+                reason: promotionReason.value,
+                approvedBy: "Administrador Sistema",
+                status: "active",
+                undoDate: null,
+                undoneBy: null
+            };
+            
+            // Adicionar ao histórico
+            promotionHistory.push(promotionRecord);
+            
+            // Atualizar dados do funcionário
+            const employeeIndex = employees.findIndex(e => e.id === selectedEmployee.id);
+            if (employeeIndex !== -1) {
+                // Atualizar dados
+                employees[employeeIndex].userType = USER_TYPES.ADMIN;
+                employees[employeeIndex].isAdmin = true;
+                employees[employeeIndex].lastPromotion = promotionRecord.promotionDate;
+                employees[employeeIndex].adminLevel = promotionRecord.adminLevel;
+                employees[employeeIndex].accessLevel = promotionRecord.accessLevel;
+            }
+            
+            // Mostrar notificação
+            showToast(`${selectedEmployee.name} foi promovido(a) com sucesso para ${getPositionText(newPosition.value)}!`, 'success');
+            
+            // Fechar modal
+            closeConfirmationModalFunc();
+            
+            // Atualizar interface
+            renderEmployees();
+            updatePromotionPanel(selectedEmployee);
+            updateEmployeeInfo(selectedEmployee);
+            updateUndoButton();
+            renderHistory();
+        }
+
+        // ===== MOSTRAR MODAL DESFAZER =====
+        function showUndoModal() {
+            if (!selectedEmployee || selectedEmployee.userType !== USER_TYPES.ADMIN) {
+                showToast('Selecione um administrador para desfazer a promoção', 'warning');
+                return;
+            }
+            
+            // Encontrar a última promoção ativa do funcionário
+            const lastPromotion = promotionHistory
+                .filter(p => p.employeeId === selectedEmployee.id && p.status === "active")
+                .sort((a, b) => new Date(b.promotionDate) - new Date(a.promotionDate))[0];
+            
+            if (!lastPromotion) {
+                showToast('Não foi encontrada promoção ativa para este funcionário', 'warning');
+                return;
+            }
+            
+            lastPromotionUndone = lastPromotion;
+            
+            // Criar conteúdo do modal
+            undoModalBody.innerHTML = `
+                <div class="confirmation-details">
+                    <div class="detail-section">
+                        <h5><i class="fas fa-exclamation-triangle text-warning"></i> Confirmar Desfazer Promoção</h5>
+                        <div class="warning-note" style="background: rgba(255, 193, 7, 0.1); border: 1px solid rgba(255, 193, 7, 0.3); padding: 15px; border-radius: var(--radius-md); margin-bottom: 20px;">
+                            <i class="fas fa-exclamation-triangle" style="color: var(--warning-orange);"></i>
+                            <span><strong>Atenção:</strong> Esta ação removerá os privilégios administrativos do funcionário.</span>
+                        </div>
+                        
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <span class="detail-label">Funcionário:</span>
+                                <span class="detail-value">${selectedEmployee.name}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Cargo Atual:</span>
+                                <span class="detail-value">${selectedEmployee.role}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Nível de Administrador:</span>
+                                <span class="detail-value">${getPositionText(lastPromotion.adminLevel)}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Data da Promoção:</span>
+                                <span class="detail-value">${formatDate(lastPromotion.promotionDate)}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h5><i class="fas fa-history"></i> Esta ação irá:</h5>
+                        <ul style="padding-left: 20px; margin-bottom: 0;">
+                            <li>Reverter o status para "${getUserTypeText(lastPromotion.oldUserType)}"</li>
+                            <li>Remover privilégios administrativos</li>
+                            <li>Restaurar o tipo de usuário anterior</li>
+                            <li>Marcar a promoção como desfeita no histórico</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+            
+            undoModal.classList.add('active');
+        }
+
+        // ===== CONFIRMAR DESFAZER PROMOÇÃO =====
+        function confirmUndoPromotion() {
+            if (!lastPromotionUndone || !selectedEmployee) {
+                showToast('Erro ao processar desfazer promoção', 'error');
+                return;
+            }
+            
+            // Atualizar registro de promoção
+            const promotionIndex = promotionHistory.findIndex(p => p.id === lastPromotionUndone.id);
+            if (promotionIndex !== -1) {
+                promotionHistory[promotionIndex].status = "undone";
+                promotionHistory[promotionIndex].undoDate = new Date().toISOString().split('T')[0];
+                promotionHistory[promotionIndex].undoneBy = "Administrador Sistema";
+            }
+            
+            // Atualizar dados do funcionário
+            const employeeIndex = employees.findIndex(e => e.id === selectedEmployee.id);
+            if (employeeIndex !== -1) {
+                // Reverter para tipo de usuário anterior
+                employees[employeeIndex].userType = lastPromotionUndone.oldUserType;
+                employees[employeeIndex].isAdmin = false;
+                employees[employeeIndex].adminLevel = null;
+                employees[employeeIndex].accessLevel = null;
+            }
+            
+            // Mostrar notificação
+            showToast(`Promoção de ${selectedEmployee.name} desfeita com sucesso!`, 'success');
+            
+            // Fechar modal
+            closeUndoModalFunc();
+            
+            // Atualizar interface
+            renderEmployees();
+            updatePromotionPanel(selectedEmployee);
+            updateEmployeeInfo(selectedEmployee);
+            updateUndoButton();
+            renderHistory();
+            
+            lastPromotionUndone = null;
+        }
+
+        // ===== MOSTRAR HISTÓRICO =====
+        function showHistory() {
+            renderHistory();
+            historyModal.classList.add('active');
+        }
+
+        function closeHistoryModalFunc() {
+            historyModal.classList.remove('active');
+        }
+
+        function closeConfirmationModalFunc() {
+            confirmationModal.classList.remove('active');
+        }
+
+        function closeUndoModalFunc() {
+            undoModal.classList.remove('active');
+        }
+
+        // ===== RENDERIZAR HISTÓRICO =====
+        function renderHistory() {
+            historyList.innerHTML = '';
+            
+            // Filtrar histórico
+            let filteredHistory = [...promotionHistory];
+            
+            if (selectedHistoryFilter === 'last-month') {
+                const oneMonthAgo = new Date();
+                oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+                
+                filteredHistory = promotionHistory.filter(record => {
+                    const recordDate = new Date(record.promotionDate);
+                    return recordDate >= oneMonthAgo;
+                });
+            } else if (selectedHistoryFilter === 'last-year') {
+                const oneYearAgo = new Date();
+                oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+                
+                filteredHistory = promotionHistory.filter(record => {
+                    const recordDate = new Date(record.promotionDate);
+                    return recordDate >= oneYearAgo;
+                });
+            } else if (selectedHistoryFilter === 'active') {
+                filteredHistory = promotionHistory.filter(record => 
+                    record.status === "active"
+                );
+            } else if (selectedHistoryFilter === 'undone') {
+                filteredHistory = promotionHistory.filter(record => 
+                    record.status === "undone"
+                );
+            }
+            
+            // Se não houver histórico
+            if (filteredHistory.length === 0) {
+                historyList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-history fa-3x mb-3"></i>
+                        <h5 class="text-muted">Nenhuma promoção encontrada</h5>
+                        <p class="text-muted">Nenhuma promoção corresponde aos filtros selecionados</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Ordenar por data (mais recente primeiro)
+            filteredHistory.sort((a, b) => new Date(b.promotionDate) - new Date(a.promotionDate));
+            
+            // Renderizar cada item
+            filteredHistory.forEach(record => {
+                const isUndone = record.status === "undone";
+                const historyItem = document.createElement('div');
+                historyItem.className = `history-item ${isUndone ? 'undo' : record.adminLevel === 'usuario_cliente' ? 'client' : 'admin'}`;
+                
+                historyItem.innerHTML = `
+                    <div class="history-header">
+                        <div class="history-employee">${record.employeeName}</div>
+                        <div class="history-date">${formatDate(record.promotionDate)}</div>
+                    </div>
+                    <div class="history-details">
+                        <div class="history-detail">
+                            <i class="fas fa-arrow-right"></i>
+                            <span><strong>${getUserTypeText(record.oldUserType)}</strong> → <strong style="color: ${isUndone ? 'var(--warning-orange)' : record.adminLevel === 'usuario_cliente' ? 'var(--success-green)' : 'var(--primary-blue)'};">${isUndone ? 'DESFEITO' : getPositionText(record.adminLevel)}</strong></span>
+                        </div>
+                        <div class="history-detail">
+                            <i class="fas fa-user-tag"></i>
+                            <span>${isUndone ? `${getPositionText(record.adminLevel)} → ${getUserTypeText(record.oldUserType)}` : `${getUserTypeText(record.oldUserType)} → ${getPositionText(record.adminLevel)}`}</span>
+                        </div>
+                        <div class="history-detail">
+                            <i class="fas fa-key"></i>
+                            <span>Nível de Acesso: ${record.accessLevel}</span>
+                        </div>
+                    </div>
+                    ${record.reason ? `
+                        <div class="history-reason">
+                            <strong>Motivo:</strong> ${record.reason}
+                        </div>
+                    ` : ''}
+                    <div class="mt-2">
+                        <small class="text-muted">
+                            <i class="fas fa-user-check"></i> ${isUndone ? 'Desfeito por' : 'Aprovado por'}: ${isUndone ? record.undoneBy : record.approvedBy}
+                            ${isUndone && record.undoDate ? ` em ${formatDate(record.undoDate)}` : ''}
+                        </small>
+                    </div>
+                `;
+                
+                historyList.appendChild(historyItem);
+            });
+        }
+
+        // ===== FUNÇÕES UTILITÁRIAS =====
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+        }
+
+        function getDepartmentText(department) {
+            const map = { 
+                'ti': 'Tecnologia da Informação', 
+                'rh': 'Recursos Humanos', 
+                'financeiro': 'Financeiro', 
+                'vendas': 'Vendas',
+                'marketing': 'Marketing',
+                'administracao': 'Administração'
+            };
+            return map[department] || department;
+        }
+
+        function getPositionText(position) {
+            const map = { 
+                'admin_sistema': 'Administrador de Sistema',
+                'usuario_cliente': 'Usuário Cliente',
+                'usuario_funcionario': 'Usuário Funcionário Citiesoft'
+            };
+            return map[position] || position;
+        }
+
+        function getUserTypeText(userType) {
+            const map = { 
+                'admin': 'Administrador',
+                'employee': 'Funcionário',
+                'client': 'Cliente'
+            };
+            return map[userType] || userType;
+        }
+
+        // ===== SISTEMA DE NOTIFICAÇÕES =====
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type} show`;
+            
+            const icons = {
+                success: 'check-circle',
+                error: 'exclamation-circle',
+                warning: 'exclamation-triangle',
+                info: 'info-circle'
+            };
+            
+            toast.innerHTML = `
+                <div class="toast-header">
+                    <div class="toast-title">
+                        <i class="fas fa-${icons[type] || 'info-circle'}"></i>
+                        ${type === 'success' ? 'Sucesso!' : type === 'error' ? 'Erro!' : type === 'warning' ? 'Atenção!' : 'Informação!'}
+                    </div>
+                    <button class="toast-close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="toast-body">${message}</div>
+            `;
+            
+            // Fechar toast
+            toast.querySelector('.toast-close').addEventListener('click', () => {
+                removeToast(toast);
+            });
+            
+            toastContainer.appendChild(toast);
+            
+            // Remover automaticamente após 5 segundos
+            setTimeout(() => {
+                removeToast(toast);
+            }, 5000);
+        }
+
+        function removeToast(toast) {
+            if (toast.parentNode) {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.remove();
+                    }
+                }, 300);
+            }
+        }
+    </script>
+</body>
+</html>

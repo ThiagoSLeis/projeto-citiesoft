@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atribuição de Chamados | Citiesoft</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS Personalizado -->
+    <link rel="stylesheet" href="atribuiçãodechamados.css">
+</head>
+<body>
+    <!-- Header -->
+    <div class="page-header">
+        <div class="header-overlay"></div>
+        <h1 class="page-title">
+            <i class="fas fa-tasks me-3"></i>
+            Atribuição de Chamados
+        </h1>
+        <p class="page-subtitle">Gerencie e atribua chamados técnicos à sua equipe Citiesoft</p>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar Funcionários -->
+        <div class="sidebar-employees">
+            <div class="sidebar-header">
+                <h3 class="sidebar-title">
+                    <i class="fas fa-users"></i>
+                    Equipe
+                    <span class="employee-count" id="employeeCount">8</span>
+                </h3>
+            </div>
+            
+            <div class="sidebar-search">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="employeeSearch" class="form-control" placeholder="Buscar funcionário...">
+                </div>
+            </div>
+            
+            <div class="employees-container" id="employeesContainer">
+                <!-- Funcionários serão carregados via JavaScript -->
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Stats Cards -->
+            <div class="stats-cards">
+                <div class="stat-card pending">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="pendingCount">12</div>
+                        <div class="stat-label">Pendentes</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card assigned">
+                    <div class="stat-icon">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="assignedCount">8</div>
+                        <div class="stat-label">Atribuídos</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card resolved">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="resolvedCount">45</div>
+                        <div class="stat-label">Resolvidos</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="totalCount">65</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tickets Container -->
+            <div class="tickets-container">
+                <div class="tickets-header">
+                    <h3 class="tickets-title">
+                        <i class="fas fa-ticket-alt"></i>
+                        Chamados
+                    </h3>
+                    
+                    <div class="tickets-actions">
+                        <button class="btn btn-warning btn-sm" id="btnUndo" disabled>
+                            <i class="fas fa-undo"></i> Desfazer
+                        </button>
+                        <button class="btn btn-secondary btn-sm" id="btnToggleFilters">
+                            <i class="fas fa-filter"></i> Filtros
+                        </button>
+                        <button class="btn btn-primary btn-sm" id="btnRefresh">
+                            <i class="fas fa-sync-alt"></i> Atualizar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filtros -->
+                <div class="filters-container" id="filtersContainer">
+                    <div class="filters-row">
+                        <div class="filter-group">
+                            <label class="filter-label">Prioridade</label>
+                            <select class="filter-select" id="filterPriority">
+                                <option value="all">Todas as prioridades</option>
+                                <option value="high">Alta</option>
+                                <option value="medium">Média</option>
+                                <option value="low">Baixa</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label class="filter-label">Status</label>
+                            <select class="filter-select" id="filterStatus">
+                                <option value="all">Todos os status</option>
+                                <option value="open">Aberto</option>
+                                <option value="in-progress">Em andamento</option>
+                                <option value="resolved">Resolvido</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label class="filter-label">Departamento</label>
+                            <select class="filter-select" id="filterDepartment">
+                                <option value="all">Todos os departamentos</option>
+                                <option value="ti">TI</option>
+                                <option value="rh">RH</option>
+                                <option value="financeiro">Financeiro</option>
+                                <option value="vendas">Vendas</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label class="filter-label">Ordenar por</label>
+                            <select class="filter-select" id="filterSort">
+                                <option value="date-desc">Mais recente</option>
+                                <option value="date-asc">Mais antigo</option>
+                                <option value="priority">Prioridade</option>
+                                <option value="title">Título</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lista de Chamados -->
+                <div class="tickets-list" id="ticketsList">
+                    <!-- Chamados serão carregados via JavaScript -->
+                </div>
+
+                <!-- Painel de Atribuição -->
+                <div class="assignment-panel" id="assignmentPanel">
+                    <div class="panel-header">
+                        <h4 class="panel-title">
+                            <i class="fas fa-user-check"></i>
+                            Atribuir Chamado
+                        </h4>
+                        <button class="btn-close-modal" id="closeAssignmentPanel">
+                            &times;
+                        </button>
+                    </div>
+                    
+                    <div class="panel-content">
+                        <div class="assignment-info">
+                            <div class="info-item">
+                                <span class="info-label">Chamado</span>
+                                <span class="info-value">
+                                    <span style="background: rgba(0, 166, 255, 0.1); color: var(--dark-blue); padding: 4px 10px; border-radius: var(--radius-sm); font-weight: 600;" id="panelTicketId">#TKT-0001</span>
+                                </span>
+                            </div>
+                            
+                            <div class="info-item">
+                                <span class="info-label">Título</span>
+                                <span class="info-value" id="panelTicketTitle">Problema no sistema</span>
+                            </div>
+                            
+                            <div class="info-item">
+                                <span class="info-label">Atribuir para</span>
+                                <div style="display: flex; align-items: center; gap: 10px; padding: 8px; background: var(--bg-light); border-radius: var(--radius-md);">
+                                    <div class="assigned-avatar" id="panelEmployeeAvatar">??</div>
+                                    <div>
+                                        <div style="font-weight: 600; color: var(--text-primary);" id="panelEmployeeName">Nenhum selecionado</div>
+                                        <div style="font-size: 0.85rem; color: var(--text-secondary);" id="panelEmployeeRole">Selecione um funcionário</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="assignment-actions">
+                            <button class="btn btn-secondary" id="btnAssignToMe">
+                                <i class="fas fa-user"></i> Atribuir a mim
+                            </button>
+                            <button class="btn btn-success" id="btnConfirmAssignment" disabled>
+                                <i class="fas fa-check"></i> Confirmar
+                            </button>
+                            <button class="btn btn-warning" id="btnMarkResolved" style="display: none;">
+                                <i class="fas fa-check-circle"></i> Marcar como Resolvido
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Detalhes do Chamado -->
+    <div class="modal-overlay" id="ticketModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4><i class="fas fa-ticket-alt me-2"></i> Detalhes do Chamado</h4>
+                <button class="btn-close-modal" id="closeTicketModal">&times;</button>
+            </div>
+            
+            <div class="modal-body" id="ticketModalBody">
+                <!-- Conteúdo será inserido via JavaScript -->
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="btnCloseModal">
+                    <i class="fas fa-times"></i> Fechar
+                </button>
+                <button class="btn btn-primary" id="btnTakeTicket">
+                    <i class="fas fa-user-check"></i> Atribuir a mim
+                </button>
+                <button class="btn btn-success" id="btnResolveTicket">
+                    <i class="fas fa-check-circle"></i> Marcar como Resolvido
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- JavaScript Personalizado -->
+    <script src="atribuiçãodechamados.js"></script>
+</body>
+</html>

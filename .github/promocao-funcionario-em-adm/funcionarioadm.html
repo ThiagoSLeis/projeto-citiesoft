@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Promoção para Administrador | Citiesoft</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS Personalizado -->
+    <link rel="stylesheet" href="funcionarioadm.css">
+</head>
+<body>
+    <!-- Header -->
+    <div class="page-header">
+        <div class="header-overlay"></div>
+        <h1 class="page-title">
+            <i class="fas fa-user-shield me-3"></i>
+            Promoção para Administrador
+        </h1>
+        <p class="page-subtitle">Sistema de Promoção para Administradores | Citiesoft</p>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar Funcionários -->
+        <div class="sidebar-employees">
+            <div class="sidebar-header">
+                <h3 class="sidebar-title">
+                    <i class="fas fa-users"></i>
+                    Funcionários Elegíveis
+                    <span class="employee-count" id="employeeCount">0</span>
+                </h3>
+                <p class="sidebar-subtitle">Clique em um funcionário para promover para administrador</p>
+            </div>
+            
+            <div class="sidebar-search">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="employeeSearch" class="form-control" placeholder="Buscar funcionário...">
+                </div>
+            </div>
+            
+            <div class="employees-container" id="employeesContainer">
+                <!-- Funcionários serão carregados via JavaScript -->
+                <div class="loading">Carregando funcionários...</div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Promoção Container -->
+            <div class="promotion-container">
+                <div class="promotion-header">
+                    <h3 class="promotion-title">
+                        <i class="fas fa-user-shield"></i>
+                        Promover para Administrador
+                    </h3>
+                    
+                    <div class="promotion-actions">
+                        <button class="btn btn-warning btn-sm" id="btnUndoPromotion" disabled>
+                            <i class="fas fa-undo"></i> Desfazer
+                        </button>
+                        <button class="btn btn-secondary btn-sm" id="btnHistory">
+                            <i class="fas fa-history"></i> Histórico
+                        </button>
+                        <button class="btn btn-info btn-sm" id="btnRefresh">
+                            <i class="fas fa-sync-alt"></i> Atualizar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Painel de Promoção -->
+                <div class="promotion-panel" id="promotionPanel">
+                    <div class="panel-header">
+                        <h4 class="panel-title">
+                            <i class="fas fa-user-shield"></i>
+                            Nova Promoção para Administrador
+                        </h4>
+                        <div class="panel-subtitle">
+                            Preencha os dados para promover o funcionário para administrador
+                        </div>
+                    </div>
+                    
+                    <div class="panel-content">
+                        <div class="employee-info-panel">
+                            <div class="info-header">
+                                <div class="employee-avatar-large" id="promoEmployeeAvatar">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="employee-details-large">
+                                    <h5 id="promoEmployeeName">Nenhum funcionário selecionado</h5>
+                                    <p id="promoEmployeeRole">Selecione um funcionário na lista ao lado</p>
+                                    <div class="employee-meta" id="promoEmployeeMeta">
+                                        <span class="meta-item">
+                                            <i class="fas fa-building"></i>
+                                            <span id="promoEmployeeDept">-</span>
+                                        </span>
+                                        <span class="meta-item">
+                                            <i class="fas fa-calendar-alt"></i>
+                                            <span id="promoEmployeeTenure">-</span>
+                                        </span>
+                                        <span class="meta-item">
+                                            <i class="fas fa-user-tag"></i>
+                                            <span id="promoEmployeeType">Funcionário</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="promotion-form">
+                                <h5 class="form-title">Detalhes da Promoção para Administrador</h5>
+                                
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="newPosition"><i class="fas fa-user-shield"></i> Nível de Administrador</label>
+                                        <select class="form-control" id="newPosition">
+                                            <option value="">Selecione o nível</option>
+                                            <option value="admin_sistema">Administrador de Sistema</option>
+                                            <option value="usuario_cliente">Usuário Cliente</option>
+                                            <option value="usuario_funcionario">Usuário Funcionário Citiesoft</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="accessLevel"><i class="fas fa-key"></i> Nível de Acesso</label>
+                                        <select class="form-control" id="accessLevel">
+                                            <option value="">Selecione o nível</option>
+                                            <option value="1">Nível 1 - Visualização</option>
+                                            <option value="2">Nível 2 - Operacional</option>
+                                            <option value="3">Nível 3 - Gerencial</option>
+                                            <option value="5">Nível 4 - Super Usuário</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="promotionDate"><i class="fas fa-calendar"></i> Data da Promoção</label>
+                                        <input type="date" class="form-control" id="promotionDate">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="promotionReason"><i class="fas fa-comment-alt"></i> Motivo da Promoção</label>
+                                    <textarea class="form-control" id="promotionReason" rows="3" placeholder="Explique por que este funcionário deve se tornar um administrador..."></textarea>
+                                </div>
+                                
+                                <!-- Permissões de Administrador -->
+                                <div class="admin-permissions">
+                                    <h6><i class="fas fa-shield-alt"></i> Permissões de Administrador</h6>
+                                    <div class="permission-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Acesso completo ao sistema</span>
+                                    </div>
+                                    <div class="permission-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Gerenciamento de usuários</span>
+                                    </div>
+                                    <div class="permission-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Configurações do sistema</span>
+                                    </div>
+                                    <div class="permission-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Relatórios administrativos</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-actions">
+                                    <button class="btn btn-secondary" id="btnCancel">
+                                        <i class="fas fa-times"></i> Cancelar
+                                    </button>
+                                    <button class="btn btn-primary" id="btnPromote" disabled>
+                                        <i class="fas fa-user-shield"></i> Promover para Administrador
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="evaluation-panel">
+                            <h5 class="panel-title">
+                                <i class="fas fa-info-circle"></i>
+                                Status de Elegibilidade
+                            </h5>
+                            
+                            <div class="eligibility-status">
+                                <h6>Status do Funcionário</h6>
+                                <div class="status-text pending" id="eligibilityStatus">
+                                    Selecione um funcionário para verificar elegibilidade
+                                </div>
+                            </div>
+                            
+                            <div class="basic-info">
+                                <h6><i class="fas fa-clipboard-list"></i> Requisitos para Administrador</h6>
+                                <ul class="info-list">
+                                    <li class="info-item">
+                                        <i class="fas fa-calendar"></i>
+                                        <span>Tempo mínimo: <strong>2 anos</strong></span>
+                                    </li>
+                                    <li class="info-item">
+                                        <i class="fas fa-chart-line"></i>
+                                        <span>Desempenho: <strong>≥ 85%</strong></span>
+                                    </li>
+                                    <li class="info-item">
+                                        <i class="fas fa-graduation-cap"></i>
+                                        <span>Treinamento: <strong>Concluído</strong></span>
+                                    </li>
+                                    <li class="info-item">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                        <span>Advertências: <strong>Nenhuma nos últimos 6 meses</strong></span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="basic-info">
+                                <h6><i class="fas fa-user-check"></i> Dados do Funcionário</h6>
+                                <ul class="info-list" id="employeeBasicInfo">
+                                    <li class="info-item">
+                                        <i class="fas fa-calendar"></i>
+                                        <span>Tempo na empresa: <strong id="infoTenure">-</strong></span>
+                                    </li>
+                                    <li class="info-item">
+                                        <i class="fas fa-chart-line"></i>
+                                        <span>Desempenho: <strong id="infoPerformance">-</strong></span>
+                                    </li>
+                                    <li class="info-item">
+                                        <i class="fas fa-graduation-cap"></i>
+                                        <span>Treinamento: <strong id="infoTraining">-</strong></span>
+                                    </li>
+                                    <li class="info-item">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                        <span>Última advertência: <strong id="infoWarning">-</strong></span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Histórico -->
+    <div class="modal-overlay" id="historyModal">
+        <div class="modal-content large-modal">
+            <div class="modal-header">
+                <h4><i class="fas fa-history me-2"></i> Histórico de Promoções para Administrador</h4>
+                <button class="btn-close-modal" id="closeHistoryModal">&times;</button>
+            </div>
+            
+            <div class="modal-body" id="historyModalBody">
+                <div class="history-filters">
+                    <div class="filter-group">
+                        <label>Filtrar por:</label>
+                        <select id="historyFilter" class="form-control">
+                            <option value="all">Todas as promoções</option>
+                            <option value="last-month">Último mês</option>
+                            <option value="last-year">Último ano</option>
+                            <option value="active">Promoções ativas</option>
+                            <option value="undone">Promoções desfeitas</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="history-list" id="historyList">
+                    <!-- Histórico será carregado via JavaScript -->
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="btnCloseHistoryModal">
+                    <i class="fas fa-times"></i> Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Confirmação -->
+    <div class="modal-overlay" id="confirmationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4><i class="fas fa-user-shield me-2"></i> Confirmar Promoção para Administrador</h4>
+                <button class="btn-close-modal" id="closeConfirmationModal">&times;</button>
+            </div>
+            
+            <div class="modal-body" id="confirmationModalBody">
+                <!-- Conteúdo será inserido via JavaScript -->
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="btnCancelPromotion">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+                <button class="btn btn-primary" id="btnConfirmPromotion">
+                    <i class="fas fa-check"></i> Confirmar Promoção
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Desfazer -->
+    <div class="modal-overlay" id="undoModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4><i class="fas fa-undo me-2"></i> Desfazer Promoção</h4>
+                <button class="btn-close-modal" id="closeUndoModal">&times;</button>
+            </div>
+            
+            <div class="modal-body" id="undoModalBody">
+                <!-- Conteúdo será inserido via JavaScript -->
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="btnCancelUndo">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+                <button class="btn btn-warning" id="btnConfirmUndo">
+                    <i class="fas fa-undo"></i> Desfazer Promoção
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- JavaScript Personalizado -->
+    <script src="funcionarioadm.js"></script>
+</body>
+</html>
